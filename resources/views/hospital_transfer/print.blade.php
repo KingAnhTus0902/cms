@@ -9,7 +9,7 @@
     <style>
         @media print {
             @page{
-                margin-top: 10px;
+                margin-top: 20px;
                 margin-bottom: 0;
             }
         }

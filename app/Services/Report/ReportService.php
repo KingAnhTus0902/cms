@@ -1,0 +1,155 @@
+<?php
+
+namespace App\Services\Report;
+use App\Helpers\RoleHelper;
+use Illuminate\Support\Facades\Auth;
+use App\Constants\CommonConstants;
+use App\Repositories\MedicalSession\MedicalSessionRepositoryInterface;
+use App\Repositories\MedicineOfMedicalSession\MedicineOfMedicalSessionRepository;
+use Carbon\Carbon;
+
+
+class ReportService implements ReportServiceInterface
+{
+    protected $medicalSessionRepository;
+    protected $medicineOfMedicalSessionRepository;
+
+    public function __construct(
+        MedicalSessionRepositoryInterface $medicalSessionRepository,MedicineOfMedicalSessionRepository $medicineOfMedicalSessionRepository
+    ) {
+        $this->medicalSessionRepository = $medicalSessionRepository;
+        $this->medicineOfMedicalSessionRepository = $medicineOfMedicalSessionRepository;
+    }
+
+    public function insurancePaidList($data, $paginate, $type = null)
+    {
+        $today = Carbon::today()->toDateString();
+        $customDate = Carbon::createFromFormat('Y-m-d', $today)->format('d/m/Y');
+        $start =  $customDate;
+        $end =  $customDate;
+
+        $time = [
+            0 => Carbon::today()->toDateString() . ' 00:00:00',
+            1 => Carbon::today()->toDateString() . ' 23:59:59'
+        ];
+        if (!empty($data[CommonConstants::KEYWORD]['time'])) {
+            $time = explode('-', $data[CommonConstants::KEYWORD]['time']);
+            $start =  $time[0];
+            $end =  $time[1];
+            $time[0] = Carbon::createFromFormat('d/m/Y', trim($time[0]))->format('Y-m-d') . ' 00:00:00';
+            $time[1] = Carbon::createFromFormat('d/m/Y', trim($time[1]))->format('Y-m-d') . ' 23:59:59';
+        }
+        $data[CommonConstants::KEYWORD]['time'] = $time;
+        $medicalSessions = $this->medicalSessionRepository->getInsurancePaidList($data, $paginate, ['*'], $type);
+        if (!empty($medicalSessions)) {
+            foreach ($medicalSessions as $key => $medicalSession) {
+                $medicalSessions[$key]->disease_code = $medicalSession->diseases[FIRST_KEY]->disease_code ?? null;
+                $firstExaminationPrice = $medicalSession->medicalSessionRoom[FIRST_KEY]->insurance_unit_price ?? null;
+                $secondExaminationPrice = $medicalSession->medicalSessionRoom[SECOND_KEY]->insurance_unit_price ?? null;
+                $medicalSessions[$key]->examination_insurance_price = $firstExaminationPrice + $secondExaminationPrice;
+            }
+        }
+        return [
+            'medicalSessions' => $medicalSessions,
+            'itemStart' => $medicalSessions->firstItem(),
+            'itemEnd' => $medicalSessions->lastItem(),
+            'total' => $medicalSessions->total(),
+            'lastPage' => $medicalSessions->lastPage(),
+            'limit' => CommonConstants::DEFAULT_LIMIT_PAGE,
+            'page' => $data[CommonConstants::INPUT_PAGE] ?? 1,
+            'sort_column' => $data[CommonConstants::KEY_SORT_COLUMN] ?? '',
+            'sort_type' => $data[CommonConstants::KEY_SORT_TYPE] ?? '',
+            'start' => $start,
+            'end' => $end,
+        ];
+    }
+
+
+
+    public function getDistributedMaterials($data, $paginate)
+    {
+        $today = Carbon::today()->toDateString();
+        $customDate = Carbon::createFromFormat('Y-m-d', $today)->format('d/m/Y');
+        $start =  $customDate;
+        $end =  $customDate;
+
+        $time = [
+            0 => Carbon::today()->toDateString() . ' 00:00:00',
+            1 => Carbon::today()->toDateString() . ' 23:59:59'
+        ];
+        if (!empty($data[CommonConstants::KEYWORD]['time'])) {
+            $time = explode('-', $data[CommonConstants::KEYWORD]['time']);
+            $start =  $time[0];
+            $end =  $time[1];
+            $time[0] = Carbon::createFromFormat('d/m/Y', trim($time[0]))->format('Y-m-d') . ' 00:00:00';
+            $time[1] = Carbon::createFromFormat('d/m/Y', trim($time[1]))->format('Y-m-d') . ' 23:59:59';
+        }
+        $data[CommonConstants::KEYWORD]['time'] = $time;
+        $medicineOfMedicalSession = $this->medicineOfMedicalSessionRepository->getDistributedMaterials($data, $paginate, ['*']);
+        $listMaterialType = $medicineOfMedicalSession['listMaterialType'];
+        $medicineOfMedicalSession = $medicineOfMedicalSession['query'];
+        return [
+            'medicineOfMedicalSession' => $medicineOfMedicalSession,
+            'listMaterialType' => $listMaterialType,
+            'itemStart' => $medicineOfMedicalSession->firstItem(),
+            'itemEnd' => $medicineOfMedicalSession->lastItem(),
+            'total' => $medicineOfMedicalSession->total(),
+            'lastPage' => $medicineOfMedicalSession->lastPage(),
+            'limit' => CommonConstants::DEFAULT_LIMIT_PAGE,
+            'page' => $data[CommonConstants::INPUT_PAGE] ?? 1,
+            'sort_column' => $data[CommonConstants::KEY_SORT_COLUMN] ?? '',
+            'sort_type' => $data[CommonConstants::KEY_SORT_TYPE] ?? '',
+            'start' => $start,
+            'end' => $end,
+        ];
+    }
+
+    /**
+     * Get List Insurance
+     * @param $data
+     * @param $paginate
+     * @param $type
+     * @return array
+     */
+    public function getInsuranceList($data, $paginate, $type = null)
+    {
+        $today = Carbon::today()->toDateString();
+        $customDate = Carbon::createFromFormat('Y-m-d', $today)->format('d/m/Y');
+        $start =  $customDate;
+        $end =  $customDate;
+
+        $time = [
+            0 => Carbon::today()->toDateString() . ' 00:00:00',
+            1 => Carbon::today()->toDateString() . ' 23:59:59'
+        ];
+        if (!empty($data[CommonConstants::KEYWORD]['time'])) {
+            $time = explode('-', $data[CommonConstants::KEYWORD]['time']);
+            $start =  $time[0];
+            $end =  $time[1];
+            $time[0] = Carbon::createFromFormat('d/m/Y', trim($time[0]))->format('Y-m-d') . ' 00:00:00';
+            $time[1] = Carbon::createFromFormat('d/m/Y', trim($time[1]))->format('Y-m-d') . ' 23:59:59';
+        }
+        $data[CommonConstants::KEYWORD]['time'] = $time;
+        $user = Auth::user();
+        if(RoleHelper::getByRole([EXAMINATION_DOCTOR])) {
+            $roomId = $user->room_id;
+            $data[CommonConstants::KEYWORD]['room_id'] = $roomId;
+        }
+        $medicalSessions = $this->medicalSessionRepository->insuranceList($data, $paginate, ['*'], $type);
+        return [
+            'medicalSessions' => $medicalSessions,
+            'itemStart' => $medicalSessions->firstItem(),
+            'itemEnd' => $medicalSessions->lastItem(),
+            'total' => $medicalSessions->total(),
+            'lastPage' => $medicalSessions->lastPage(),
+            'limit' => CommonConstants::DEFAULT_LIMIT_PAGE,
+            'page' => $data[CommonConstants::INPUT_PAGE] ?? 1,
+            'sort_column' => $data[CommonConstants::KEY_SORT_COLUMN] ?? '',
+            'sort_type' => $data[CommonConstants::KEY_SORT_TYPE] ?? '',
+            'dateNow' => date('Y'),
+            'start' => $start,
+            'end' => $end,
+        ];
+    }
+
+}

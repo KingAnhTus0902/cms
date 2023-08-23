@@ -1,0 +1,13 @@
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #444;
+    line-height: 18px;
+    padding: 0;
+}
+.select2-container--default .select2-selection--single {
+    height: calc(1.8125rem + 2px);
+    border-radius: 0.2rem;
+    border: 1px solid #ced4da;
+}
+.select2-selection__arrow b {
+    margin-top: 2px !important;
+}
