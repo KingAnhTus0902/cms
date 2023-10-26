@@ -61,11 +61,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/suggest-hospital-name', [HospitalController::class, 'searchHospitalByCode'])
         ->name('suggest.hospital.name');
 
-    Route::prefix('tin-tuc')->group(function () {
-        Route::get('/list', [NewsController::class, 'list'])
-            ->name('news.list')
-            ->middleware('permission:List-news');
-    });
 
     Route::prefix('nguoi-dung')->name('users.')->group(function () {
         Route::get('/', [UserController::class, 'list'])
@@ -131,29 +126,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->middleware('permission:List-diseases');
     });
 
-
-    Route::prefix('tin-tuc')->group(function () {
-        Route::post('/add', [NewsController::class, 'create'])
-            ->name('create.news')
-            ->middleware('permission:Create-new');
-
-        Route::get('/{id}', [NewsController::class, 'detail'])
-            ->name('detail.news')
-            ->middleware('permission:View-new');
-
-        Route::post('/update', [NewsController::class, 'update'])
-            ->name('update.news')
-            ->middleware('permission:Edit-new');
-
-        Route::post('/delete', [NewsController::class, 'delete'])
-            ->name('delete.news')
-            ->middleware('permission:Delete-new');
-
-        Route::post('/upload', [NewsController::class, 'upload'])
-            ->name('upload.news');
-        Route::post('/upload/{id}', [NewsController::class, 'upload'])
-            ->name('upload_edit.news');
-    });
 
     Route::prefix('nguoi-dung')->name('users.')->group(function () {
         Route::post('/', [UserController::class, 'store'])
@@ -374,27 +346,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->name('upload_edit.designated_service');
     });
 
-    Route::prefix('dau-the-bhyt')->group(function () {
-        Route::get('/list', [HealthInsuranceCardHeadController::class, 'list'])
-            ->name('list.health_insurance_card')
-            ->middleware('permission:List-health-insurance-card-head');
-
-        Route::post('/create', [HealthInsuranceCardHeadController::class, 'create'])
-            ->name('create.health_insurance_card')
-            ->middleware('permission:Create-health-insurance-card-head');
-
-        Route::get('/{id}', [HealthInsuranceCardHeadController::class, 'detail'])
-            ->name('detail.health_insurance_card')
-            ->middleware('permission:View-health-insurance-card-head');
-
-        Route::post('/update', [HealthInsuranceCardHeadController::class, 'update'])
-            ->name('update.health_insurance_card')
-            ->middleware('permission:Edit-health-insurance-card-head');
-
-        Route::post('/delete', [HealthInsuranceCardHeadController::class, 'delete'])
-            ->name('delete.health_insurance_card')
-            ->middleware('permission:Delete-health-insurance-card-head');
-    });
 
     Route::prefix('loai-kham')->name('examination_type.')->group(function () {
         Route::get('/', [ExaminationTypeController::class, 'list'])
@@ -603,34 +554,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
     });
 
-    Route::prefix('import-materials-slip')->name('import_materials_slip.')->group(function () {
-        Route::get('/list', [ImportMaterialsSlipController::class, 'list'])
-            ->name('list')
-            ->middleware('permission:List-materials-slip');
-
-        Route::post('/store', [ImportMaterialsSlipController::class, 'store'])
-            ->name('store')
-            ->middleware('permission:Create-materials-slip');
-
-        Route::post('/edit', [ImportMaterialsSlipController::class, 'edit'])
-            ->name('edit')
-            ->middleware('permission:Edit-materials-slip');
-
-        Route::post('/valid-import', [ImportMaterialsSlipController::class, 'validImport'])
-            ->name('valid_import');
-
-        Route::post('/import', [ImportMaterialsSlipController::class, 'import'])
-            ->name('import')
-            ->middleware('permission:Import-materials-slip');
-
-        Route::get('/{id}', [ImportMaterialsSlipController::class, 'detail'])
-            ->name('detail')
-            ->middleware('permission:View-materials-slip');
-
-        Route::post('/delete', [ImportMaterialsSlipController::class, 'delete'])
-            ->name('delete')
-            ->middleware('permission:Delete-materials-slip');
-    });
 
     Route::prefix('dispense-medicine')->name('dispense_medicine.')->group(function () {
         Route::post('/update-status', [DispenseMedicinesController::class, 'updateStatus'])

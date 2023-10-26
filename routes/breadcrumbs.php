@@ -7,11 +7,6 @@ Breadcrumbs::for('home', function ($trail) {
     $trail->push(__('menu.home'), route('home'));
 });
 
-// News
-Breadcrumbs::for('admin.news.index', function ($trail) {
-    $trail->parent('home');
-    $trail->push(__('menu.list_management.news'), route('admin.news.index'));
-});
 
 // Department
 Breadcrumbs::for('admin.department.index', function ($trail) {
@@ -122,11 +117,6 @@ Breadcrumbs::for('admin.examination_type.index', function ($trail) {
     $trail->push(__('menu.list_management.examination_type'), route('admin.examination_type.index'));
 });
 
-// HealthInsuranceCardHead
-Breadcrumbs::for('admin.index.health_insurance_card', function ($trail) {
-    $trail->parent('home');
-    $trail->push(__('menu.list_management.health_insurance_card_head'), route('admin.index.health_insurance_card'));
-});
 
 // Setting
 Breadcrumbs::for('admin.setting.view', function ($trail) {
@@ -147,24 +137,6 @@ Breadcrumbs::for('admin.medical_tests.view', function ($trail) {
     $trail->push(__('menu.list_management.medical_test_view'), route('admin.medical_tests.view', $id));
 });
 
-// Import_materials_slip
-Breadcrumbs::for('admin.import_materials_slip.index', function ($trail) {
-    $trail->parent('home');
-    $trail->push(__('menu.list_management.import_materials_slip'), route('admin.import_materials_slip.index'));
-});
-Breadcrumbs::for('admin.import_materials_slip.create', function ($trail) {
-    $trail->parent('admin.import_materials_slip.index');
-    $trail->push(__('label.import_materials_slip.title_add'), route('admin.import_materials_slip.create'));
-});
-Breadcrumbs::for('admin.import_materials_slip.view_edit', function ($trail) {
-    $trail->parent('admin.import_materials_slip.index');
-    $trail->push(__('label.import_materials_slip.title_edit'), route('admin.import_materials_slip.view_edit'));
-});
-
-Breadcrumbs::for('admin.dispense_medicine.index', function ($trail) {
-    $trail->parent('home');
-    $trail->push(__('menu.list_management.dispense_medicine'), route('admin.dispense_medicine.index'));
-});
 
 //Export
 Breadcrumbs::for('admin.report.insurancePaidIndex', function ($trail) {

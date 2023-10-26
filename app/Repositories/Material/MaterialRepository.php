@@ -71,14 +71,11 @@ class MaterialRepository extends BaseRepository implements MaterialRepositoryInt
         $select = CommonConstants::SELECT_ALL;
         $query = $this->model->select($select);
         if ($forPrescription) {
-            $query->whereHas('materialBatches', function ($q) {
-                $q->unexpired();
-            })
-            ->where('type', MaterialConstants::TYPE_MEDICINE);
+            $query->where('type', MaterialConstants::TYPE_MEDICINE);
         }
         if (isset($keyword)) {
             $query->where('name', CommonConstants::OPERATOR_LIKE, '%' . $keyword . '%');
         }
         return $query->get();
-    } 
+    }
 }

@@ -33,9 +33,6 @@
                                                 {{ __('label.material.detail_field.batch_name') }}
                                             </th>
                                             <th class="dt-center w-15">
-                                                {{ __('label.material.detail_field.amount') }}
-                                            </th>
-                                            <th class="dt-center w-15">
                                                 {{ __('label.material.detail_field.unit_price') }}
                                             </th>
                                             <th class="dt-center w-15">
@@ -56,8 +53,6 @@
                                                 <td class="word-break">
                                                     {{ $materialBatche->batch_name }}
                                                 </td>
-                                                <td class="word-break text-right">
-                                                    {{ number_format($materialBatche->amount) }}</td>
                                                 <td class="word-break text-right">
                                                     {{ NumberFormatHelper::priceFormat($materialBatche->unit_price) }}
                                                 </td>

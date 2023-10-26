@@ -53,11 +53,8 @@ class MedicineOfMedicalSessionService extends BaseService
      */
     public function list($medicalSessionId)
     {
-        $prescriptionOfMedical = $this->prescriptionOfMedicalSessionRepository->findOneBy([
-            'medical_session_id' => $medicalSessionId
-        ]);
-        $idPrescriptionOfMedical = empty($prescriptionOfMedical) ? null : $prescriptionOfMedical->id;
-        $medicineOfMedicalSessions = $this->medicineOfMedicalSessionRepository->list($idPrescriptionOfMedical);
+
+        $medicineOfMedicalSessions = $this->medicineOfMedicalSessionRepository->list($medicalSessionId);
         return $medicineOfMedicalSessions;
     }
 
@@ -73,29 +70,15 @@ class MedicineOfMedicalSessionService extends BaseService
     {
         DB::beginTransaction();
         try {
-            $medicineId = '';
-            $prescriptionOfMedical = $this->prescriptionOfMedicalSessionRepository->findOneBy([
-                'medical_session_id' => $conditions['medical_session_id']
-            ]);
-            if (empty($prescriptionOfMedical)) {
-                $dataPrescriptionOfMedical['medical_session_id'] = $conditions['medical_session_id'];
-                $dataPrescriptionOfMedical['status'] = PrescriptionConstants::STATUS_WAITING_DISPENSED;
-                $resultPrescriptionCreate = $this->prescriptionOfMedicalSessionRepository
-                    ->create($dataPrescriptionOfMedical);
-                $idPrescriptionOfMedical = $resultPrescriptionCreate->id;
-            } else {
-                $dataPrescriptionOfMedical['status'] = PrescriptionConstants::STATUS_WAITING_DISPENSED;
-                $idPrescriptionOfMedical = $prescriptionOfMedical->id;
-                $this->prescriptionOfMedicalSessionRepository->update($idPrescriptionOfMedical, $dataPrescriptionOfMedical);
+            if(!empty($conditions['medical_session_id'])) {
+                $dataSave['medical_session_id'] = $conditions['medical_session_id'];
             }
-            $dataSave['prescription_id'] = $idPrescriptionOfMedical;
             if (!empty($conditions['material_id'])) {
                 $material = $this->materialRepositoryInterface->find($conditions['material_id']);
                 if (!$material) {
                     return Response::HTTP_NOT_FOUND;
                 }
                 if (!empty($material)) {
-                    $medicineId = $material->id;
                     $dataSave['materials_name'] = $material->name;
                     $dataSave['materials_code'] = $material->code;
                     $dataSave['materials_unit'] = !empty($material->unit) ? $material->unit->name : '';
@@ -113,27 +96,27 @@ class MedicineOfMedicalSessionService extends BaseService
                 }
 
                 // get data medicine medical session if created
-                $conditionMedicineMedicalSession = [
-                    'prescription_id' => $idPrescriptionOfMedical,
-                    'materials_code' => $material->code,
-                    'status' => MedicineConstants::STATUS_WAITING_DISPENSED
-                ];
+//                $conditionMedicineMedicalSession = [
+//                    'prescription_id' => $idPrescriptionOfMedical,
+//                    'materials_code' => $material->code,
+//                    'status' => MedicineConstants::STATUS_WAITING_DISPENSED
+//                ];
 //                if (!RoleHelper::getByRole([ADMIN])) {
 //                    $conditionMedicineMedicalSession['user_id'] = Auth::user()->id;
 //                }
-                $oldMedineOfMedicalSession = $this->medicineOfMedicalSessionRepository
-                    ->findOneBy($conditionMedicineMedicalSession);
-                if (
-                    !empty($oldMedineOfMedicalSession)
+//                $oldMedineOfMedicalSession = $this->medicineOfMedicalSessionRepository
+//                    ->findOneBy($conditionMedicineMedicalSession);
+//                if (
+//                    !empty($oldMedineOfMedicalSession)
 //                    && (
 //                        RoleHelper::getByRole([ADMIN])
 //                        || (!RoleHelper::getByRole([ADMIN]) && Auth::user()->id == $oldMedineOfMedicalSession->user_id)
 //                    )
-                ) {
-                    $conditions['materials_amount'] = (int) $conditions['materials_amount']
-                        + $oldMedineOfMedicalSession->materials_amount;
-                    $medicineOfMedicalSessionId = $oldMedineOfMedicalSession->id;
-                }
+//                ) {
+//                    $conditions['materials_amount'] = (int) $conditions['materials_amount']
+//                        + $oldMedineOfMedicalSession->materials_amount;
+//                    $medicineOfMedicalSessionId = $oldMedineOfMedicalSession->id;
+//                }
             }
             $dataSave['payment_status'] = MedicineConstants::PAYMENT_PENDING;
             $dataSave['materials_usage'] = $conditions['materials_usage'];
@@ -142,14 +125,15 @@ class MedicineOfMedicalSessionService extends BaseService
             $dataSave['user_id'] = !empty($oldMedineOfMedicalSession->user_id) ? $oldMedineOfMedicalSession->user_id : $this->getLoginUserId();
 
             // revert medicine
-            $medicine = $this->medicineOfMedicalSessionRepository->find($medicineOfMedicalSessionId);
-            if (!empty($medicine)) {
-                $medicineId = !empty($medicine->material->id) ? $medicine->material->id : '';
-                $medicines[] = $medicine;
-                $this->materialBatchRepository->revertMedicines($medicines);
-            }
+//            $medicine = $this->medicineOfMedicalSessionRepository->find($medicineOfMedicalSessionId);
+//            if (!empty($medicine)) {
+//                $medicineId = !empty($medicine->material->id) ? $medicine->material->id : '';
+//                $medicines[] = $medicine;
+//                $this->materialBatchRepository->revertMedicines($medicines);
+//            }
 
-            // create or update data medicine of medical session
+//            // create or update data medicine of medical session
+//            dd($dataSave);
             if (empty($medicineOfMedicalSessionId)) {
                 $response = $this->medicineOfMedicalSessionRepository->create($dataSave);
             } else {
@@ -157,50 +141,50 @@ class MedicineOfMedicalSessionService extends BaseService
             }
 
             // take medicine in batchs
-            $column = [
-                'id',
-                'amount'
-            ];
-            $data = [
-                'material_id' => $medicineId
-            ];
-            $batchs = $this->materialBatchRepository->getBatchsForMedicalSession($data, $column);
+//            $column = [
+//                'id',
+//                'amount'
+//            ];
+//            $data = [
+//                'material_id' => $medicineId
+//            ];
+//            $batchs = $this->materialBatchRepository->getBatchsForMedicalSession($data, $column);
 
-            // check amount medicine in batchs
-            $totalMedicines = $batchs->sum('amount');
-            if ($conditions['materials_amount'] > $totalMedicines) {
-                return __('messages.EXM-001');
-            }
+//            // check amount medicine in batchs
+//            $totalMedicines = $batchs->sum('amount');
+//            if ($conditions['materials_amount'] > $totalMedicines) {
+//                return __('messages.EXM-001');
+//            }
 
             // update batch and create data medicine medical session batch
-            $dataMedicineAndBatchs = [];
-            foreach ($batchs as $batch) {
-                if ($conditions['materials_amount'] > 0) {
-                    if ($batch->amount >= $conditions['materials_amount']) {
-                        $batch->amount -= $conditions['materials_amount'];
-                        $takendAmount = $conditions['materials_amount'];
-                        $conditions['materials_amount'] = 0;
-                    } else {
-                        $takendAmount = $batch->amount;
-                        $conditions['materials_amount'] -= $batch->amount;
-                        $batch->amount = 0;
-                    }
-
-                    $batch->save();
-                    // create new data medicine of medical session and batch
-                    $dataMedicineAndBatchs[] = [
-                        'material_batch_id' => $batch->id,
-                        'medicine_of_medical_session_id' => $response->id,
-                        'amount' => $takendAmount,
-                        'created_at' => now(),
-                        'updated_at' => now(),
-                    ];
-                }
-            }
-
-            if (!empty($dataMedicineAndBatchs)) {
-                $this->medicineMedicalSessionBatchRepository->saveMultipleData($dataMedicineAndBatchs);
-            }
+//            $dataMedicineAndBatchs = [];
+//            foreach ($batchs as $batch) {
+//                if ($conditions['materials_amount'] > 0) {
+//                    if ($batch->amount >= $conditions['materials_amount']) {
+//                        $batch->amount -= $conditions['materials_amount'];
+//                        $takendAmount = $conditions['materials_amount'];
+//                        $conditions['materials_amount'] = 0;
+//                    } else {
+//                        $takendAmount = $batch->amount;
+//                        $conditions['materials_amount'] -= $batch->amount;
+//                        $batch->amount = 0;
+//                    }
+//
+//                    $batch->save();
+//                    // create new data medicine of medical session and batch
+//                    $dataMedicineAndBatchs[] = [
+//                        'material_batch_id' => $batch->id,
+//                        'medicine_of_medical_session_id' => $response->id,
+//                        'amount' => $takendAmount,
+//                        'created_at' => now(),
+//                        'updated_at' => now(),
+//                    ];
+//                }
+//            }
+//
+//            if (!empty($dataMedicineAndBatchs)) {
+//                $this->medicineMedicalSessionBatchRepository->saveMultipleData($dataMedicineAndBatchs);
+//            }
 
             DB::commit();
             return $response;
@@ -224,8 +208,6 @@ class MedicineOfMedicalSessionService extends BaseService
         if (!$medicineOfMedicalSession) {
             return Response::HTTP_NOT_FOUND;
         }
-        $medicines[] = $medicineOfMedicalSession;
-        $this->materialBatchRepository->revertMedicines($medicines);
         return $medicineOfMedicalSession->delete();
     }
 

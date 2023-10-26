@@ -90,7 +90,7 @@ class MaterialController extends Controller
      */
     public function detailAmount($id)
     {
-        $materialBatches = $this->materialService->detailAmountMaterial($id);
+        $materialBatches = $this->materialService->findOneOrFail($id);
         return view('elements.material.detail-result', compact('materialBatches'))->render();
     }
 

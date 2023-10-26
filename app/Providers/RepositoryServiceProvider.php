@@ -39,7 +39,6 @@ class RepositoryServiceProvider extends ServiceProvider
         RoleRepositoryInterface::class => RoleRepository::class,
         DiseaseRepositoryInterface::class => DiseaseRepository::class,
         DSMedSessionRepositoryInterface::class => DSMedSessionRepository::class,
-        DesignatedServiceTypeRepositoryInterface::class => DesignatedServiceTypeRepository::class,
         MaterialBatchRepositoryInterface::class => MaterialBatchRepository::class,
         MedicalSessionRoomRepositoryInterface::class => MedicalSessionRoomRepository::class,
         PermissionRepositoryInterface::class => PermissionRepository::class,

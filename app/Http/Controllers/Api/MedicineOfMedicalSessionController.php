@@ -62,7 +62,6 @@ class MedicineOfMedicalSessionController extends Controller
     {
         $response['data'] = $this->medicineOfMedicalSessionService->saveMedicineOfMedicalSession(
             $request->only(
-                'prescription_id',
                 'materials_name',
                 'materials_code',
                 'materials_amount',
@@ -109,7 +108,6 @@ class MedicineOfMedicalSessionController extends Controller
     {
         $response['data'] = $this->medicineOfMedicalSessionService->saveMedicineOfMedicalSession(
             $request->only(
-                'prescription_id',
                 'materials_name',
                 'materials_code',
                 'materials_amount',

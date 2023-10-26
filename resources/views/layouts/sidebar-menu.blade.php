@@ -40,18 +40,6 @@
                     </a>
                 </li>
             @endif
-            @if(auth()->user()->can('List-dispense-medicine'))
-                <li class="nav-item">
-                    <a href="{{ route('admin.dispense_medicine.index') }}" class="nav-link
-                    {{ request()->routeIs('admin.dispense_medicine.index') ? 'active': '' }}
-                    ">
-                        <i class="fas fa-capsules"></i>
-                        <p>
-                            {{ __('menu.list_management.dispense_medicine') }}
-                        </p>
-                    </a>
-                </li>
-            @endif
             @if(auth()->user()->canany(['List-payment','List-hospital-tranfer']))
             <li class="nav-item
             {{(request()->routeIs('admin.payment.*') ||
@@ -222,7 +210,7 @@
                         </ul>
                     </li>
                         @endif
-                        @if(auth()->user()->canany(['List-unit', 'List-material_type', 'List-material', 'List-materials-slip']))
+                        @if(auth()->user()->canany(['List-unit', 'List-material_type', 'List-material']))
                     <li class="nav-item
                     {{CommonHelper::openMaterialManagementSidebar() ? 'menu-is-opening menu-open' : ''}}">
                         <a href="#" class="nav-link">
@@ -257,16 +245,6 @@
                                        class="nav-link {{ request()->routeIs('admin.index.material') ? 'active': '' }}">
                                         <i class='far fa-dot-circle nav-icon'></i>
                                         <p>{{ __('menu.list_management.material') }}</p>
-                                    </a>
-                                </li>
-                                @endif
-                                @if(auth()->user()->can('List-materials-slip'))
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.import_materials_slip.index') }}"
-                                       class="nav-link
-                                   {{ request()->routeIs('admin.import_materials_slip.index') ? 'active': '' }}">
-                                        <i class='far fa-dot-circle nav-icon'></i>
-                                        <p>{{ __('menu.list_management.import_materials_slip') }}</p>
                                     </a>
                                 </li>
                                 @endif
@@ -307,12 +285,10 @@
                         </ul>
                     </li>
                         @endif
-                        @if(auth()->user()->canany(['List-news', 'List-diseases', 'List-examination-type', 'List-health-insurance-card-head']))
+                        @if(auth()->user()->canany(['List-diseases', 'List-examination-type']))
                     <li class="nav-item
-                        {{ request()->routeIs('admin.news.index')
-                        || request()->routeIs('admin.diseases.index')
-                        || request()->routeIs('admin.examination_type.index')
-                        || request()->routeIs('admin.index.health_insurance_card')  ?
+                        {{ request()->routeIs('admin.diseases.index')
+                        || request()->routeIs('admin.examination_type.index') ?
                          'menu-is-opening menu-open' : ''}}">
                         <a href="#" class="nav-link">
                             <i class="fas fa-book"></i>
@@ -322,15 +298,6 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview menu-lv3">
-                            @if(auth()->user()->can('List-news'))
-                            <li class="nav-item">
-                                <a href="{{route("admin.news.index")}}"
-                                   class="nav-link {{ request()->routeIs('admin.news.index') ? 'active': '' }}">
-                                    <i class='fas fa-newspaper'></i>
-                                    <p>{{ __('menu.list_management.news') }}</p>
-                                </a>
-                            </li>
-                            @endif
                             @if(auth()->user()->can('List-diseases'))
                             <li class="nav-item">
                                 <a href="{{ route('admin.diseases.index') }}"
@@ -348,16 +315,6 @@
                                     <p>{{ __('menu.list_management.examination_type') }}</p>
                                 </a>
                             </li>
-                            @endif
-                            @if(auth()->user()->can('List-health-insurance-card-head'))
-                                <li class="nav-item">
-                                    <a href="{{ route('admin.index.health_insurance_card') }}"
-                                       class="nav-link
-                                   {{ request()->routeIs('admin.index.health_insurance_card') ? 'active': '' }}">
-                                        <i class='far fa-dot-circle'></i>
-                                        <p>{{ __('menu.list_management.health_insurance_card_head') }}</p>
-                                    </a>
-                                </li>
                             @endif
                         </ul>
                     </li>

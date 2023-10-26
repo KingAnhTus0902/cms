@@ -16,7 +16,7 @@ class MedicineOfMedicalSession extends Model
     protected $table = 'medicine_of_medical_sessions_tbl';
 
     protected $fillable = [
-        'prescription_id',
+        'medical_session_id',
         'materials_name',
         'materials_code',
         'materials_amount',
@@ -43,15 +43,7 @@ class MedicineOfMedicalSession extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function prescription()
-    {
-        return $this->belongsTo(PrescriptionOfMedicalSession::class, 'prescription_id', 'id');
-    }
 
-    public function batchs()
-    {
-        return $this->hasMany(MedicineMedicalSessionBatch::class, 'medicine_of_medical_session_id', 'id');
-    }
 
     /**
      * Get material/medicine info

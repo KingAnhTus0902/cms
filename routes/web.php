@@ -52,10 +52,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [HomePageController::class, 'index'])->name('home');
     Route::post('/dang-xuat', [AuthController::class, 'logout'])->name('logout');
     Route::prefix('admin')->name('admin.')->group(function () {
-        // Manage examination type
-        Route::prefix('tin-tuc')->group(function () {
-            Route::get('/', [NewsController::class, 'index'])->name('news.index');
-        });
 
         // Manage user
         Route::prefix('nguoi-dung')->name('users.')->group(function () {
@@ -147,10 +143,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [DiseaseController::class, 'index'])->name('index');
         });
 
-        Route::prefix('dau-the-bhyt')->group(function () {
-            Route::get('/', [HealthInsuranceCardHeadController::class, 'index'])
-                ->name('index.health_insurance_card');
-        });
 
         Route::prefix('loai-kham')->name('examination_type.')->group(function () {
             Route::get('/', [ExaminationTypeController::class, 'index'])
@@ -179,31 +171,7 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/{id}', [MedicalSessionController::class, 'examination'])->name('examination');
         });
-
-        Route::prefix('phieu-nhap-kho')->name('import_materials_slip.')->group(function () {
-            Route::get('/', [ImportMaterialsSlipController::class, 'index'])->name('index');
-            Route::get('/tao-moi', [ImportMaterialsSlipController::class, 'create'])
-                ->name('create')
-                ->middleware('permission:Create-materials-slip');
-
-            Route::get('/chinh-sua/{id?}', [ImportMaterialsSlipController::class, 'viewEdit'])
-                ->name('view_edit')
-                ->middleware('permission:View-materials-slip');
-
-            Route::get('/export', [ImportMaterialsSlipController::class, 'export'])
-                ->name('export');
-        });
-
-        Route::prefix('phat-thuoc')->name('dispense_medicine.')->group(function () {
-            Route::get('/', [DispenseMedicinesController::class, 'index'])->name('index');
-            Route::get('/list', [DispenseMedicinesController::class, 'list'])
-                ->name('list')
-                ->middleware('permission:List-dispense-medicine');
-
-            Route::get('/{id}', [DispenseMedicinesController::class, 'detailPresciption'])
-                ->name('detail')
-                ->middleware('permission:View-dispense-medicine');
-        });
+        
 
         // Report
         Route::middleware('permission:C79a-HD')->group(function () {

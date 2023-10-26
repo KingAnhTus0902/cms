@@ -26,13 +26,13 @@ class MedicineOfMedicalSessionRepository extends BaseRepository implements Medic
      *
      * @return [type]
      */
-    public function list($idPrescriptionOfMedical)
+    public function list($medicalSessionId)
     {
         $query = $this->model->select(CommonConstants::SELECT_ALL);
-        if (empty($idPrescriptionOfMedical)) {
-            $query->whereNull('prescription_id');
+        if (empty($medicalSessionId)) {
+            $query->whereNull('medical_session_id');
         } else {
-            $query->where('prescription_id', $idPrescriptionOfMedical)->with('prescription:id,status');
+            $query->where('medical_session_id', $medicalSessionId);
         }
         return $query->get();
     }
@@ -142,9 +142,9 @@ class MedicineOfMedicalSessionRepository extends BaseRepository implements Medic
     {
         $query = $this->model->select(CommonConstants::SELECT_ALL);
         if (empty($idPrescriptionOfMedical)) {
-            $query->whereNull('prescription_id');
+            $query->whereNull('medical_session_id');
         } else {
-            $query->where('prescription_id', $idPrescriptionOfMedical)->with('prescription:id,status');
+            $query->where('medical_session_id', $idPrescriptionOfMedical);
             $query->where('status', CommonConstants::OPERATOR_NOT_EQUAL ,MedicineConstants::STATUS_CANCEL);
         }
         return $query->get();
