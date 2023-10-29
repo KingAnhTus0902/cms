@@ -38,9 +38,8 @@ class MedicalSessionService extends BaseService
      */
     protected $cadresRepository;
     /**
-     * @var healthInsuranceCardHeadRepository
+     * @var roomRepository
      */
-    protected $healthInsuranceCardHeadRepository;
 
     protected $roomRepository;
 
@@ -59,21 +58,18 @@ class MedicalSessionService extends BaseService
      * Before
      * @param MedicalSessionRepositoryInterface $medicalSessionRepositoryInterface
      * @param CadresRepositoryInterface $cadresRepository
-     * @param HealthInsuranceCardHeadRepositoryInterface $healthInsuranceCardHeadRepository
      * @param SettingRepositoryInterface $settingRepository
      * @param HospitalRepositoryInterface $hospitalRepository
      */
     public function __construct(
         MedicalSessionRepositoryInterface $medicalSessionRepositoryInterface,
         CadresRepositoryInterface $cadresRepository,
-        HealthInsuranceCardHeadRepositoryInterface $healthInsuranceCardHeadRepository,
         RoomRepositoryInterface $roomRepository,
         SettingRepositoryInterface $settingRepository,
         HospitalRepositoryInterface $hospitalRepository
     ) {
         $this->mainRepository = $medicalSessionRepositoryInterface;
         $this->cadresRepository = $cadresRepository;
-        $this->healthInsuranceCardHeadRepository = $healthInsuranceCardHeadRepository;
         $this->roomRepository = $roomRepository;
         $this->settingRepository = $settingRepository;
         $this->hospitalRepository = $hospitalRepository;
@@ -126,7 +122,6 @@ class MedicalSessionService extends BaseService
             'reason_for_examination' => $data['reason_for_examination'],
             'medical_examination_day' => date(YEAR_MONTH_DAY_HIS),
             'cadre_id' => $data['cadre_id'],
-            'use_medical_insurance' => $data['use_medical_insurance'],
             'cadre_code' => $cadre->code,
             'cadre_name' => $cadre->name,
             'cadre_identity_card_number' => $cadre->identity_card_number,
@@ -139,15 +134,6 @@ class MedicalSessionService extends BaseService
             'cadre_district_id' => $cadre->district_id,
             'cadre_address' => $cadre->address,
             'cadre_job' => $cadre->job,
-            'cadre_medical_insurance_number' => $cadre->medical_insurance_number,
-            'cadre_medical_insurance_start_date' => $cadre->medical_insurance_start_date,
-            'cadre_medical_insurance_end_date' => $cadre->medical_insurance_end_date,
-            'cadre_is_long_date' => $cadre->is_long_date,
-            'cadre_medical_insurance_symbol_code' => $cadre->medical_insurance_symbol_code,
-            'cadre_medical_insurance_live_code' => $cadre->medical_insurance_live_code,
-            'cadre_hospital_code' => $cadre->hospital_code,
-            'cadre_medical_insurance_address' => $cadre->medical_insurance_address,
-            'cadre_insurance_five_consecutive_years' => $cadre->insurance_five_consecutive_years
         ];
 
         DB::beginTransaction();
@@ -196,27 +182,7 @@ class MedicalSessionService extends BaseService
                 $healthInsuranceCard = null;
                 $hospitalName = null;
                 $medicines_status = PrescriptionConstants::STATUS_DISPENSED;
-                if (empty($data['cadre_medical_insurance_number'])) {
-                    $data['use_medical_insurance'] = MedicalSessionConstants::NO_USE_MEDICAL_INSURANCE;
-                    $data['cadre_medical_insurance_code'] = TextFormatHelper::medicalInsuranceNumber();
-                } else {
-                    $insuranceNumber = $data['cadre_medical_insurance_symbol_code'] ?? null;
-                    $healthInsuranceCard = $this->healthInsuranceCardHeadRepository->findOneBy(
-                        ['code' => $insuranceNumber]);
-                    $data['cadre_medical_insurance_code'] = TextFormatHelper::medicalInsuranceNumber(
-                        $data['cadre_medical_insurance_number']
-                    );
-                    $data['treatment_line'] = MedicalSessionConstants::OPPOSITE_TREATMENT_LINE;
-                    if (!empty($setting->hospital_id)) {
-                        $hospital = $this->hospitalRepository->findOneOrFail($setting->hospital_id);
-                        $hospitalName = $hospital->name ?? null;
-                        if (!empty($hospital->code)
-                        && !empty($data['cadre_hospital_code'])
-                        && $data['cadre_hospital_code'] == $hospital->code) {
-                            $data['treatment_line'] = MedicalSessionConstants::RIGHT_TREATMENT_LINE;
-                        }
-                    }
-                }
+
                 // calculate sum
                 $examinationsInsuranceCost = !empty($data['examination_types']) ? array_sum(
                     array_column($data['examination_types'], 'insurance_unit_price')
@@ -320,15 +286,6 @@ class MedicalSessionService extends BaseService
         return [
            'name' => $medicalSession->cadre_name,
            'identity_card_number' => $medicalSession->cadre_identity_card_number,
-           'medical_insurance_number' => $medicalSession->cadre_medical_insurance_number,
-           'medical_insurance_symbol_code' => $medicalSession->cadre_medical_insurance_symbol_code,
-           'medical_insurance_live_code' => $medicalSession->cadre_medical_insurance_live_code,
-           'medical_insurance_start_date' => $medicalSession->cadre_medical_insurance_start_date,
-           'medical_insurance_end_date' => $medicalSession->cadre_medical_insurance_end_date,
-           'medical_insurance_address' => $medicalSession->cadre_medical_insurance_address,
-           'is_long_date' => $medicalSession->cadre_is_long_date,
-           'insurance_five_consecutive_years' => $medicalSession->cadre_insurance_five_consecutive_years,
-           'hospital_code' => $medicalSession->cadre_hospital_code,
            'birthday' => $medicalSession->cadre_birthday,
            'gender' => $medicalSession->getRawOriginal('cadre_gender'),
            'folk_id' => $medicalSession->cadre_folk_id,
@@ -348,16 +305,6 @@ class MedicalSessionService extends BaseService
         ];
     }
 
-    public function detailPrescription($id)
-    {
-        $medicalSession = $this->mainRepository->detail($id);
-        return [
-            'medical_session' => $medicalSession ?? [],
-            'medicines' => $medicalSession->prescription->medicines ?? [],
-            'prescription' => $medicalSession->prescription ?? [],
-            'paymentStatus' => $medicalSession->getRawOriginal('payment_status')
-        ];
-    }
 
     public function update($data)
     {
@@ -411,15 +358,6 @@ class MedicalSessionService extends BaseService
             $medicalSession->cadre_district_id = $cadre->district_id;
             $medicalSession->cadre_address = $cadre->address;
             $medicalSession->cadre_job = $cadre->job;
-            $medicalSession->cadre_medical_insurance_number = $cadre->medical_insurance_number;
-            $medicalSession->cadre_medical_insurance_start_date = $cadre->medical_insurance_start_date;
-            $medicalSession->cadre_medical_insurance_end_date = $cadre->medical_insurance_end_date;
-            $medicalSession->cadre_is_long_date = $cadre->is_long_date;
-            $medicalSession->cadre_insurance_five_consecutive_years = $cadre->insurance_five_consecutive_years;
-            $medicalSession->cadre_medical_insurance_symbol_code = $cadre->medical_insurance_symbol_code;
-            $medicalSession->cadre_medical_insurance_live_code = $cadre->medical_insurance_live_code;
-            $medicalSession->cadre_hospital_code = $cadre->hospital_code;
-            $medicalSession->cadre_medical_insurance_address = $cadre->medical_insurance_address;
             $medicalSession->save();
             DB::commit();
             return true;

@@ -138,15 +138,4 @@ class MedicineOfMedicalSessionRepository extends BaseRepository implements Medic
             'listMaterialType' => $listMaterialType,
         ];
     }
-    public function getListMedicine($idPrescriptionOfMedical)
-    {
-        $query = $this->model->select(CommonConstants::SELECT_ALL);
-        if (empty($idPrescriptionOfMedical)) {
-            $query->whereNull('medical_session_id');
-        } else {
-            $query->where('medical_session_id', $idPrescriptionOfMedical);
-            $query->where('status', CommonConstants::OPERATOR_NOT_EQUAL ,MedicineConstants::STATUS_CANCEL);
-        }
-        return $query->get();
-    }
 }

@@ -33,50 +33,6 @@ class MedicalSessionCadresRequest extends BaseRequest
                 'digits_between:0,12',
                 'regex:' . REGEX_NUMBER,
             ],
-            'medical_insurance_number' => [
-                'bail',
-                'required',
-                'min:10',
-                'max:15',
-                'regex:' . REGEX_NUMBER_INSURANCE_CADR,
-            ],
-            'medical_insurance_symbol_code' => [
-                'bail',
-                'nullable',
-                'integer',
-                'between:1,5'
-            ],
-            'medical_insurance_live_code' => 'nullable|string|min:2|max:2',
-            'medical_insurance_start_date' => [
-                'bail',
-                'nullable',
-                'before_or_equal:today',
-                'date_format:' . DAY_MONTH_YEAR,
-                Rule::requiredIf($this->medical_insurance_number !== null),
-                'after_or_equal:birthday',
-            ],
-            'medical_insurance_end_date' => [
-                'bail',
-                'nullable',
-                'after:medical_insurance_start_date',
-                'after_or_equal:today',
-                'date_format:' . DAY_MONTH_YEAR
-            ],
-            'medical_insurance_address' => '' . Rule::requiredIf($this->medical_insurance_number !== null) . '|max:255',
-            'hospital_code' => [
-                Rule::requiredIf($this->medical_insurance_number !== null),
-                'nullable',
-                'min:5',
-                'max:5',
-                'exists:hospitals_mst,code',
-            ],
-            'insurance_five_consecutive_years' => [
-                'bail',
-                'nullable',
-                'date_format:' . DAY_MONTH_YEAR,
-                Rule::requiredIf(!empty($this->is_long_date)),
-                'after_or_equal:birthday'
-            ],
         ];
     }
 
@@ -95,14 +51,6 @@ class MedicalSessionCadresRequest extends BaseRequest
             'email' => __('label.cadres.field.email'),
             'address' => __('label.cadres.field.address'),
             'identity_card_number' => __('label.cadres.field.identity_card_number'),
-            'medical_insurance_number' => __('label.cadres.field.medical_insurance_number'),
-            'medical_insurance_symbol_code' => __('label.cadres.field.medical_insurance_symbol_code'),
-            'medical_insurance_live_code' => __('label.cadres.field.medical_insurance_live_code'),
-            'medical_insurance_start_date' => __('label.cadres.field.medical_insurance_start_date'),
-            'medical_insurance_end_date' => __('label.cadres.field.medical_insurance_end_date'),
-            'medical_insurance_address' => __('label.cadres.field.medical_insurance_address'),
-            'hospital_code' => __('label.cadres.field.hospital_code'),
-            'insurance_five_consecutive_years'  => __('label.cadres.field.insurance_five_consecutive_years')
         ];
     }
 

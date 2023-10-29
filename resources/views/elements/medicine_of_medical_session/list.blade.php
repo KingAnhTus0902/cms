@@ -86,11 +86,6 @@
                                         </button>
                                     </div>
                                 </td>
-                                <td class="word-break pt-0 pb-0 pr-2">
-                                    <strong class="btn-medicine-of-medical-session-title col-form-label-fz">
-                                        {!! $medicineOfMedicalSession->status_label ?? '' !!}
-                                    </strong>
-                                </td>
                             </tr>
                         @endforeach
                     </tbody>

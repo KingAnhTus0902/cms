@@ -12,6 +12,5 @@ interface MedicineOfMedicalSessionRepositoryInterface extends BaseRepositoryInte
      *
      * @return [type]
      */
-    public function list($idPrescriptionOfMedical);
-    public function getListMedicine($idPrescriptionOfMedical);
+    public function list($medicalSessionId);
 }

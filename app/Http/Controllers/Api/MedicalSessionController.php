@@ -78,11 +78,6 @@ class MedicalSessionController extends Controller
                             'name' => $data['name'],
                             'user_name' => $data['email'],
                             'password' => $password,
-                            'android_link' => env(
-                                'ANDROID_LINK',
-                                'https://play.google.com/store/apps/details?id=com.jvb.medbook'
-                            ),
-                            'ios_link' => 'Medbook'
                         ]
                     ];
                     // Send mail
@@ -133,9 +128,6 @@ class MedicalSessionController extends Controller
         }
         $cadre = $this->cadresService->findOneOrFail($cadreId);
         $data = $request->all();
-        $data['use_medical_insurance'] = $cadre->medical_insurance_number
-            ? MedicalSessionConstants::USE_MEDICAL_INSURANCE
-            : MedicalSessionConstants::NO_USE_MEDICAL_INSURANCE;
         $response = $this->medicalSessionService->createMedicalSession($data, $cadre);
         if ($response === true) {
             return $this->createSuccessResponse([]);

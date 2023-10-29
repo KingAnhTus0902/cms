@@ -6,13 +6,13 @@ $(document).ready(function () {
         toastAlert(MESSAGE_ERROR, "", "error");
     }
 
-    // DateTimePicker
-    $("#cal-medical_insurance_start_date-add, #cal-medical_insurance_start_date-edit, #cadre_insurance_five_consecutive_years-add, #cadre_insurance_five_consecutive_years-edit").datetimepicker({
-        format: "DD/MM/YYYY",
-        locale: 'vi',
-        language: 'vi',
-        useCurrent: false,
-    });
+    // // DateTimePicker
+    // $("#cal-medical_insurance_start_date-add, #cal-medical_insurance_start_date-edit, #cadre_insurance_five_consecutive_years-add, #cadre_insurance_five_consecutive_years-edit").datetimepicker({
+    //     format: "DD/MM/YYYY",
+    //     locale: 'vi',
+    //     language: 'vi',
+    //     useCurrent: false,
+    // });
 
     $(document).on("click", "#search-medical-session", function () {
         appendKeyWordSearch();
@@ -54,10 +54,8 @@ $(document).ready(function () {
     $(document).on("click", ".edit-cadres", function () {
         let api = API_UPDATE_CADRES;
         let type = $("#type").val();
-        let medicalInsuranceAddress = $(`#medical_insurance_address-${type}`).val();
         let medicalSessionId = $(`#id_medical_session_hidden-${type}`).val();
         let serializeArrayData = $("#edit-cadres-form").serializeArray();
-        serializeArrayData.push({ name: "medical_insurance_address", value: medicalInsuranceAddress });
         serializeArrayData.push({ name: "medical_session_id", value: medicalSessionId });
         let data = jQuery.param(serializeArrayData);
         hideMessageValidate('#edit-cadres-form');
@@ -98,42 +96,6 @@ $(document).ready(function () {
         getMedicalSession(keyword, page, sortColumn, sortType);
     });
 
-    $(document).on("keyup", "#medical_insurance_number-add", function () {
-        let medical_insurance_number = $('#medical_insurance_number-add').val().trim();
-        if (medical_insurance_number.length > 0) {
-            $('#medical_insurance_start_date-add').removeAttr('disabled');
-            $('#medical_insurance_end_date-add').removeAttr('disabled');
-            $('#is_long_date-add').removeAttr('disabled');
-            $('#hospital_code-add').val(DEFAULT_HOSPITAL_CODE).removeAttr('disabled');;
-            $('#medical_insurance_symbol_code-add').removeAttr('disabled', 'disabled');
-            $('#medical_insurance_live_code-add').removeAttr('disabled', 'disabled');
-            autoFillHospital('add', DEFAULT_HOSPITAL_CODE);
-        } else {
-            setDefaultInsurance('add');
-        }
-    });
-
-    $('#medical_insurance_number-add, #medical_insurance_number-edit').on('input', function() {
-        let medical_insurance_number = $(this).val().trim();
-        if (medical_insurance_number.length > 15) {
-            $(this).val(medical_insurance_number.slice(0, 15));
-        }
-    });
-
-    $(document).on("keyup", "#medical_insurance_number-edit", function () {
-        let medical_insurance_number = $('#medical_insurance_number-edit').val().trim();
-        if (medical_insurance_number.length > 0) {
-            $('#medical_insurance_start_date-edit').removeAttr('disabled');
-            $('#medical_insurance_end_date-edit').removeAttr('disabled');
-            $('#is_long_date-edit').removeAttr('disabled');
-            $('#hospital_code-edit').val(DEFAULT_HOSPITAL_CODE).removeAttr('disabled');
-            $('#medical_insurance_symbol_code-edit').removeAttr('disabled', 'disabled');
-            $('#medical_insurance_live_code-edit').removeAttr('disabled', 'disabled');
-            autoFillHospital('edit', DEFAULT_HOSPITAL_CODE);
-        } else {
-            setDefaultInsurance('edit');
-        }
-    });
 
     $("#city_id-add, #city_id-edit").on('change', function() {
         let type = $("#type").val();
@@ -148,9 +110,7 @@ $(document).ready(function () {
     $(document).on("click", ".add-cadres", function () {
         let api = API_CREATE_CADRES;
         let type = $("#type").val();
-        let medicalInsuranceAddress = $(`#medical_insurance_address-${type}`).val();
         let serializeArrayData = $("#add-cadres-form").serializeArray();
-        serializeArrayData.push({ name: "medical_insurance_address", value: medicalInsuranceAddress });
         let data = jQuery.param(serializeArrayData);
         hideMessageValidate('#add-cadres-form');
         createOrUpdate(api, data, nextAddCadres);
@@ -228,14 +188,6 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on("click", "#is_long_date-add, #is_long_date-edit", function () {
-        let type = $("#type").val();
-        if ($(this).is(":checked")) {
-            $(`#insurance_five_consecutive_years-${type}`).removeAttr('disabled');
-        } else {
-            $(`#insurance_five_consecutive_years-${type}`).val('').attr('disabled', 'disabled');
-        }
-    });
 });
 
 
@@ -371,15 +323,8 @@ function getRoomByDepartment(key) {
 function resetFormAddCadres(element) {
     resetForm(element);
     $("#folk_id-add").val('1').trigger('change');
-    $("#medical_insurance_live_code-add").val('').trigger('change');
     $("#city_id-add").val('').trigger('change');
     $("#district_id-add").val('').trigger('change');
-    $('#medical_insurance_symbol_code-add').prop('disabled', true);
-    $('#medical_insurance_live_code-add').prop('disabled', true);
-    $('#hospital_code-add').prop('disabled', true);
-    $('#medical_insurance_start_date-add').prop('disabled', true);
-    $('#medical_insurance_end_date-add').prop('disabled', true);
-    $('#is_long_date-add').prop('disabled', true);
     $('#cadre-id-add').val('');
     $('#cadre_id_check-add').val('');
     $(`${element} .input-group.date`).each(function() {
@@ -390,9 +335,9 @@ function resetFormAddCadres(element) {
 function appendDataSuggest(data) {
     let item = data.data;
     item['birthday'] = item['birthday'] ? moment(item['birthday']).format("DD/MM/YYYY") : moment().format("DD/MM/YYYY");
-    item['medical_insurance_start_date'] = item['medical_insurance_start_date'] ? moment(item['medical_insurance_start_date']).format("DD/MM/YYYY") : "";
-    item['medical_insurance_end_date'] = item['medical_insurance_end_date'] ? moment(item['medical_insurance_end_date']).format("DD/MM/YYYY") : "";
-    item['insurance_five_consecutive_years'] = item['insurance_five_consecutive_years'] ? moment(item['insurance_five_consecutive_years']).format("DD/MM/YYYY") : "";
+    // item['medical_insurance_start_date'] = item['medical_insurance_start_date'] ? moment(item['medical_insurance_start_date']).format("DD/MM/YYYY") : "";
+    // item['medical_insurance_end_date'] = item['medical_insurance_end_date'] ? moment(item['medical_insurance_end_date']).format("DD/MM/YYYY") : "";
+    // item['insurance_five_consecutive_years'] = item['insurance_five_consecutive_years'] ? moment(item['insurance_five_consecutive_years']).format("DD/MM/YYYY") : "";
     let type = $("#type").val();
     $(`#cadre_id_check-${type}`).val(item.id);
     hideMessageValidate(`#${type}-cadres-form`);
@@ -402,46 +347,37 @@ function appendDataSuggest(data) {
     for (let key in item) {
         if (key != 'city_id' && key != 'district_id' && key != 'folk_id') {
             if (item.hasOwnProperty(key)) {
-                if (key == 'is_long_date') {
-                    if (item[key] == 1) {
-                        $(`#${key}-${type}`).prop('checked', true);
-                        $(`#insurance_five_consecutive_years-${type}`).removeAttr('disabled');
-                    } else {
-                        $(`#${key}-${type}`).prop('checked', false);
-                    }
-                } else {
-                    $(`#${key}-${type}`).val(item[key])
-                }
+                $(`#${key}-${type}`).val(item[key])
             }
         }
     }
 
-    $(`#medical_insurance_live_code-${type} option[value=${item['medical_insurance_live_code']}]`).attr('selected','selected');
+    // $(`#medical_insurance_live_code-${type} option[value=${item['medical_insurance_live_code']}]`).attr('selected','selected');
 
 
-    if (item['medical_insurance_number'] && item['medical_insurance_number'].length > 0) {
-        $(`#medical_insurance_start_date-${type}`).removeAttr('disabled');
-        $(`#medical_insurance_end_date-${type}`).removeAttr('disabled');
-        $('#medical_insurance_symbol_code-add').removeAttr('disabled');
-        $('#medical_insurance_live_code-add').removeAttr('disabled');
-        $(`#is_long_date-${type}`).removeAttr('disabled');
-        $(`#hospital_code-${type}`).removeAttr('disabled');
-    } else {
-        $(`#medical_insurance_start_date-${type}`).attr('disabled', 'disabled');
-        $(`#medical_insurance_end_date-${type}`).attr('disabled', 'disabled');
-        $('#medical_insurance_symbol_code-add').attr('disabled', 'disabled');
-        $('#medical_insurance_live_code-add').attr('disabled', 'disabled');
-        $(`#is_long_date-${type}`).attr('disabled', 'disabled');
-        $(`#hospital_code-${type}`).attr('disabled', 'disabled');
-    }
+    // if (item['medical_insurance_number'] && item['medical_insurance_number'].length > 0) {
+    //     $(`#medical_insurance_start_date-${type}`).removeAttr('disabled');
+    //     $(`#medical_insurance_end_date-${type}`).removeAttr('disabled');
+    //     $('#medical_insurance_symbol_code-add').removeAttr('disabled');
+    //     $('#medical_insurance_live_code-add').removeAttr('disabled');
+    //     $(`#is_long_date-${type}`).removeAttr('disabled');
+    //     $(`#hospital_code-${type}`).removeAttr('disabled');
+    // } else {
+    //     $(`#medical_insurance_start_date-${type}`).attr('disabled', 'disabled');
+    //     $(`#medical_insurance_end_date-${type}`).attr('disabled', 'disabled');
+    //     $('#medical_insurance_symbol_code-add').attr('disabled', 'disabled');
+    //     $('#medical_insurance_live_code-add').attr('disabled', 'disabled');
+    //     $(`#is_long_date-${type}`).attr('disabled', 'disabled');
+    //     $(`#hospital_code-${type}`).attr('disabled', 'disabled');
+    // }
 }
 
 function appendDataEdit(data) {
     let item = data.data;
-    item['insurance_five_consecutive_years'] = item['insurance_five_consecutive_years'] ? moment(item['insurance_five_consecutive_years']).format("DD/MM/YYYY") : "";
+    // item['insurance_five_consecutive_years'] = item['insurance_five_consecutive_years'] ? moment(item['insurance_five_consecutive_years']).format("DD/MM/YYYY") : "";
     item['birthday'] = item['birthday'] ? moment(item['birthday']).format("DD/MM/YYYY") : moment().format("DD/MM/YYYY");
-    item['medical_insurance_start_date'] = item['medical_insurance_start_date'] ? moment(item['medical_insurance_start_date']).format("DD/MM/YYYY") : "";
-    item['medical_insurance_end_date'] = item['medical_insurance_end_date'] ? moment(item['medical_insurance_end_date']).format("DD/MM/YYYY") : "";
+    // item['medical_insurance_start_date'] = item['medical_insurance_start_date'] ? moment(item['medical_insurance_start_date']).format("DD/MM/YYYY") : "";
+    // item['medical_insurance_end_date'] = item['medical_insurance_end_date'] ? moment(item['medical_insurance_end_date']).format("DD/MM/YYYY") : "";
     let type = 'edit';
     getSelectDataCiTyDistrictFolk(type, item['city_id'], item['district_id'], item['folk_id']);
     for (let key in item) {
@@ -453,30 +389,30 @@ function appendDataEdit(data) {
     }
 
     $(`#room_id-${type}`).trigger('change');
-    $(`#medical_insurance_live_code-${type} option[value=${item['medical_insurance_live_code']}]`).attr('selected','selected');
+    // $(`#medical_insurance_live_code-${type} option[value=${item['medical_insurance_live_code']}]`).attr('selected','selected');
 
-    if (item['is_long_date'] == '1') {
-        $(`#is_long_date-edit`).prop('checked', true);
-        $('#insurance_five_consecutive_years-edit').removeAttr('disabled');
-    } else {
-        $(`#is_long_date-edit`).prop('checked', false);
-    }
+    // if (item['is_long_date'] == '1') {
+    //     $(`#is_long_date-edit`).prop('checked', true);
+    //     $('#insurance_five_consecutive_years-edit').removeAttr('disabled');
+    // } else {
+    //     $(`#is_long_date-edit`).prop('checked', false);
+    // }
 
-    if (item['medical_insurance_number'] && item['medical_insurance_number'].length > 0) {
-        $(`#medical_insurance_start_date-${type}`).removeAttr('disabled');
-        $(`#medical_insurance_end_date-${type}`).removeAttr('disabled');
-        $(`#medical_insurance_symbol_code-${type}`).removeAttr('disabled');
-        $(`#medical_insurance_live_code-${type}`).removeAttr('disabled');
-        $(`#is_long_date-${type}`).removeAttr('disabled');
-        $(`#hospital_code-${type}`).removeAttr('disabled');
-    } else {
-        $(`#medical_insurance_start_date-${type}`).attr('disabled', 'disabled');
-        $(`#medical_insurance_end_date-${type}`).attr('disabled', 'disabled');
-        $(`#medical_insurance_symbol_code-${type}`).attr('disabled', 'disabled');
-        $(`#medical_insurance_live_code-${type}`).attr('disabled', 'disabled');
-        $(`#is_long_date-${type}`).attr('disabled', 'disabled');
-        $(`#hospital_code-${type}`).attr('disabled', 'disabled');
-    }
+    // if (item['medical_insurance_number'] && item['medical_insurance_number'].length > 0) {
+    //     $(`#medical_insurance_start_date-${type}`).removeAttr('disabled');
+    //     $(`#medical_insurance_end_date-${type}`).removeAttr('disabled');
+    //     $(`#medical_insurance_symbol_code-${type}`).removeAttr('disabled');
+    //     $(`#medical_insurance_live_code-${type}`).removeAttr('disabled');
+    //     $(`#is_long_date-${type}`).removeAttr('disabled');
+    //     $(`#hospital_code-${type}`).removeAttr('disabled');
+    // } else {
+    //     $(`#medical_insurance_start_date-${type}`).attr('disabled', 'disabled');
+    //     $(`#medical_insurance_end_date-${type}`).attr('disabled', 'disabled');
+    //     $(`#medical_insurance_symbol_code-${type}`).attr('disabled', 'disabled');
+    //     $(`#medical_insurance_live_code-${type}`).attr('disabled', 'disabled');
+    //     $(`#is_long_date-${type}`).attr('disabled', 'disabled');
+    //     $(`#hospital_code-${type}`).attr('disabled', 'disabled');
+    // }
 }
 
 function getSelectDataCiTyDistrictFolk(type, city_id, district_id, folk_id, department_id, room_id) {
@@ -493,12 +429,12 @@ function getSelectDataCiTyDistrictFolk(type, city_id, district_id, folk_id, depa
     })
 }
 
-$("#hospital_code-add, #hospital_code-edit").keyup(function () {
-    let type = $("#type").val();
-    let hospital_code =  $(this).val();
-    if (!hospital_code.trim()) {
-        $(`#medical_insurance_address-${type}`).val('');
-    } else {
-        autoFillHospital(type, hospital_code);
-    }
-});
+// $("#hospital_code-add, #hospital_code-edit").keyup(function () {
+//     let type = $("#type").val();
+//     let hospital_code =  $(this).val();
+//     if (!hospital_code.trim()) {
+//         $(`#medical_insurance_address-${type}`).val('');
+//     } else {
+//         autoFillHospital(type, hospital_code);
+//     }
+// });

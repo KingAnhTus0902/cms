@@ -183,17 +183,6 @@ class MedicalSession extends Model
         return $this->hasMany(DesignatedServiceOfMedicalSession::class, 'medical_session_id', 'id');
     }
 
-    public function medicines()
-    {
-        return $this->hasManyThrough(
-            MedicineOfMedicalSession::class,
-            PrescriptionOfMedicalSession::class,
-            'medical_session_id',
-            'prescription_id',
-            'id',
-            'id'
-        );
-    }
 
     public function getCadreCityIdAttribute($value)
     {
@@ -246,10 +235,6 @@ class MedicalSession extends Model
      * get prescription of medical session
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function prescription(): \Illuminate\Database\Eloquent\Relations\HasOne
-    {
-        return $this->hasOne(PrescriptionOfMedicalSession::class, 'medical_session_id', 'id');
-    }
 
     public function scopeCompletedSession($query)
     {

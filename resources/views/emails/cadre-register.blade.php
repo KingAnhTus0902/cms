@@ -20,16 +20,6 @@
 
         @if (isset($params['data']['password'])) Mật khẩu tạm thời：{{ $params['data']['password'] }}<br> @endif
 
-        ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
-
-        Hãy sử dụng thông tin trên để truy cập vào tài khoản của bạn. Sau khi đăng nhập lần đầu, chúng tôi khuyến
-        nghị bạn nên thay đổi mật khẩu để đảm bảo tính bảo mật cho tài khoản của mình .<br>
-
-        &#8226; Đối với người dùng Android, vui lòng tải ứng dụng từ Google Play Store bằng cách truy cập vào đường
-        link sau: <a href="{{ $params['data']['android_link'] }}">{{ $params['data']['android_link'] }}</a><br>
-
-        &#8226; Đối với người dùng iOS, hãy truy cập vào App Store và tìm kiếm '{{ $params['data']['ios_link'] }}'
-        để tải ứng dụng của chúng tôi.<br>
 
         ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
 

@@ -225,11 +225,7 @@ class MedicineOfMedicalSessionService extends BaseService
 
     public function listMedicinPrint($medicalSessionId)
     {
-        $prescriptionOfMedical = $this->prescriptionOfMedicalSessionRepository->findOneBy([
-            'medical_session_id' => $medicalSessionId
-        ]);
-        $idPrescriptionOfMedical = empty($prescriptionOfMedical) ? null : $prescriptionOfMedical->id;
-        $medicineOfMedicalSessions = $this->medicineOfMedicalSessionRepository->getListMedicine($idPrescriptionOfMedical);
+        $medicineOfMedicalSessions = $this->medicineOfMedicalSessionRepository->list($medicalSessionId);
         return $medicineOfMedicalSessions;
     }
 }

@@ -150,39 +150,7 @@ class CommonHelper
         return [];
     }
 
-    public static function calculateTimeByYears(
-        $start = null,
-        $end = null,
-        $currentFormat = YEAR_MONTH_DAY_HIS
-    )
-    {
-        $start = $start ? Carbon::createFromFormat($currentFormat, trim($start)) : Carbon::now();
-        $end = $end ? Carbon::createFromFormat($currentFormat, trim($end)) : Carbon::now();
-        return $end->diff($start)->y;
-    }
 
-    /**
-     * Transform a date value into a Carbon object (Laravel Excel).
-     *
-     * @return Carbon|null
-     */
-    public static function transformDate($value, $format = 'd/m/Y')
-    {
-        try {
-            if (empty($value)) {
-                return null;
-            }
-
-            if (is_numeric($value)) {
-                return Carbon::instance(\PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($value))
-                    ->format($format);
-            }
-
-            return Carbon::createFromFormat($format, $value)->format($format);
-        } catch (\Throwable $th) {
-            return $value;
-        }
-    }
 
     /**
      * Transform a date value into a Carbon object (Laravel Excel).
@@ -194,31 +162,6 @@ class CommonHelper
         if (!empty($data['birthday'])) {
             $data['birthday'] = self::formatDate(
                 $data['birthday'], DAY_MONTH_YEAR, YEAR_MONTH_DAY);
-        }
-        if (!empty($data['medical_insurance_start_date'])) {
-            $data['medical_insurance_start_date'] = self::formatDate(
-                $data['medical_insurance_start_date'], DAY_MONTH_YEAR, YEAR_MONTH_DAY);
-        }
-        if (!empty($data['medical_insurance_end_date'])) {
-            $data['medical_insurance_end_date']   = self::formatDate(
-                $data['medical_insurance_end_date'], DAY_MONTH_YEAR, YEAR_MONTH_DAY);
-        }
-        if (!empty($data['insurance_five_consecutive_years'])) {
-            $data['insurance_five_consecutive_years']   = self::formatDate(
-                $data['insurance_five_consecutive_years'], DAY_MONTH_YEAR, YEAR_MONTH_DAY);
-        }
-        if (empty($data['medical_insurance_number'])) {
-            $data['medical_insurance_start_date'] = null;
-            $data['medical_insurance_end_date'] = null;
-            $data['medical_insurance_symbol_code'] = null;
-            $data['medical_insurance_live_code'] = null;
-            $data['hospital_code'] = null;
-            $data['is_long_date'] = CadresConstants::IS_LONG_DATE_ZERO;
-            $data['medical_insurance_address'] = null;
-        }
-        if (empty($data['is_long_date'])) {
-            $data['is_long_date'] = '0';
-            $data['insurance_five_consecutive_years'] = null;
         }
         return $data;
     }
@@ -232,20 +175,6 @@ class CommonHelper
         return implode(' + ', $hospitalLineText);
     }
 
-    /**
-     * Check current user can delete room
-     * @param int $idRoom
-     * @param array $roomCanDelete
-     * @return bool
-     */
-    public static function checkCanDeleteRoom(int $idRoom, array $roomCanDelete): bool
-    {
-        $canDelete = true;
-        if (!RoleHelper::getByRole([ADMIN])) {
-            $canDelete = in_array($idRoom, $roomCanDelete);
-        }
-        return $canDelete;
-    }
 
     /**
      * Get session for the condition

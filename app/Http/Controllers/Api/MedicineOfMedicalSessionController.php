@@ -185,7 +185,7 @@ class MedicineOfMedicalSessionController extends Controller
     public function print($medicalSessionId)
     {
         $medicalSession = $this->medicalSessionService->findOneOrFail($medicalSessionId);
-        $medicineOfMedicalSessions = $this->medicineOfMedicalSessionService->listMedicinPrint($medicalSessionId);
+        $medicineOfMedicalSessions = $this->medicineOfMedicalSessionService->list($medicalSessionId);
         return view('elements.medicine_of_medical_session.print-prescription', compact(
             'medicalSession',
             'medicineOfMedicalSessions'

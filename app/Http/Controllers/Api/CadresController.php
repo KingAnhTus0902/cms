@@ -109,11 +109,6 @@ class CadresController extends Controller
                         'name' => $data['name'],
                         'user_name' => $data['email'],
                         'password' => $password,
-                        'android_link' => env(
-                            'ANDROID_LINK',
-                            'https://play.google.com/store/apps/details?id=com.jvb.medbook'
-                        ),
-                        'ios_link' => 'Medbook'
                     ]
                 ];
                 // Send mail

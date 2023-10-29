@@ -83,68 +83,6 @@
                             <span class="col-form-label-fz">{{ $medical_session->cadre_address}}</span>
                         </div>
                         <!-- /ADDRESS -->
-
-                    @if ($medical_session->cadre_medical_insurance_number)
-                            <div class="col-md-4">
-                                <input type="hidden" id="medical_session_status"
-                                    value="{{ $medical_session->getRawOriginal('status') }}">
-                                <label for="reason_for_examination-edit" class="col-form-label col-form-label-fz">
-                                {{ __('label.cadres.field.medical_insurance_number') }}:
-                                </label>
-                                <span class="col-form-label-fz">{{$medical_session->cadre_medical_insurance_number}}</span>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label for="reason_for_examination-edit" class="col-form-label col-form-label-fz">
-                                {{ __('label.cadres.field.medical_insurance_start_date') }}:
-                                </label>
-                                <span class="col-form-label-fz">
-                                    {{ $medical_session->cadre_medical_insurance_start_date ?
-                                    CommonHelper::formatDate($medical_session->cadre_medical_insurance_start_date,
-                                    YEAR_MONTH_DAY,
-                                    DAY_MONTH_YEAR)
-                                    : '' }}
-                                </span>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="reason_for_examination-edit" class="col-form-label col-form-label-fz">
-                                {{ __('label.cadres.field.medical_insurance_end_date') }}:
-                                </label>
-                                <span class="col-form-label-fz">
-                                    {{ $medical_session->cadre_medical_insurance_end_date ?
-                                        CommonHelper::formatDate($medical_session->cadre_medical_insurance_end_date,
-                                        YEAR_MONTH_DAY,
-                                        DAY_MONTH_YEAR)
-                                        : '' }}
-                               </span>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="reason_for_examination-edit" class="col-form-label col-form-label-fz">
-                                {{ __('label.cadres.field.hospital_code') }}:
-                                </label>
-                                <span class="col-form-label-fz">{{$medical_session->cadre_hospital_code}}</span>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="reason_for_examination-edit" class="col-form-label col-form-label-fz">
-                                {{ __('label.cadres.field.medical_insurance_symbol_code') }}:
-                                </label>
-                                <span class="col-form-label-fz">{{$medical_session->cadre_medical_insurance_symbol_code}}</span>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="reason_for_examination-edit" class="col-form-label col-form-label-fz">
-                                {{ __('label.cadres.field.medical_insurance_live_code') }}:
-                                </label>
-                                <span class="col-form-label-fz">{{$medical_session->cadre_medical_insurance_live_code}}</span>
-                            </div>
-                            <div class="col-md">
-                                <label for="reason_for_examination-edit" class="col-form-label col-form-label-fz">
-                                {{ __('label.cadres.field.medical_insurance_address') }}:
-                                </label>
-                                <span class="col-form-label-fz">{{$medical_session->cadre_medical_insurance_address}}</span>
-                            </div>
-
-
-                        @endif
                     </div>
 
                     <form id="save-examination-form">
