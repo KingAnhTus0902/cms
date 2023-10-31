@@ -315,24 +315,7 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
     {
         $data = $this->model->where('id', $id)
             ->select("*", "payment_status as is_payment", "status as examination_status", "department_id as department")
-            ->with(['department:id,name,code', 'medicines', 'diseases', 'city:id,name'])
-            ->with(['medicines' => function ($medicines) {
-                $medicines
-                ->select(
-                    '*',
-                    'prescription_of_medical_sessions_tbl.status'
-                )
-                ->where(
-                    'prescription_of_medical_sessions_tbl.status',
-                    OPERATOR_NOT_EQUAL,
-                    PrescriptionConstants::STATUS_CANCEL
-                )
-                ->where(
-                    'medicine_of_medical_sessions_tbl.status',
-                    OPERATOR_NOT_EQUAL,
-                    MedicineConstants::STATUS_CANCEL
-                );
-            }])
+            ->with(['department:id,name,code', 'diseases', 'city:id,name'])
             ->with(['services' => function ($services) {
                 $services->select(
                     'id',
@@ -352,7 +335,6 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                 $rooms->select(
                         'examination_id',
                         'examination_name as name',
-                        'examination_insurance_price as insurance_unit_price',
                         'examination_service_price as service_unit_price',
                         'medical_session_id'
                     )
@@ -375,6 +357,7 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
             unset($data['medical_session_room']);
         }
         $data['medical_examination_day'] = $examinationDay;
+//        dd($data);
         return $data;
     }
 
@@ -537,21 +520,12 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                     UserRoomConstants::TABLE_NAME . '.' . UserRoomConstants::COLUMN_USER_ID
                 );
             })
-
-            // Join width prescription
-            ->leftJoin(PrescriptionConstants::TABLE_NAME, function ($join) {
-                $join->on(
-                    MedicalSessionConstants::TABLE_NAME . '.' . MedicalSessionConstants::COLUMN_ID,
-                    OPERATOR_EQUAL,
-                    PrescriptionConstants::TABLE_NAME . '.' . PrescriptionConstants::COLUMN_MEDICAL_SESSION_ID
-                );
-            })
             // Join width medicine
             ->leftJoin(MedicineConstants::TABLE_NAME, function ($join) {
                 $join->on(
-                    PrescriptionConstants::TABLE_NAME . '.' . PrescriptionConstants::COLUMN_ID,
+                    MedicalSessionConstants::TABLE_NAME . '.' . MedicalSessionConstants::COLUMN_ID,
                     OPERATOR_EQUAL,
-                    MedicineConstants::TABLE_NAME . '.' . MedicineConstants::COLUMN_PRESCRIPTION_ID
+                    MedicineConstants::TABLE_NAME . '.' . MedicineConstants::COLUMN_MEDICAL_SESSION_ID
                 );
             })
             -> leftJoinSub($queryGroupmedial,'subQ', function ($join) {

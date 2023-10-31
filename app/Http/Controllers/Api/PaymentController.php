@@ -30,7 +30,7 @@ class PaymentController extends BaseController
      * @return JsonResponse
      */
     public function list(Request $request): JsonResponse
-    {       
+    {
         session()->put('payment', $request->get('data')['keyword']);
 
         $response = $this->medicalSessionService->list($request->get('data'), true, true);

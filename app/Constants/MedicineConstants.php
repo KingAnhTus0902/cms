@@ -10,7 +10,7 @@ class MedicineConstants
     public const TABLE_NAME = 'medicine_of_medical_sessions_tbl';
     public const COLUMN_MATERIAL_TYPE_ID =  'materials_type_id';
     public const COLUMN_MATERIAL_TYPE_NAME =  'materials_type_name';
-    public const COLUMN_PRESCRIPTION_ID = 'prescription_id';
+    public const COLUMN_MEDICAL_SESSION_ID = 'medical_session_id';
     public const COLUMN_INSURANCE_CODE  =   'materials_insurance_code';
     public const COLUMN_MATERIAL_CODE =   'materials_code';
     public const COLUMN_MATERIAL_NAME =   'materials_name';

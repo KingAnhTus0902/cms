@@ -183,6 +183,12 @@ class MedicalSession extends Model
         return $this->hasMany(DesignatedServiceOfMedicalSession::class, 'medical_session_id', 'id');
     }
 
+    public function diseases()
+    {
+        return $this->hasMany(DiseaseOfMedicalSession::class, 'medical_session_id', 'id')
+            ->whereNull(CommonConstants::DELETED_AT);
+    }
+
 
     public function getCadreCityIdAttribute($value)
     {
@@ -222,12 +228,6 @@ class MedicalSession extends Model
                 DAY_MONTH_YEAR,
             )
             : '';
-    }
-
-    public function diseases()
-    {
-        return $this->hasMany(DiseaseOfMedicalSession::class, 'medical_session_id', 'id')
-            ->whereNull(CommonConstants::DELETED_AT);
     }
 
 

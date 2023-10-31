@@ -156,7 +156,6 @@ class MedicalSessionService extends BaseService
                 = $room->examinationType->insurance_unit_price ?? null;
             $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_EXAMINATION_SERVICE_PRICE}
                 = $room->examinationType->service_unit_price ?? null;
-            $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_ROOM_NAME} = $room->name ?? null;
             $medicalSessionRoom->save();
             DB::commit();
             return true;
@@ -171,100 +170,41 @@ class MedicalSessionService extends BaseService
         try {
             $data = $this->mainRepository->getPaymentDetail($id);
             $setting = $this->settingRepository->first();
-                $medicinesInsuranceCost = ZERO_PRICE;
-                $servicesInsuranceCost = ZERO_PRICE;
-                $medicinesServiceCost = ZERO_PRICE;
                 $servicesServiceCost = ZERO_PRICE;
-                $benefitRate = BENEFIT_RATE;
-                $baseSalary = $setting->base_salary ?? BASE_SALARY;
-                $otherMedicines = ZERO_PRICE;
                 $otherServices = ZERO_PRICE;
-                $healthInsuranceCard = null;
                 $hospitalName = null;
-                $medicines_status = PrescriptionConstants::STATUS_DISPENSED;
-
                 // calculate sum
-                $examinationsInsuranceCost = !empty($data['examination_types']) ? array_sum(
-                    array_column($data['examination_types'], 'insurance_unit_price')
-                ) : 0;
                 $examinationsServiceCost = !empty($data['examination_types']) ? array_sum(
                     array_column($data['examination_types'], 'service_unit_price')
                 ) : 0;
-                if (!empty($data['medicines'])) {
-                    foreach ($data['medicines'] as $key => $value) {
-                        $medicines_status = $value['status'];
-                        $insurance = (int) $value['materials_insurance_unit_price'] * $value['materials_amount'];
-                        $service = (int) $value['materials_unit_price'] * $value['materials_amount'];
-                        $data['medicines'][$key]['total_insurance'] = $insurance;
-                        $data['medicines'][$key]['total_service'] = $service;
-                        if ($value['use_insurance'] == MedicalSessionConstants::USE_INSURANCE
-                        && $data['use_medical_insurance'] == MedicalSessionConstants::USE_INSURANCE) {
-                            $medicinesInsuranceCost = $medicinesInsuranceCost + $insurance;
-                            $medicinesServiceCost = $medicinesServiceCost + $service;
-                        } else {
-                            $otherMedicines = $otherMedicines + $service;
-                        }
-                    }
-                }
+
                 $data['service'] = $data['services'];
                 $data['services'] = [];
                 if (!empty($data['service'])) {
                     foreach ($data['service'] as $key => $value) {
-                        $insurance = (int) $value['designated_insurance_unit_price']
+                        $service = (int) $value['designated_insurance_unit_price']
                                         * $value['designated_service_amount'];
-                        $service = (int) $value['designated_service_unit_price']
-                                        * $value['designated_service_amount'];
-                        $value['total_insurance'] = $insurance;
                         $value['total_service'] = $service;
-                        $value['use_insurance'] = $value['designated_service']['use_insurance'];
                         $value['type_surgery'] = $value['designated_service_type_surgery']
-                                                ?? DesignatedServiceConstants::TYPE_TEST;
-                        if ($value['use_insurance'] == MedicalSessionConstants::USE_INSURANCE
-                        && $data['use_medical_insurance'] == MedicalSessionConstants::USE_INSURANCE) {
-                            $servicesInsuranceCost = $servicesInsuranceCost + $insurance;
-                            $servicesServiceCost = $servicesServiceCost + $service;
-                        } else {
-                            $otherServices = $otherServices + $service;
-                        }
+                            ?? DesignatedServiceConstants::TYPE_TEST;
+                        $otherServices = $otherServices + $service;
                         unset($value['designated_service']);
                         $data['services'][$value['type_surgery']][] = $value;
                     }
                     ksort($data['services']);
                     unset($data['service']);
                 }
-                $sumInsurance = $examinationsInsuranceCost + $medicinesInsuranceCost + $servicesInsuranceCost;
-                $sumService = $examinationsServiceCost + $medicinesServiceCost + $servicesServiceCost;
-                // calculate benefit rate based on treatment line
-                if (!empty($healthInsuranceCard)) {
-                    $healthInsuranceCard = $healthInsuranceCard->toArray();
-                    if ($data['treatment_line'] == MedicalSessionConstants::RIGHT_TREATMENT_LINE) {
-                        if (!($data['cadre_is_long_date'] == CadresConstants::IS_LONG_DATE_ONE)) {
-                            if (($baseSalary * FIFTEEN_PERCENT / FULL_PERCENT) < $sumInsurance) {
-                                $benefitRate = $healthInsuranceCard['discount_right_line'];
-                            }
-                        }
-                    } else {
-                        $benefitRate = $healthInsuranceCard['discount_opposite_line'];
-                    }
-                }
+                $sumService = $examinationsServiceCost + $otherServices;
+
 
                 $data['examination_start_invoice'] = CommonHelper::formatDateInvoice(
                                                     $data['medical_examination_day'], 'Y-m-d H:i:s');
                 $data['examination_end_invoice'] = CommonHelper::formatDateInvoice(
                                                     $data['medical_examination_day_end'], 'Y-m-d H:i:s');
-                $data['benefit_rate'] = $benefitRate;
-                $data['base_salary'] = $baseSalary;
-                $data['examinations_insurance_cost'] = $examinationsInsuranceCost;
-                $data['medicines_insurance_cost'] = $medicinesInsuranceCost;
-                $data['services_insurance_cost'] = $servicesInsuranceCost;
-                $data['other_medicines'] = $otherMedicines;
-                $data['sum_insurance'] = $sumInsurance;
                 $data['examinations_service_cost'] = $examinationsServiceCost;
-                $data['medicines_service_cost'] = $medicinesServiceCost;
                 $data['services_service_cost'] = $servicesServiceCost;
                 $data['sum_service'] = $sumService;
-                $data['other_services'] = $otherServices;
-                $data['medicines_status'] = $medicines_status;
+                $data['other_services'] = $sumService;
                 $data['city_name'] = $data['cadre_city_id'] ?? null;
                 $data['clinic_name'] = $setting->clinic_name ?? null;
                 $data['ministry_of_health'] = $setting->ministry_of_health ?? null;
@@ -493,8 +433,6 @@ class MedicalSessionService extends BaseService
         DB::beginTransaction();
         try {
             $data['payment_status'] = $action;
-            $data['is_emergency'] = $data['is_emergency'] ?? MedicalSessionConstants::NORMAL;
-            $data['cadre_is_long_date'] = $data['cadre_is_long_date'] ?? CadresConstants::IS_LONG_DATE_ZERO;
             $payment = $this->mainRepository->find($id);
             if (!empty($payment)) {
                 if ($payment->getRawOriginal('payment_status') != $action) {
@@ -508,20 +446,7 @@ class MedicalSessionService extends BaseService
                 $medicalData = $data;
                 $medicalData['payment_price'] = $medicalData['medical_price'];
                 unset($medicalData['medical_price']);
-                unset($medicalData['medicines_price']);
                 $this->mainRepository->updates($payment, $medicalData);
-                $medicinesData = $data;
-                $medicinesData['payment_price'] = $medicinesData['medicines_price'];
-                unset($medicinesData['medical_price']);
-                unset($medicinesData['medicines_price']);
-                unset($medicinesData['is_emergency']);
-                unset($medicinesData['treatment_line']);
-                unset($medicinesData['cadre_id']);
-                unset($medicinesData['cadre_is_long_date']);
-                unset($medicinesData['health_insurance_fund']);
-                unset($medicinesData['patient_pay']);
-                unset($medicinesData['benefit_rate']);
-                $this->mainRepository->updatePrescriptionByMedicalSessionId($id, $medicinesData);
                 $this->mainRepository->updateDesignatedByMedicalSessionId($id, ['payment_status' => $action]);
                 DB::commit();
             }

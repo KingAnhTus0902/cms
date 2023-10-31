@@ -183,10 +183,9 @@ function saveAndPrint() {
     });
 }
 
-function save(element, medicines_status, print_insurance, result) {
+function save(element, print_insurance, result) {
     var action = element;
     var routes = $(action).attr('routes');
-    if (medicines_status == 2) {
         $.clinicSave({
             selector: action,
             url: routes,
@@ -203,9 +202,6 @@ function save(element, medicines_status, print_insurance, result) {
                 toastAlert('Có lỗi xảy ra. Vui lòng thử lại sau ít phút', '', 'error');
             }
         });
-    } else {
-        toastAlert('Đơn thuốc chưa được phát, vui lòng phát thuốc trước khi thanh toán!', '', 'error');
-    }
 }
 
 function appendDataEditCadre(response) {
