@@ -182,7 +182,7 @@ class MedicalSessionService extends BaseService
                 $data['services'] = [];
                 if (!empty($data['service'])) {
                     foreach ($data['service'] as $key => $value) {
-                        $service = (int) $value['designated_insurance_unit_price']
+                        $service = (int) $value['designated_service_unit_price']
                                         * $value['designated_service_amount'];
                         $value['total_service'] = $service;
                         $value['type_surgery'] = $value['designated_service_type_surgery']

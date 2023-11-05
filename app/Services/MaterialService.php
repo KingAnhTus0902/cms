@@ -62,15 +62,6 @@ class MaterialService extends BaseService
      */
     public function saveMaterial($conditions, $materialId = null)
     {
-        $useInsurance = MaterialConstants::USE_INSURANCE;
-        $notUseInsurance = MaterialConstants::NOT_USE_INSURANCE;
-        $conditions['use_insurance'] = !empty($conditions['use_insurance']) ? $useInsurance : $notUseInsurance;
-        if (empty($conditions['service_unit_price'])) {
-            $conditions['service_unit_price'] = CommonConstants::PRICE_DEFAULT;
-        }
-        if (empty($conditions['insurance_unit_price'])) {
-            $conditions['insurance_unit_price'] = CommonConstants::PRICE_DEFAULT;
-        }
         if (empty($materialId)) {
             $conditions['code'] = self::generateMaterialCode();
             return $this->materialRepositoryInterface->create($conditions);
@@ -79,10 +70,6 @@ class MaterialService extends BaseService
         $material = $this->materialRepositoryInterface->findOneOrFail($materialId);
         if (!$material) {
             return Response::HTTP_NOT_FOUND;
-        }
-        if ($conditions['use_insurance'] == $notUseInsurance) {
-            $conditions['insurance_code'] = null;
-            $conditions['insurance_unit_price'] = CommonConstants::PRICE_DEFAULT;
         }
         return $this->materialRepositoryInterface->update($materialId, $conditions);
     }
@@ -101,20 +88,6 @@ class MaterialService extends BaseService
             return [
                 'isNotFound' => true,
                 'isDenyDelete' => false,
-                'isDeleted' => false
-            ];
-        }
-
-        $materialBatches = $this->materialBatchRepository->getList(
-            ['id', 'amount'],
-            [
-                'material_id' => QueryHelper::setQueryInput($materialId)
-            ]
-        )->get();
-        if ($materialBatches->isNotEmpty()) {
-            return [
-                'isNotFound' => false,
-                'isDenyDelete' => true,
                 'isDeleted' => false
             ];
         }
@@ -152,16 +125,6 @@ class MaterialService extends BaseService
         return $result;
     }
 
-    /**
-     * Detail amount material
-     *
-     * @param int $id
-     * @return Collection
-     */
-    public function detailAmountMaterial($id)
-    {
-        return $this->materialBatchRepository->listForDetailMaterial($id);
-    }
 
     /**
      * List data export.

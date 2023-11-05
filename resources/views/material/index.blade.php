@@ -14,7 +14,6 @@
         'units' => $units,
         'materialTypes' => $materialTypes,
     ])
-    @include('elements.material.detail')
     <div id="content-list">
     </div>
 @endsection

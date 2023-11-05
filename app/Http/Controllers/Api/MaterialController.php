@@ -52,12 +52,7 @@ class MaterialController extends Controller
                     'content',
                     'dosage_form',
                     'material_type_id',
-                    'ingredients',
                     'unit_id',
-                    'service_unit_price',
-                    'use_insurance',
-                    'insurance_code',
-                    'insurance_unit_price',
                     'disease_type',
                     'method',
                     'usage',
@@ -82,17 +77,6 @@ class MaterialController extends Controller
         return $this->successResponse($response);
     }
 
-    /**
-     * Detail amount Material
-     *
-     * @param int $id
-     * @return JsonResponse
-     */
-    public function detailAmount($id)
-    {
-        $materialBatches = $this->materialService->findOneOrFail($id);
-        return view('elements.material.detail-result', compact('materialBatches'))->render();
-    }
 
     /**
      * Update Material
@@ -112,12 +96,7 @@ class MaterialController extends Controller
                     'content',
                     'dosage_form',
                     'material_type_id',
-                    'ingredients',
                     'unit_id',
-                    'service_unit_price',
-                    'use_insurance',
-                    'insurance_code',
-                    'insurance_unit_price',
                     'disease_type',
                     'method',
                     'usage',

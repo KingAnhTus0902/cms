@@ -51,12 +51,7 @@ $(document).ready(function () {
             content: $('#content-edit').val(),
             dosage_form: $('#dosage_form-edit').val(),
             material_type_id: $('#material_type_id-edit').val(),
-            ingredients: $('#ingredients-edit').val(),
             unit_id: $('#unit_id-edit').val(),
-            service_unit_price: $('#service_unit_price-edit').val(),
-            use_insurance: $('#use_insurance-edit').val(),
-            insurance_code: $('#insurance_code-edit').val(),
-            insurance_unit_price: $('#insurance_unit_price-edit').val(),
             disease_type: $('#disease_type-edit').val(),
             method: $('#method-edit').val(),
             usage: $('#usage-data-edit').val(),
@@ -84,7 +79,7 @@ $(document).ready(function () {
             });
     });
 
-    
+
     $(".material-add-select2").select2({
         dropdownParent: $("#add-material")
     });
@@ -96,17 +91,6 @@ $(document).ready(function () {
         $(":radio[name=type]").first().prop("checked", true);
     });
 
-    $(document).on('click', '.detail-material', function () {
-        let id = $(this).data('id');
-        let api = API_DETAIL_AMOUNT;
-        api = api.replace(":id", id);
-        getData(api, id, appendDataDetail);
-    });
-
-    function appendDataDetail(data) {
-        $('#detail-material').find('.modal-body').html(data);
-        $('#detail-material').modal("show")
-    }
 })
 
 
@@ -138,17 +122,7 @@ function appendDataEdit(data) {
     let type = 'edit';
     for (let key in item) {
         if (item.hasOwnProperty(key)) {
-            if (key === 'use_insurance' && item[key] == 1) {
-                $(`#${key}-${type}`).prop('checked', true);
-                $('.insurance_code_input').show();
-                $('.insurance_unit_price_input').show();
-            }
-            else if (key === 'use_insurance' && item[key] == 0) {
-                $(`#${key}-${type}`).prop('checked', false);
-                $('.insurance_code_input').hide();
-                $('.insurance_unit_price_input').hide();
-            }
-            else if ($(`#${key}-${type}`).is('select')) {
+            if ($(`#${key}-${type}`).is('select')) {
                 $(`#${key}-${type}`).val(item[key]).trigger('change');
             }
             else if ($(`input[name=${key}]`).is(':radio')) {

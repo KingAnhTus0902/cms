@@ -31,14 +31,8 @@
                                             <th class="dt-center w-15">
                                                 {{ __('label.material.material_type') }}
                                             </th>
-                                            <th class="dt-center w-10">
-                                                {{ __('label.material.field.amount') }}
-                                            </th>
                                             <th class="dt-center w-8">
                                                 {{ __('label.unit.field.name') }}
-                                            </th>
-                                            <th class="dt-center w-12">
-                                                {{ __('label.material.field.insurance_unit_price') }}
                                             </th>
                                             <th class="dt-center w-10"
                                                 aria-label="CSS grade: activate to sort column ascending">
@@ -50,22 +44,15 @@
                                         @foreach ($materials as $key => $material)
                                             <tr class="odd">
                                                 <td class="text-center">{{ $itemStart + $key }}</td>
-                                                <td class="word-break detail-material cursor-pointer text-primary"
-                                                    tabindex="0" data-id="{{ $material->id }}">{{ $material->code }}
+                                                <td class="word-break">
+                                                    {{ $material->code }}
                                                 </td>
-                                                <td class="word-break detail-material cursor-pointer text-primary"
-                                                    data-id="{{ $material->id }}">{{ $material->name }}</td>
+                                                <td class="word-break">{{ $material->name }}</td>
                                                 <td class="word-break">
                                                     {{ !empty($material->materialType) ? $material->materialType->name : '' }}
                                                 </td>
-                                                <td class="word-break text-right">
-                                                    {{ number_format($material->materialBatches->sum('amount')) }}
-                                                </td>
                                                 <td class="word-break">
                                                     {{ !empty($material->unit) ? $material->unit->name : '' }}</td>
-                                                <td class="word-break text-right">
-                                                    {{ NumberFormatHelper::priceFormat($material->insurance_unit_price) }}
-                                                </td>
                                                 <td class="dt-center">
                                                     @if (auth()->user()->can('View-material')
                                                         || auth()->user()->can('Edit-material'))
