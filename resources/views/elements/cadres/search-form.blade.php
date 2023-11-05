@@ -24,38 +24,6 @@
         <div class="col-md-12">
             <div class="row justify-content-center">
                 <div class="col-md-6 row justify-content-center">
-                    <label class="col-md-4 col-lg-4 col-xl-3 col-xxl-2 control-label">{{__("label.cadres.search_phone")}}</label>
-                    <div class="col-md-7">
-                        <div class="input-group input-group-sm">
-                            <input
-                                type="text"
-                                class="form-control form-control-sm id"
-                                placeholder="{{__("label.cadres.search_phone_ph")}}"
-                                id="input-search-phone-cadres"
-                            />
-                            <input type="hidden" id="input-search-phone-cadres-hidden" value="">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 row justify-content-center">
-                    <label class="col-md-4 col-lg-4 col-xl-3 col-xxl-2 control-label">{{__("label.cadres.search_identity_card_number")}}</label>
-                    <div class="col-md-7">
-                        <div class="input-group input-group-sm">
-                            <input
-                                type="text"
-                                class="form-control form-control-sm id"
-                                placeholder="{{__("label.cadres.search_identity_card_number")}}"
-                                id="input-search-identity_card_number"
-                            />
-                            <input type="hidden" id="input-search-identity_card_number-hidden" value="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12 mt-md-2">
-            <div class="row justify-content-center">
-                <div class="col-md-6 row justify-content-center">
                     <label class="col-md-4 col-lg-4 col-xl-3 col-xxl-2 control-label">{{__("label.cadres.search_name")}}</label>
                     <div class="col-md-7">
                         <div class="input-group input-group-sm">
@@ -70,16 +38,16 @@
                     </div>
                 </div>
                 <div class="col-md-6 row justify-content-center">
-                    <label class="col-md-4 col-lg-4 col-xl-3 col-xxl-2 control-label">{{__("label.cadres.search_medical_insurance_number")}}</label>
+                    <label class="col-md-4 col-lg-4 col-xl-3 col-xxl-2 control-label">{{__("label.cadres.search_identity_card_number")}}</label>
                     <div class="col-md-7">
                         <div class="input-group input-group-sm">
                             <input
                                 type="text"
                                 class="form-control form-control-sm id"
-                                placeholder="{{__("label.cadres.search_medical_insurance_number_ph")}}"
-                                id="input-search-medical_insurance_number"
+                                placeholder="{{__("label.cadres.search_identity_card_number")}}"
+                                id="input-search-identity_card_number"
                             />
-                            <input type="hidden" id="input-search-medical_insurance_number-hidden" value="">
+                            <input type="hidden" id="input-search-identity_card_number-hidden" value="">
                         </div>
                     </div>
                 </div>

@@ -4,7 +4,7 @@
 
 <div id="add-cadres" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog"
      aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title">
@@ -19,7 +19,7 @@
                 <form id="add-cadres-form">
                     @csrf
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="name">
                                     {{ __('label.cadres.field.name') }}
@@ -27,6 +27,53 @@
                                 </label>
                                 <input type="text" class="form-control form-control-sm input-form" id="name-add" name="name">
                                 <p id="name-add-error" class="error validate-error"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="identity_card_number">
+                                    {{ __('label.cadres.field.identity_card_number') }}
+                                </label>
+                                <input type="text"
+                                       class="form-control form-control-sm input-form number-integer-validate"
+                                       id="identity_card_number-add"
+                                       name="identity_card_number"
+                                >
+                                <p id="identity_card_number-add-error" class="error validate-error"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="phone">
+                                        {{ __('label.cadres.field.phone') }}
+                                        <span class="text-red">(*)</span>
+                                    </label>
+                                    <input type="text" class="form-control form-control-sm input-form" id="phone-add" name="phone">
+                                    <p id="phone-add-error" class="error validate-error"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="email">
+                                    {{ __('label.cadres.field.email') }}
+                                </label>
+                                <input type="text" class="form-control form-control-sm input-form" id="email-add" name="email">
+                                <p id="email-add-error" class="error validate-error"></p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="job">{{ __('label.cadres.field.job') }}</label>
+                                <input type="text"
+                                       class="form-control form-control-sm input-form"
+                                       id="job-add"
+                                       name="job"
+                                >
+                                <p id="job-add-error" class="error validate-error"></p>
                             </div>
                         </div>
                     </div>
@@ -71,45 +118,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="identity_card_number">
-                                    {{ __('label.cadres.field.identity_card_number') }}
-                                </label>
-                                <input type="text"
-                                    class="form-control form-control-sm input-form number-integer-validate"
-                                    id="identity_card_number-add"
-                                    name="identity_card_number"
-                                >
-                                <p id="identity_card_number-add-error" class="error validate-error"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="phone">
-                                    {{ __('label.cadres.field.phone') }}
-                                    <span class="text-red">(*)</span>
-                                </label>
-                                <input type="text" class="form-control form-control-sm input-form" id="phone-add" name="phone">
-                                <p id="phone-add-error" class="error validate-error"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="email">
-                                    {{ __('label.cadres.field.email') }}
-                                </label>
-                                <input type="text" class="form-control form-control-sm input-form" id="email-add" name="email">
-                                <p id="email-add-error" class="error validate-error"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="city_id">{{ __('label.cadres.field.city_id') }}</label>
                                 <select name="city_id" class="form-control form-control-sm input-form" id="city_id-add">
@@ -117,9 +126,7 @@
                                 <p id="city_id-add-error" class="error validate-error"></p>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="district_id">{{ __('label.cadres.field.district_id') }}</label>
                                 <select name="district_id" class="form-control form-control-sm input-form" id="district_id-add">
@@ -127,30 +134,15 @@
                                 <p id="district_id-add-error" class="error validate-error"></p>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="address">{{ __('label.cadres.field.address') }}</label>
                                 <input type="text"
-                                    class="form-control form-control-sm input-form"
-                                    id="address-add"
-                                    name="address"
+                                       class="form-control form-control-sm input-form"
+                                       id="address-add"
+                                       name="address"
                                 >
                                 <p id="address-add-error" class="error validate-error"></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label for="job">{{ __('label.cadres.field.job') }}</label>
-                                <input type="text"
-                                    class="form-control form-control-sm input-form"
-                                    id="job-add"
-                                    name="job"
-                                >
-                                <p id="job-add-error" class="error validate-error"></p>
                             </div>
                         </div>
                     </div>

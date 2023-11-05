@@ -255,16 +255,6 @@ function developing() {
     swal("Hiện tại hệ thống đang phát triển. Quý khách vui lòng thử lại sau", "", "warning");
 }
 
-function setDefaultInsurance(type) {
-    $(`#medical_insurance_start_date-${type}`).val('').attr('disabled', 'disabled');
-    $(`#medical_insurance_end_date-${type}`).val('').attr('disabled', 'disabled');
-    $(`#medical_insurance_symbol_code-${type}`).val('').attr('disabled', 'disabled');
-    $(`#medical_insurance_live_code-${type}`).val('').attr('disabled', 'disabled');
-    $(`#medical_insurance_address-${type}`).val('').attr('disabled', 'disabled');
-    $(`#hospital_code-${type}`).val('').attr('disabled', 'disabled');
-    $(`#is_long_date-${type}`).prop('checked', false).attr('disabled', 'disabled');
-    $(`#insurance_five_consecutive_years-${type}`).val('').attr('disabled', 'disabled');
-}
 
 //Common Material js
 function resetMaterialElement(form = '')
@@ -276,20 +266,6 @@ function resetMaterialElement(form = '')
     $('.insurance_unit_price_input').hide();
     resetForm(form);
 }
-
-$('.insurance_code_input').hide();
-$('.insurance_unit_price_input').hide();
-$('.use_insurance_checkbox').change(function(){
-    if ($(this).is(':checked')) {
-        $(this).val(1);
-        $('.insurance_code_input').show();
-        $('.insurance_unit_price_input').show();
-    } else {
-        $(this).val(0);
-        $('.insurance_code_input').hide();
-        $('.insurance_unit_price_input').hide();
-    }
-});
 
 // Toast popup alert
 function toastAlert(title, body, type)

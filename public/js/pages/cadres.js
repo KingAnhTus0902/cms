@@ -24,13 +24,9 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#search-cadres-clear", function () {
-        $('#input-search-phone-cadres').val('');
         $('#input-search-name-cadres').val('');
-        $('#input-search-medical_insurance_number').val('');
         $('#input-search-identity_card_number').val('');
-        $('#input-search-phone-cadres-hidden').val('');
         $('#input-search-name-cadres-hidden').val('');
-        $('#input-search-medical_insurance_number-hidden').val('');
         $('#input-search-identity_card_number-hidden').val('');
     });
 
@@ -54,10 +50,7 @@ $(document).ready(function () {
 
     $(document).on("click", ".add", function () {
         let api = API_CREATE;
-        let type = $("#type").val();
-        let medicalInsuranceAddress = $(`#medical_insurance_address-${type}`).val();
         let serializeArrayData = $("#add-cadres-form").serializeArray();
-        serializeArrayData.push({ name: "medical_insurance_address", value: medicalInsuranceAddress });
         let data = jQuery.param(serializeArrayData);
         hideMessageValidate('#add-cadres-form');
         createOrUpdate(api, data, nextAddCadres);
@@ -89,15 +82,6 @@ $(document).ready(function () {
             code: $('#code-edit').val(),
             name: $('#name-edit').val(),
             identity_card_number: $('#identity_card_number-edit').val(),
-            medical_insurance_number: med_number,
-            medical_insurance_symbol_code: $('#medical_insurance_symbol_code-edit').val(),
-            medical_insurance_live_code: $('#medical_insurance_live_code-edit').val(),
-            medical_insurance_start_date: $('#medical_insurance_start_date-edit').val(),
-            medical_insurance_end_date: $('#medical_insurance_end_date-edit').val(),
-            medical_insurance_address: $('#medical_insurance_address-edit').val(),
-            is_long_date: med_number.length ? ($('#is_long_date-edit').is(":checked") ? 1 : 0) : '',
-            insurance_five_consecutive_years: $('#insurance_five_consecutive_years-edit').val(),
-            hospital_code: med_number.length ? $('#hospital_code-edit').val() : '',
             birthday: $('#birthday-edit').val(),
             gender: $('#gender-edit').val(),
             folk_id: $('#folk_id-edit').val(),
@@ -144,44 +128,6 @@ $(document).ready(function () {
             });
     });
 
-    $(document).on("keyup", "#medical_insurance_number-add", function () {
-        let medical_insurance_number = $('#medical_insurance_number-add').val().trim();
-        if (medical_insurance_number.length > 0) {
-            $('#medical_insurance_start_date-add').removeAttr('disabled');
-            $('#medical_insurance_end_date-add').removeAttr('disabled');
-            $('#is_long_date-add').removeAttr('disabled');
-            $('#hospital_code-add').val(DEFAULT_HOSPITAL_CODE).removeAttr('disabled');
-            $('#medical_insurance_symbol_code-add').removeAttr('disabled', 'disabled');
-            $('#medical_insurance_live_code-add').removeAttr('disabled', 'disabled');
-            autoFillHospital('add', DEFAULT_HOSPITAL_CODE);
-        } else {
-            setDefaultInsurance('add');
-        }
-    });
-
-    $(document).on("keyup", "#medical_insurance_number-edit", function () {
-        let medical_insurance_number = $('#medical_insurance_number-edit').val().trim();
-        if (medical_insurance_number.length > 0) {
-            $('#medical_insurance_start_date-edit').removeAttr('disabled');
-            $('#medical_insurance_end_date-edit').removeAttr('disabled');
-            $('#is_long_date-edit').removeAttr('disabled');
-            $('#hospital_code-edit').val(DEFAULT_HOSPITAL_CODE).removeAttr('disabled');
-            $('#medical_insurance_symbol_code-edit').removeAttr('disabled', 'disabled');
-            $('#medical_insurance_live_code-edit').removeAttr('disabled', 'disabled');
-            autoFillHospital('edit', DEFAULT_HOSPITAL_CODE);
-        } else {
-            setDefaultInsurance('edit');
-        }
-    });
-
-    $(document).on("click", "#is_long_date-add, #is_long_date-edit", function () {
-        let type = $("#type").val();
-        if ($(this).is(":checked")) {
-            $(`#insurance_five_consecutive_years-${type}`).removeAttr('disabled');
-        } else {
-            $(`#insurance_five_consecutive_years-${type}`).val('').attr('disabled', 'disabled');
-        }
-    });
 
     $('#name-add, #name-edit').on('keyup', function() {
         let inputName = $(this).val();
@@ -199,32 +145,28 @@ $(document).on("click", ".sorting", function () {
 });
 
 
-function getCadres(code = "", name = "", page = 1, sortColumn = "", sortType = "", identity_card_number = "", medical_insurance_number = "") {
+function getCadres(name = "", page = 1, sortColumn = "", sortType = "", identity_card_number = "") {
     let api = API_LIST;
     let dataSearch = {
-        phone: code,
         name: name,
         page: page,
         sort_column: sortColumn,
         sort_type: sortType,
-        identity_card_number: identity_card_number,
-        medical_insurance_number: medical_insurance_number
+        identity_card_number: identity_card_number
     };
     getData(api, dataSearch, nextGetCadres);
 }
 function searchCadres(search) {
     let sortType = '';
-    let code = $("#input-search-phone-cadres-hidden").val();
     let name = $("#input-search-name-cadres-hidden").val();
     let identity_card_number = $("#input-search-identity_card_number-hidden").val();
-    let medical_insurance_number = $("#input-search-medical_insurance_number-hidden").val();
     let page = $("li.page-item.active ").find("a.page-link").data('id');
     if (search) {page = 1;}
     if ($("#ordinal-number-cadres").hasClass("sorting_desc")) {
         sortType = 'desc';
     }
     let sortColumn = $("#ordinal-number-cadres").data('column-name');
-    getCadres(code, name, page, sortColumn, sortType, identity_card_number, medical_insurance_number);
+    getCadres(name, page, sortColumn, sortType, identity_card_number);
 }
 
 
@@ -236,9 +178,6 @@ function appendDataEdit(data) {
     $('#edit-cadres').modal('show');
     let item = data.data;
     item['birthday'] = item['birthday'] ? moment(item['birthday']).format("DD/MM/YYYY") : moment().format("DD/MM/YYYY");
-    item['medical_insurance_start_date'] = item['medical_insurance_start_date'] ? moment(item['medical_insurance_start_date']).format("DD/MM/YYYY") : "";
-    item['medical_insurance_end_date'] = item['medical_insurance_end_date'] ? moment(item['medical_insurance_end_date']).format("DD/MM/YYYY") : "";
-    item['insurance_five_consecutive_years'] = item['insurance_five_consecutive_years'] ? moment(item['insurance_five_consecutive_years']).format("DD/MM/YYYY") : "";
     let type = 'edit';
     let cityId = item['city_id'];
     let districtId = item['district_id'];
@@ -248,27 +187,6 @@ function appendDataEdit(data) {
         if (item.hasOwnProperty(key)) {
             $(`#${key}-${type}`).val(item[key])
         }
-    }
-
-    $(`#medical_insurance_live_code-edit option[value=${item['medical_insurance_live_code']}]`).attr('selected','selected');
-
-    if (item['is_long_date'] && item['is_long_date'] == 1) {
-        $(`#is_long_date-edit`).prop('checked', true);
-        $(`#insurance_five_consecutive_years-edit`).removeAttr('disabled', 'disabled');
-    } else {
-        $(`#is_long_date-edit`).prop('checked', false);
-    }
-
-    if (item['medical_insurance_number'] && item['medical_insurance_number'].length > 0) {
-        $('#medical_insurance_start_date-edit').removeAttr('disabled');
-        $('#medical_insurance_end_date-edit').removeAttr('disabled');
-        $('#is_long_date-edit').removeAttr('disabled');
-        $('#hospital_code-edit').removeAttr('disabled');
-    } else {
-        $('#medical_insurance_start_date-edit').attr('disabled', 'disabled');
-        $('#medical_insurance_end_date-edit').attr('disabled', 'disabled');
-        $('#is_long_date-edit').attr('disabled', 'disabled');
-        $('#hospital_code-edit').attr('disabled', 'disabled');
     }
 }
 
@@ -343,41 +261,20 @@ function getSelectData(type, city_id, district_id, folk_id) {
     })
 }
 function appendKeyWordSearch () {
-    let keywordPhone = $('#input-search-phone-cadres').val();
     let keywordName = $('#input-search-name-cadres').val();
-    let keywordMedicalInsurance = $('#input-search-medical_insurance_number').val();
     let keywordIdentity = $('#input-search-identity_card_number').val();
 
-    $("#input-search-phone-cadres-hidden").val(keywordPhone);
     $("#input-search-name-cadres-hidden").val(keywordName);
-    $("#input-search-medical_insurance_number-hidden").val(keywordMedicalInsurance);
     $("#input-search-identity_card_number-hidden").val(keywordIdentity);
 }
 
 function resetFormAddCadres(element) {
     resetForm(element);
-    setDefaultInsurance('add');
     $(`${element} .input-group.date`).each(function() {
         resetDateTimePicker($(this));
     })
 }
 
-
-$("#hospital_code-add, #hospital_code-edit").keyup(function () {
-    let type = $("#type").val();
-    let hospital_code =  $(this).val();
-    if (hospital_code !== "") {
-        autoFillHospital(type, hospital_code);
-    }
-});
-
-$("#hospital_code-add, #hospital_code-edit").on('input', function () {
-    let type = $("#type").val();
-    let hospitalCode =  $(this).val();
-    if (hospitalCode == null || hospitalCode.trim() === '') {
-        $(`#medical_insurance_address-${type}`).val('');
-    }
-});
 
 $.clinicChangeStatus({
     selector: '.change-status-btn',

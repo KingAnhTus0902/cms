@@ -34,19 +34,7 @@ class CadresRepository extends BaseRepository implements CadresRepositoryInterfa
     public function list(array $data, $paginate, $select)
     {
         $query = $this->model->select($select);
-        if (isset($data[CadresConstants::COLUMN_CODE])) {
-            $code = $data[CadresConstants::COLUMN_CODE];
-            $query->where(function ($query) use ($code) {
-                $query->orWhere(CadresConstants::COLUMN_CODE, CommonConstants::OPERATOR_LIKE, '%' . $code . '%');
-            });
-        }
 
-        if (isset($data[CadresConstants::COLUMN_PHONE])) {
-            $phone = $data[CadresConstants::COLUMN_PHONE];
-            $query->where(function ($query) use ($phone) {
-                $query->orWhere(CadresConstants::COLUMN_PHONE, CommonConstants::OPERATOR_LIKE, '%' . $phone . '%');
-            });
-        }
 
         if (isset($data[CadresConstants::COLUMN_NAME])) {
             $name = $data[CadresConstants::COLUMN_NAME];
@@ -54,7 +42,6 @@ class CadresRepository extends BaseRepository implements CadresRepositoryInterfa
                 $query->orWhere(CadresConstants::COLUMN_NAME, CommonConstants::OPERATOR_LIKE, '%' . $name . '%');
             });
         }
-
         if (isset($data[CadresConstants::COLUMN_IDENTITY_CARD_NUMBER])) {
             $identityCardNumber = $data[CadresConstants::COLUMN_IDENTITY_CARD_NUMBER];
             $query->where(function ($query) use ($identityCardNumber) {
@@ -62,17 +49,6 @@ class CadresRepository extends BaseRepository implements CadresRepositoryInterfa
                     'identity_card_number',
                     CommonConstants::OPERATOR_LIKE,
                     '%' . $identityCardNumber . '%'
-                );
-            });
-        }
-
-        if (isset($data[CadresConstants::COLUMN_MEDICAL_INSURANCE_NUMBER])) {
-            $medicalInsuranceNumber = $data[CadresConstants::COLUMN_MEDICAL_INSURANCE_NUMBER];
-            $query->where(function ($query) use ($medicalInsuranceNumber) {
-                $query->orWhere(
-                    'medical_insurance_number',
-                    CommonConstants::OPERATOR_LIKE,
-                    '%' . $medicalInsuranceNumber . '%'
                 );
             });
         }

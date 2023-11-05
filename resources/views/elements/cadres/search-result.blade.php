@@ -38,11 +38,6 @@
                                         </th>
                                         <th class="dt-center u-width100" tabindex="0"
                                             aria-controls="example2" rowspan="1"
-                                            colspan="1" aria-label="Platform(s): activate to sort column ascending">
-                                            {{__("label.cadres.search_medical_insurance_number")}}
-                                        </th>
-                                        <th class="dt-center u-width100" tabindex="0"
-                                            aria-controls="example2" rowspan="1"
                                             colspan="1" aria-label="Engine version: activate to sort column ascending">
                                             {{__("label.cadres.field.city_id")}}
                                         </th>
@@ -60,7 +55,6 @@
                                             <td class="word-break">{{ $cadres->name }}</td>
                                             <td class="word-break text-right">{{ $cadres->phone }}</td>
                                             <td class="word-break text-right">{{ $cadres->identity_card_number }}</td>
-                                            <td class="word-break text-left">{{ $cadres->medical_insurance_number }}</td>
                                             <td class="word-break">{{ $cadres->city->name ?? '' }}</td>
                                             <td class="dt-center text-nowrap">
                                                 @if (\App\Helpers\RoleHelper::getByRole([ADMIN]))
