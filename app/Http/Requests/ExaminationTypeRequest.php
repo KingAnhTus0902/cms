@@ -2,8 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
-
 class ExaminationTypeRequest extends BaseRequest
 {
     /**
@@ -15,7 +13,6 @@ class ExaminationTypeRequest extends BaseRequest
     {
         return [
             'name' => 'required|max:255',
-            'insurance_unit_price' => 'required|max:10',
             'service_unit_price' => 'required|max:10'
         ];
     }
@@ -43,7 +40,6 @@ class ExaminationTypeRequest extends BaseRequest
     {
         return [
             'name' => __('label.examination_type.name'),
-            'insurance_unit_price' => __('label.examination_type.insurance_unit_price'),
             'service_unit_price' => __('label.examination_type.service_unit_price')
         ];
     }

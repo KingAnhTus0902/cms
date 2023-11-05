@@ -32,21 +32,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label for="code" class="col-form-label col-form-label-sm">
-                                    {{ __('label.designated_service.field.insurance_unit_price') }}
-                                    <span class="text-red">(*)</span>
-                                </label>
-                                <input type="number"
-                                       class="form-control form-control-sm input-form number-validate"
-                                       id="insurance_unit_price-add"
-                                       name="insurance_unit_price">
-                                <span id="insurance_unit_price-add-error" class="error validate-error"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
                             <div class="form-group form-group-sm">
                                 <label for="type" class="col-form-label col-form-label-sm">
                                     {{ __('label.designated_service.field.service_unit_price') }}

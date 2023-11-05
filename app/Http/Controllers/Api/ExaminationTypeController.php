@@ -53,7 +53,7 @@ class ExaminationTypeController extends BaseController
      */
     public function store(ExaminationTypeRequest $request): JsonResponse
     {
-        $param = $request->only('name', 'insurance_unit_price', 'service_unit_price');
+        $param = $request->only('name', 'service_unit_price');
 
         return $this->examinationTypeService->store($param)
             ? response()->json(['success' => __('messages.SM-001')])
@@ -88,7 +88,6 @@ class ExaminationTypeController extends BaseController
         $examinationTypeRequest = array_merge(
             $request->only(
                 'name',
-                'insurance_unit_price',
                 'service_unit_price'
             ),
             ['id' => $id]

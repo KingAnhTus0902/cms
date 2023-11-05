@@ -16,9 +16,6 @@
                                         <th class="text-center">{{ __('label.common.field.ordinal_number') }}</th>
                                         <th class="text-center">{{ __('label.examination_type.name') }}</th>
                                         <th class="text-center">
-                                            {{ __('label.examination_type.insurance_unit_price') }}
-                                        </th>
-                                        <th class="text-center">
                                             {{ __('label.examination_type.service_unit_price') }}
                                         </th>
                                         @if(auth()->user()->can('View-disease') ||
@@ -32,8 +29,6 @@
                                         <tr>
                                             <td class="text-center">{{ $examinationTypes->firstItem() + $key }}</td>
                                             <td>{{ $value->name }}</td>
-                                            <td class="text-right">{{ \App\Helpers\NumberFormatHelper::
-                                                    priceFormat($value->insurance_unit_price) }}</td>
                                             <td class="text-right">{{ \App\Helpers\NumberFormatHelper::
                                                     priceFormat($value->service_unit_price) }}</td>
                                             @if(auth()->user()->can('View-disease') ||
