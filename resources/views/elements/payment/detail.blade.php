@@ -155,10 +155,10 @@
                                                 ({{ __('label.invoice.invoice.time') }})
                                             </td>
                                             <td class="text-center">
-                                                {{ NumberFormatHelper::priceFormat($data['designated_insurance_unit_price'], '', 2, ',', '.') }}
+                                                {{ NumberFormatHelper::priceFormat($data['designated_service_unit_price'], '', 2, ',', '.') }}
                                             </td>
                                             <td class="text-center">
-                                                {{ NumberFormatHelper::priceFormat($data['designated_insurance_unit_price'], '', 2, ',', '.') }}
+                                                {{ NumberFormatHelper::priceFormat($data['designated_service_unit_price'], '', 2, ',', '.') }}
                                             </td>
                                         </tr>
                                     @endforeach

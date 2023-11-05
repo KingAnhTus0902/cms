@@ -236,7 +236,7 @@
                             <td class="height-no text-left"> {{ $value['designated_service_name'] }}</td>
                             <td class="height-no text-left"> {{ __('label.invoice.invoice.time') }}</td>
                             <td class="height-no">{{ $value['designated_service_amount'] }}</td>
-                            <td class="height-no">{{ NumberFormatHelper::priceFormat($value['designated_insurance_unit_price'], '', 2, ',', '.') }}
+                            <td class="height-no">{{ NumberFormatHelper::priceFormat($value['designated_service_unit_price'], '', 2, ',', '.') }}
                             </td>
                             <td class="height-no">{{ NumberFormatHelper::priceFormat($value['total_service'], '', 2, ',', '.') }}
                             </td>
