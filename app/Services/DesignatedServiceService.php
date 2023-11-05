@@ -55,9 +55,6 @@ class DesignatedServiceService extends BaseService
 
     public function saveDesignatedService($conditions, $id = null)
     {
-        $conditions['use_insurance'] = !empty($conditions['use_insurance'])
-            ? DesignatedServiceConstants::USE_INSURANCE
-            : DesignatedServiceConstants::NOT_USE_INSURANCE;
         if (empty($id)) {
             $conditions['code'] = 'DV';
             $result = $this->mainRepository->create($conditions);
@@ -71,11 +68,6 @@ class DesignatedServiceService extends BaseService
             $res = $this->mainRepository->findOneOrFail($id);
             if (!$res) {
                 return Response::HTTP_NOT_FOUND;
-            }
-            if ($conditions['use_insurance'] == DesignatedServiceConstants::NOT_USE_INSURANCE) {
-                $conditions['insurance_code'] = null;
-                $conditions['insurance_unit_price'] = 0;
-                $conditions['insurance_surcharge'] = null;
             }
             return $this->mainRepository->update($id, $conditions);
         }

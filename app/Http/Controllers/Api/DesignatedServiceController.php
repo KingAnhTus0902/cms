@@ -53,12 +53,8 @@ class DesignatedServiceController extends Controller
                 'description',
                 'room_id',
                 'decision_number',
-                'insurance_surcharge',
-                'use_insurance',
                 'specialist',
-                'insurance_code',
                 'service_unit_price',
-                'insurance_unit_price',
                 'type_surgery',
                 );
             $response['data'] = $this->designatedServiceService->saveDesignatedService($data, null);
@@ -92,13 +88,8 @@ class DesignatedServiceController extends Controller
                     'name',
                     'description',
                     'room_id',
-                    'decision_number',
-                    'insurance_surcharge',
-                    'use_insurance',
                     'specialist',
-                    'insurance_code',
                     'service_unit_price',
-                    'insurance_unit_price',
                     'type_surgery',
                 ),
                 $request->id

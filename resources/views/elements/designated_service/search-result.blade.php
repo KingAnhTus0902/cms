@@ -30,22 +30,12 @@
                                         <th class="u-width200" tabindex="0"
                                             aria-controls="example2" rowspan="1"
                                             colspan="1" aria-label="Engine version: activate to sort column ascending">
-                                            {{__("label.designated_service.field.insurance_code")}}
-                                        </th>
-                                        <th class="u-width200" tabindex="0"
-                                            aria-controls="example2" rowspan="1"
-                                            colspan="1" aria-label="Engine version: activate to sort column ascending">
                                             {{__("label.designated_service.field.specialist")}}
                                         </th>
                                         <th class="u-width150" tabindex="0"
                                             aria-controls="example2" rowspan="1"
                                             colspan="1" aria-label="Engine version: activate to sort column ascending">
                                             {{__("label.designated_service.field.service_unit_price")}}
-                                        </th>
-                                        <th class="u-width150" tabindex="0"
-                                            aria-controls="example2" rowspan="1"
-                                            colspan="1" aria-label="Engine version: activate to sort column ascending">
-                                            {{__("label.designated_service.field.insurance_unit_price")}}
                                         </th>
                                         <th class="u-width100" tabindex="0"
                                             aria-controls="example2" rowspan="1" colspan="1"
@@ -59,8 +49,6 @@
                                         <tr class="odd">
                                             <td class="dt-center">{{ $itemStart + $key }}</td>
                                             <td class="word-break">{{ $designated_service->name }}</td>
-                                            <td class="word-break text-right">
-                                                {{ $designated_service->insurance_code ?? '' }}</td>
                                             <td class="word-break">
                                                 {{
                                                     DesignatedServiceConstants::SPECIALIST[
@@ -73,10 +61,6 @@
                                                 {{ \App\Helpers\NumberFormatHelper::
                                                     priceFormat($designated_service->service_unit_price) }}
                                             </td>
-                                            <td class="word-break text-right">
-                                                {{ \App\Helpers\NumberFormatHelper::
-                                                    priceFormat($designated_service->insurance_unit_price) }}
-                                                </td>
                                             <td class="dt-center">
                                                 @if(auth()->user()->can('View-designated_service') ||
                                                     auth()->user()->can('Edit-designated_service'))

@@ -28,59 +28,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" >
-                        <div class="col-md-12">
-                            <div class="form-group clearfix">
-                                <div class="icheck-primary d-inline">
-                                    <input type="checkbox" id="use_insurance-edit" name="use_insurance"
-                                           class="use_insurance_checkbox">
-                                    <label for="use_insurance-edit" style="font-size: .875rem;">
-                                        {{ __('label.designated_service.field.use_insurance') }}
-                                    </label>
-                                </div>
-                                <span id="use_insurance-add-error" class="error validate-error"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" >
-                        <div class="col-md-4 insurance_code_input">
-                            <div class="form-group form-group-sm">
-                                <label for="insurance_code-edit">
-                                    {{ __('label.designated_service.field.insurance_code') }}
-                                </label>
-                                <input type="text" class="form-control form-control-sm input-form" id="insurance_code-edit"
-                                       name="insurance_code">
-                                <p id="insurance_code-edit-error" class="error validate-error"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 insurance_unit_price_input">
-                            <div class="form-group">
-                                <label for="insurance_unit_price-edit">
-                                    {{ __('label.designated_service.field.insurance_unit_price') }}
-                                </label>
-                                <input type="number"
-                                       class="form-control form-control-sm input-form number-integer-validate"
-                                       id="insurance_unit_price-edit"
-                                       name="insurance_unit_price">
-                                <p id="insurance_unit_price-edit-error" class="error validate-error"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-4 insurance_surcharge_input">
-                            <div class="form-group">
-                                <label for="insurance_surcharge-edit">
-                                    {{ __('label.designated_service.field.insurance_surcharge') }}
-                                </label>
-                                <input type="number"
-                                       class="form-control form-control-sm input-form number-integer-validate"
-                                       id="insurance_surcharge-edit"
-                                       name="insurance_surcharge">
-                                <p id="insurance_surcharge-edit-error" class="error validate-error"></p>
-                            </div>
-                        </div>
-
-                    </div>
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group form-group-sm">
                                 <label for="service_unit_price-edit">
                                     {{ __('label.designated_service.field.service_unit_price') }}
@@ -92,7 +41,7 @@
                                 <p id="service_unit_price-edit-error" class="error validate-error"></p>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group form-group-sm">
                                 <label for="type_surgery-edit">
                                     {{ __('label.designated_service.field.type_surgery') }}
@@ -110,7 +59,9 @@
                                 <p id="type_surgery-edit-error" class="error validate-error"></p>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="form-group form-group-sm">
                                 <label for="specialist-edit">
                                     {{ __('label.designated_service.field.specialist') }}
@@ -118,10 +69,10 @@
                                 </label>
                                 <select class="form-control form-control-sm"
                                         id="specialist-edit" name="specialist">
-                                <option value="">--- {{ __('label.designated_service.field.specialist') }} ---</option>
-                                @foreach (DesignatedServiceConstants::SPECIALIST as $key => $specialist)
-                                    <option value="{{ $key }}"> {{ $specialist }}</option>
-                                @endforeach
+                                    <option value="">--- {{ __('label.designated_service.field.specialist') }} ---</option>
+                                    @foreach (DesignatedServiceConstants::SPECIALIST as $key => $specialist)
+                                        <option value="{{ $key }}"> {{ $specialist }}</option>
+                                    @endforeach
                                 </select>
                                 <p id="specialist-edit-error" class="error validate-error"></p>
                             </div>
@@ -139,16 +90,6 @@
                                     @endforeach
                                 </select>
                                 <p id="room_id-edit-error" class="error validate-error"></p>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group form-group-sm">
-                                <label for="decision_number-edit">
-                                    {{ __('label.designated_service.field.decision_number') }}
-                                </label>
-                                <input type="text" class="form-control form-control-sm input-form" id="decision_number-edit"
-                                        name="decision_number">
-                                <p id="decision_number-edit-error" class="error validate-error"></p>
                             </div>
                         </div>
                     </div>

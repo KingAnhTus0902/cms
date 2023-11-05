@@ -24,9 +24,6 @@ $(document).ready(function () {
         if($("#add-designated_service-form").find('input[name="service_unit_price"]').val()===''){
             $("#add-designated_service-form").find('input[name="service_unit_price"]').val(0);
         }
-        if($("#add-designated_service-form").find('input[name="insurance_unit_price"]').val()===''){
-            $("#add-designated_service-form").find('input[name="insurance_unit_price"]').val(0);
-        }
         let data = $("#add-designated_service-form").serialize();
         hideMessageValidate('#add-designated_service-form');
         createOrUpdate(api, data, nextAddDesignatedService);
@@ -51,12 +48,7 @@ $(document).ready(function () {
             name: $('#name-edit').val(),
             description: $('#description-edit').val(),
             room_id: $('#room_id-edit').val(),
-            decision_number: $('#decision_number-edit').val(),
-            insurance_surcharge: $('#insurance_surcharge-edit').val(),
             service_unit_price: $('#service_unit_price-edit').val(),
-            insurance_unit_price: $('#insurance_unit_price-edit').val(),
-            use_insurance: $('#use_insurance-edit').val(),
-            insurance_code: $('#insurance_code-edit').val(),
             specialist: $('#specialist-edit').val(),
             type_surgery: $('#type_surgery-edit').val(),
         };
@@ -82,9 +74,6 @@ $(document).ready(function () {
                 }
             });
     });
-    $('.insurance_surcharge_input').hide()
-    $('.insurance_code_input').hide();
-    $('.insurance_unit_price_input').hide();
 
     $('#description-add').summernote({
         placeholder: 'Mô tả',
@@ -155,19 +144,7 @@ function appendDataEdit(data) {
     let type = 'edit';
     for (let key in item) {
         if (item.hasOwnProperty(key)) {
-            if (key === 'use_insurance' && item[key] == 1) {
-                $(`#${key}-${type}`).prop('checked', true);
-                $('.insurance_code_input').show();
-                $('.insurance_unit_price_input').show();
-                $('.insurance_surcharge_input').show();
-            }
-            else if (key === 'use_insurance' && item[key] == 0) {
-                $(`#${key}-${type}`).prop('checked', false);
-                $('.insurance_code_input').hide();
-                $('.insurance_unit_price_input').hide();
-                $('.insurance_surcharge_input').hide();
-            }
-            else if ($(`#${key}-${type}`).is('select')) {
+            if ($(`#${key}-${type}`).is('select')) {
                 $(`#${key}-${type}`).val(item[key]).trigger('change');
             }
             else if (key == 'description') {
@@ -189,9 +166,6 @@ function nextAddDesignatedService(data) {
         $('#add-designated_service').modal('hide');
         $('#add-designated_service-form')[0].reset();
         hideMessageValidate('#add-designated_service-form');
-        $('.insurance_code_input').hide();
-        $('.insurance_unit_price_input').hide();
-        $('.insurance_surcharge_input').hide();
         toastAlert(data.message, "", "success");
         searchDesignatedService();
     }
@@ -228,24 +202,6 @@ function appendKeyWordSearch () {
     $("#input-search-name-hidden").val(keywordSearchName);
 }
 
-$('.close-modal-btn').click(function () {
-    $('.insurance_surcharge_input').hide()
-    $('.insurance_code_input').hide();
-    $('.insurance_unit_price_input').hide()
-})
-$('.use_insurance_checkbox').change(function(){
-    if ($(this).is(':checked')) {
-        $(this).val(1);
-        $('.insurance_code_input').show();
-        $('.insurance_unit_price_input').show();
-        $('.insurance_surcharge_input').show();
-    } else {
-        $(this).val(0);
-        $('.insurance_code_input').hide();
-        $('.insurance_unit_price_input').hide();
-        $('.insurance_surcharge_input').hide();
-    }
-});
 
 function resetDesignatedServiceForm(form = '')
 {
