@@ -94,11 +94,11 @@ class CadresController extends Controller
         try {
             $password = Str::random(10);
             $data['password'] = Hash::make($password);
-            $data['code'] = 'CB';
+            $data['code'] = 'BN';
             $data['status'] = ACTIVE;
             $res = $this->cadresService->create($data);
             $code = str_pad($res->id, 4, "0", STR_PAD_LEFT);
-            $response['data'] = $res->update(['code' => 'CB' . $code]);
+            $response['data'] = $res->update(['code' => 'BN' . $code]);
 
             if ($data['email']) {
                 $mailParams = [

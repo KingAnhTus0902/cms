@@ -120,30 +120,15 @@ return [
         'modal_title_add' => 'Thêm mới phòng khám',
         'modal_title_edit' => 'Cập nhật phòng khám',
     ],
-    'news' => [
-        'title' => 'Quản lý tin tức',
-        'search_keyword_label' => 'Từ khóa',
-        'search_keyword' => 'Nhập tiêu đề, mô tả',
-        'search_category' => 'Chọn phân loại',
-        'field' => [
-            'title' => 'Tiêu đề',
-            'short_description' => 'Mô tả',
-            'category' => 'Phân loại',
-            'thumbnail' => 'Ảnh thu nhỏ',
-            'content' => 'Nội dung',
-        ],
-        'modal_title_add' => 'Thêm mới tin tức',
-        'modal_title_edit' => 'Cập nhật tin tức',
-    ],
     'cadres' => [
-        'title'             => 'Quản lý cán bộ',
-        'search_keyword'    => 'Nhập mã cán bộ, tên cán bộ',
-        'search_code'       => 'Mã CB',
-        'search_code_ph'    => 'Nhập mã cán bộ',
+        'title'             => 'Quản lý bệnh nhân',
+        'search_keyword'    => 'Nhập mã bệnh nhân, tên bệnh nhân',
+        'search_code'       => 'Mã BN',
+        'search_code_ph'    => 'Nhập mã bệnh nhân',
         'search_phone'       => 'SĐT',
         'search_phone_ph'       => 'Nhập SĐT',
-        'search_name'       => 'Tên CB',
-        'search_name_ph'    => 'Nhập tên cán bộ',
+        'search_name'       => 'Tên BN',
+        'search_name_ph'    => 'Nhập tên bệnh nhân',
         'keyword'           => 'Từ khóa',
         'search_identity_card_number'       => 'CCCD/ CMND',
         'search_medical_insurance_number'   => 'Mã thẻ BHYT',
@@ -151,8 +136,8 @@ return [
         'search_medical_insurance_number_start_date'    => 'Ngày hiệu lực',
         'search_medical_insurance_number_end_date'      => 'Ngày hết hạn',
         'field' => [
-            'code'          => 'Mã CB',
-            'name'          => 'Tên CB',
+            'code'          => 'Mã BN',
+            'name'          => 'Tên BN',
             'birthday'      => 'Ngày sinh',
             'gender'        => 'Giới tính',
             'folk_id'       => 'Dân tộc',
@@ -185,8 +170,8 @@ return [
             'male'      => 'Nam',
             'female'    => 'Nữ'
         ],
-        'modal_title_add'   => 'Thêm mới cán bộ',
-        'modal_title_edit'  => 'Cập nhật cán bộ',
+        'modal_title_add'   => 'Thêm mới bệnh nhân',
+        'modal_title_edit'  => 'Cập nhật bệnh nhân',
         'modal_title_reset' => 'Đổi mật khẩu'
     ],
     'material_type' => [
@@ -310,13 +295,13 @@ return [
                 'status'     =>  'Chọn trạng thái',
                 'room'       =>  'Chọn phòng khám',
                 'department' =>  'Chọn khoa',
-                'code_name_phone' => 'Nhập mã phiên khám, tên cán bộ, số điện thoại',
-                'code_name' => 'Nhập mã phiên khám, tên cán bộ'
+                'code_name_phone' => 'Nhập mã phiên khám, tên bệnh nhân, số điện thoại',
+                'code_name' => 'Nhập mã phiên khám, tên bệnh nhân'
             ]
         ],
         'field' => [
             'code'                   => 'Phiên khám',
-            'cadres_name'            => 'Tên CB',
+            'cadres_name'            => 'Tên BN',
             'cadres_phone'           => 'SĐT',
             'cadres_birthday'        => 'Năm sinh',
             'cadres_gender'          => 'Giới tính',
@@ -372,7 +357,7 @@ return [
         'choose_city' => 'Chọn tỉnh/thành',
         'choose_district' => 'Chọn quận/huyện',
         'message' => [
-            'not_create' => 'Không thể tạo phiên khám! Cán bộ đang trong 1 phiên khám khác',
+            'not_create' => 'Không thể tạo phiên khám! Bệnh nhân đang trong 1 phiên khám khác',
             'can_not_examination_in_room' => 'Bạn không có quyền tại phòng khám này!',
             're_examination' => 'Hẹn ngày khám lại thành công!',
             'delete_re_examination' => 'Xóa ngày hẹn khám lại thành công!',
@@ -395,7 +380,7 @@ return [
             'pathological_process' => 'Quá trình bệnh lý',
             'personal_history' => 'Tiền sử bản thân',
             'family_history' => 'Tiền sử gia đình',
-            'cadres_name' => 'Tên CB',
+            'cadres_name' => 'Tên BN',
         ],
         'button' => [
             'begin_examination' => 'Bắt đầu khám bệnh'
@@ -430,12 +415,12 @@ return [
         'service_name' => 'Tên',
         'search' => [
             'placeholder' => [
-                'key_word' => 'Nhập mã phiên khám, tên cán bộ, số điện thoại'
+                'key_word' => 'Nhập mã phiên khám, tên bệnh nhân, số điện thoại'
             ],
         ],
         'cadre' => [
-            'information' => 'Thông tin cán bộ',
-            'code' => 'Mã CB',
+            'information' => 'Thông tin bệnh nhân',
+            'code' => 'Mã BN',
             'name' => 'Họ và tên',
             'phone' => 'SĐT',
             'identity_card_number' => 'Số CCCD/CMND'
@@ -472,7 +457,7 @@ return [
         'search' => [
             'title' => [
                 'id'       => 'Mã hồ sơ',
-                'cadre_id'     => 'Tên CB',
+                'cadre_id'     => 'Tên BN',
                 'national_card'       => 'CCCD/ CMND',
                 'phone' => 'SĐT',
             ],
@@ -480,7 +465,7 @@ return [
         'field' => [
             'id' => 'Mã hồ sơ',
             'medical_sessions_id' => 'Phiên khám',
-            'cadre_name' => 'Tên CB',
+            'cadre_name' => 'Tên BN',
             'cadre_phone' => 'SĐT',
             'gender' => 'Giới tính',
             'age' => 'Tuổi',
@@ -620,7 +605,7 @@ return [
     'medical_test' => [
         'doctor' => 'Bác sỹ',
         'requirement' => 'Yêu cầu',
-        'cadre' => 'Tên CB',
+        'cadre' => 'Tên BN',
         'medical_examination_day' => 'Ngày khám',
         'birthday' => 'Năm sinh',
         'gender' => 'Giới tính',

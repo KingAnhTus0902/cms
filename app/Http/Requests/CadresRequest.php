@@ -42,51 +42,6 @@ class CadresRequest extends FormRequest
             . '|max:255|nullable',
             'address'   => 'max:255',
             'identity_card_number'      => 'bail|numeric|digits_between:1,12|nullable',
-            'medical_insurance_number'  => [
-                'bail',
-                'required',
-                'nullable',
-                'min:10',
-                'max:15',
-                'regex:' . REGEX_NUMBER_INSURANCE_CADR
-            ],
-            'medical_insurance_symbol_code' => [
-                'bail',
-                'nullable',
-                'integer',
-                'between:1,5',
-                ],
-            'medical_insurance_live_code'   => 'max:2|nullable',
-            'medical_insurance_start_date' => [
-                'bail',
-                'nullable',
-                'before_or_equal:today',
-                'date_format:' . DAY_MONTH_YEAR,
-                Rule::requiredIf($this->medical_insurance_number !== null),
-                'after_or_equal:birthday'
-            ],
-            'medical_insurance_end_date' => [
-                'bail',
-                'nullable',
-                'after:medical_insurance_start_date',
-                'after_or_equal:today',
-                'date_format:' . DAY_MONTH_YEAR
-            ],
-            'medical_insurance_address' => '' . Rule::requiredIf($this->medical_insurance_number !== null) . '|max:255',
-            'hospital_code' => [
-                Rule::requiredIf($this->medical_insurance_number !== null),
-                'nullable',
-                'min:5',
-                'max:5',
-                'exists:hospitals_mst,code',
-            ],
-            'insurance_five_consecutive_years' => [
-                'bail',
-                'nullable',
-                'date_format:' . DAY_MONTH_YEAR,
-                Rule::requiredIf(!empty($this->is_long_date)),
-                'after_or_equal:birthday'
-            ],
         ];
     }
 
@@ -105,13 +60,6 @@ class CadresRequest extends FormRequest
             'email'     => __('label.cadres.field.email'),
             'address'   => __('label.cadres.field.address'),
             'identity_card_number'          => __('label.cadres.field.identity_card_number'),
-            'medical_insurance_number'      => __('label.cadres.field.medical_insurance_number'),
-            'medical_insurance_symbol_code' => __('label.cadres.field.medical_insurance_symbol_code'),
-            'medical_insurance_start_date'  => __('label.cadres.field.medical_insurance_start_date'),
-            'medical_insurance_end_date'    => __('label.cadres.field.medical_insurance_end_date'),
-            'medical_insurance_address'     => __('label.cadres.field.medical_insurance_address'),
-            'hospital_code'                 => __('label.cadres.field.hospital_code'),
-            'insurance_five_consecutive_years'  => __('label.cadres.field.insurance_five_consecutive_years')
         ];
     }
 
@@ -132,8 +80,6 @@ class CadresRequest extends FormRequest
             'size'              => __('messages.EM-014', ['attribute2' => 15]),
             'after'             => __('messages.EM-013', ['attribute2' => __('label.cadres.field.medical_insurance_start_date')]),
             'medical_insurance_start_date.after_or_equal' =>
-                __('messages.EM-026', ['attribute1' => __('label.cadres.field.birthday')]),
-            'insurance_five_consecutive_years.after_or_equal' =>
                 __('messages.EM-026', ['attribute1' => __('label.cadres.field.birthday')]),
             'after_or_equal'    => __('messages.EM-031'),
             'regex'             => __('messages.EM-003'),
