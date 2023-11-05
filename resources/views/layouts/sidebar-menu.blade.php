@@ -8,72 +8,72 @@
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <!-- Add icons to the links using the .nav-icon class
              with font-awesome or any other icon font library -->
-            @if(auth()->user()->can('List-medical-session'))
-            <li class="nav-item
-             {{request()->routeIs('admin.medical_session.index') ? 'menu-is-opening menu-open' : ''}}">
-                <a href="#" class="nav-link">
-                    <i class="fa fa-fw fa-user-plus"></i>
-                    <p>
-                        {{ __('menu.list_management.receive') }}
-                        <i class="fas fa-angle-left right"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview menu-lv2">
-                    <li class="nav-item">
-                        <a href="{{route("admin.medical_session.index")}}"
-                           class="nav-link {{ request()->routeIs('admin.medical_session.index') ? 'active': '' }}">
-                           <i class="fa fa-fw fa-stethoscope"></i>
-                            <p>
-                                {{ __('menu.list_management.medical_session') }}
-                            </p>
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            @endif
-            @if(auth()->user()->can('List-medical-test'))
-                <li class="nav-item">
-                    <a href="{{ route('admin.medical_tests.index') }}"
-                       class="nav-link {{ request()->routeIs('admin.medical_tests.index') ? 'active': '' }}">
-                        <i class="fas fa-heartbeat"></i>
-                        <p>{{ __('menu.list_management.medical_test') }}</p>
-                    </a>
-                </li>
-            @endif
-            @if(auth()->user()->canany(['List-payment','List-hospital-tranfer']))
-            <li class="nav-item
-            {{(request()->routeIs('admin.payment.*') ||
-            request()->routeIs('admin.index.hospital_transfer')) ? 'menu-is-opening menu-open' : ''}}
-             ">
-                <a href="#" class="nav-link">
-                    <i class="fa fa-fw fa-dollar-sign"></i>
-                    <p>
-                        {{ __('menu.list_management.hospital_fee') }}
-                        <i class="fas fa-angle-left right"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview menu-lv2">
-                    @if(auth()->user()->can('List-payment'))
-                    <li class="nav-item">
-                        <a href="{{ route('admin.payment.index') }}"
-                           class="nav-link {{ request()->routeIs('admin.payment.*') ? 'active': '' }}">
-                            <i class="fas fa-dot-circle"></i>
-                            <p>{{ __('menu.list_management.payment') }}</p>
-                        </a>
-                    </li>
-                    @endif
-                    @if(auth()->user()->can('List-hospital-tranfer'))
-                            <li class="nav-item">
-                                <a href="{{route("admin.index.hospital_transfer")}}"
-                                   class="nav-link {{ request()->routeIs('admin.index.hospital_transfer') ? 'active': '' }}">
-                                    <i class='far fa-dot-circle'></i>
-                                    <p>{{ __('menu.list_management.hospital_transfer') }}</p>
-                                </a>
-                            </li>
-                    @endif
-                </ul>
-            </li>
-            @endif
+{{--            @if(auth()->user()->can('List-medical-session'))--}}
+{{--            <li class="nav-item--}}
+{{--             {{request()->routeIs('admin.medical_session.index') ? 'menu-is-opening menu-open' : ''}}">--}}
+{{--                <a href="#" class="nav-link">--}}
+{{--                    <i class="fa fa-fw fa-user-plus"></i>--}}
+{{--                    <p>--}}
+{{--                        {{ __('menu.list_management.receive') }}--}}
+{{--                        <i class="fas fa-angle-left right"></i>--}}
+{{--                    </p>--}}
+{{--                </a>--}}
+{{--                <ul class="nav nav-treeview menu-lv2">--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{route("admin.medical_session.index")}}"--}}
+{{--                           class="nav-link {{ request()->routeIs('admin.medical_session.index') ? 'active': '' }}">--}}
+{{--                           <i class="fa fa-fw fa-stethoscope"></i>--}}
+{{--                            <p>--}}
+{{--                                {{ __('menu.list_management.medical_session') }}--}}
+{{--                            </p>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                </ul>--}}
+{{--            </li>--}}
+{{--            @endif--}}
+{{--            @if(auth()->user()->can('List-medical-test'))--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a href="{{ route('admin.medical_tests.index') }}"--}}
+{{--                       class="nav-link {{ request()->routeIs('admin.medical_tests.index') ? 'active': '' }}">--}}
+{{--                        <i class="fas fa-heartbeat"></i>--}}
+{{--                        <p>{{ __('menu.list_management.medical_test') }}</p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--            @endif--}}
+{{--            @if(auth()->user()->canany(['List-payment','List-hospital-tranfer']))--}}
+{{--            <li class="nav-item--}}
+{{--            {{(request()->routeIs('admin.payment.*') ||--}}
+{{--            request()->routeIs('admin.index.hospital_transfer')) ? 'menu-is-opening menu-open' : ''}}--}}
+{{--             ">--}}
+{{--                <a href="#" class="nav-link">--}}
+{{--                    <i class="fa fa-fw fa-dollar-sign"></i>--}}
+{{--                    <p>--}}
+{{--                        {{ __('menu.list_management.hospital_fee') }}--}}
+{{--                        <i class="fas fa-angle-left right"></i>--}}
+{{--                    </p>--}}
+{{--                </a>--}}
+{{--                <ul class="nav nav-treeview menu-lv2">--}}
+{{--                    @if(auth()->user()->can('List-payment'))--}}
+{{--                    <li class="nav-item">--}}
+{{--                        <a href="{{ route('admin.payment.index') }}"--}}
+{{--                           class="nav-link {{ request()->routeIs('admin.payment.*') ? 'active': '' }}">--}}
+{{--                            <i class="fas fa-dot-circle"></i>--}}
+{{--                            <p>{{ __('menu.list_management.payment') }}</p>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                    @endif--}}
+{{--                    @if(auth()->user()->can('List-hospital-tranfer'))--}}
+{{--                            <li class="nav-item">--}}
+{{--                                <a href="{{route("admin.index.hospital_transfer")}}"--}}
+{{--                                   class="nav-link {{ request()->routeIs('admin.index.hospital_transfer') ? 'active': '' }}">--}}
+{{--                                    <i class='far fa-dot-circle'></i>--}}
+{{--                                    <p>{{ __('menu.list_management.hospital_transfer') }}</p>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                    @endif--}}
+{{--                </ul>--}}
+{{--            </li>--}}
+{{--            @endif--}}
 {{--            <li class="nav-item">--}}
 {{--                <a href="#" class="nav-link" onclick="developing()">--}}
 {{--                    <i class="fa fa-fw fa-calendar"></i>--}}
@@ -82,48 +82,48 @@
 {{--                    </p>--}}
 {{--                </a>--}}
 {{--            </li>--}}
-            @if(auth()->user()->canany(['C79a-HD','Medical-examination-handbook','20/BHYT']))
-            <li class="nav-item
-             {{CommonHelper::openReportSidebar() ? 'menu-is-opening menu-open' : ''}}
-             ">
-             <a href="#" class="nav-link">
-                    <i class="fa fa-fw fa-chart-pie"></i>
-                    <p>
-                        {{ __('menu.list_management.report') }}
-                        <i class="fas fa-angle-left right"></i>
-                    </p>
-                </a>
-                <ul class="nav nav-treeview menu-lv2">
-                    @if(auth()->user()->can('C79a-HD'))
-                        <li class="nav-item">
-                            <a href="{{route('admin.report.insurancePaidIndex')}}"
-                               class="nav-link {{request()->routeIs('admin.report.insurancePaidIndex') ? 'active': ''}}">
-                                <i class="far fa-dot-circle"></i>
-                                <p>{{ __('menu.list_management.insurance_paid') }}</p>
-                            </a>
-                        </li>
-                    @endif
-                    @if(auth()->user()->can('Medical-examination-handbook'))
-                        <li class="nav-item">
-                            <a href="{{route('admin.report.reportInsuranceIndex')}}"
-                               class="nav-link {{request()->routeIs('admin.report.reportInsuranceIndex') ? 'active': ''}}">
-                                <i class="far fa-dot-circle"></i>
-                                <p>{{ __('menu.list_management.report_insurance') }}</p>
-                            </a>
-                        </li>
-                        @endif
-                        @if(auth()->user()->can('20/BHYT'))
-                            <li class="nav-item">
-                                <a href="{{route('admin.report.distributed_materials')}}"
-                                   class="nav-link {{request()->routeIs('admin.report.distributed_materials') ? 'active': ''}}">
-                                    <i class="far fa-dot-circle"></i>
-                                    <p>{{ __('menu.list_management.distributed_materials') }}</p>
-                                </a>
-                            </li>
-                        @endif
-                </ul>
-            </li>
-            @endif
+{{--            @if(auth()->user()->canany(['C79a-HD','Medical-examination-handbook','20/BHYT']))--}}
+{{--            <li class="nav-item--}}
+{{--             {{CommonHelper::openReportSidebar() ? 'menu-is-opening menu-open' : ''}}--}}
+{{--             ">--}}
+{{--             <a href="#" class="nav-link">--}}
+{{--                    <i class="fa fa-fw fa-chart-pie"></i>--}}
+{{--                    <p>--}}
+{{--                        {{ __('menu.list_management.report') }}--}}
+{{--                        <i class="fas fa-angle-left right"></i>--}}
+{{--                    </p>--}}
+{{--                </a>--}}
+{{--                <ul class="nav nav-treeview menu-lv2">--}}
+{{--                    @if(auth()->user()->can('C79a-HD'))--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="{{route('admin.report.insurancePaidIndex')}}"--}}
+{{--                               class="nav-link {{request()->routeIs('admin.report.insurancePaidIndex') ? 'active': ''}}">--}}
+{{--                                <i class="far fa-dot-circle"></i>--}}
+{{--                                <p>{{ __('menu.list_management.insurance_paid') }}</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                    @endif--}}
+{{--                    @if(auth()->user()->can('Medical-examination-handbook'))--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="{{route('admin.report.reportInsuranceIndex')}}"--}}
+{{--                               class="nav-link {{request()->routeIs('admin.report.reportInsuranceIndex') ? 'active': ''}}">--}}
+{{--                                <i class="far fa-dot-circle"></i>--}}
+{{--                                <p>{{ __('menu.list_management.report_insurance') }}</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                        @endif--}}
+{{--                        @if(auth()->user()->can('20/BHYT'))--}}
+{{--                            <li class="nav-item">--}}
+{{--                                <a href="{{route('admin.report.distributed_materials')}}"--}}
+{{--                                   class="nav-link {{request()->routeIs('admin.report.distributed_materials') ? 'active': ''}}">--}}
+{{--                                    <i class="far fa-dot-circle"></i>--}}
+{{--                                    <p>{{ __('menu.list_management.distributed_materials') }}</p>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                        @endif--}}
+{{--                </ul>--}}
+{{--            </li>--}}
+{{--            @endif--}}
             <li class="nav-item
              {{CommonHelper::openListManagementSidebar() ? 'menu-is-opening menu-open' : ''}}
              ">
@@ -165,15 +165,15 @@
                                 </a>
                             </li>
                             @endif
-                            @if(RoleHelper::getByRole([ADMIN]))
-                                <li class="nav-item">
-                                    <a href="{{route('admin.permission.index')}}"
-                                       class="nav-link {{request()->routeIs('admin.permission.index') ? 'active' : ''}}">
-                                        <i class='far fa-dot-circle nav-icon'></i>
-                                        <p>{{ __('menu.list_management.permission') }}</p>
-                                    </a>
-                                </li>
-                            @endif
+{{--                            @if(RoleHelper::getByRole([ADMIN]))--}}
+{{--                                <li class="nav-item">--}}
+{{--                                    <a href="{{route('admin.permission.index')}}"--}}
+{{--                                       class="nav-link {{request()->routeIs('admin.permission.index') ? 'active' : ''}}">--}}
+{{--                                        <i class='far fa-dot-circle nav-icon'></i>--}}
+{{--                                        <p>{{ __('menu.list_management.permission') }}</p>--}}
+{{--                                    </a>--}}
+{{--                                </li>--}}
+{{--                            @endif--}}
                         </ul>
                     </li>
                     @endif
@@ -321,17 +321,17 @@
                         @endif
                 </ul>
             </li>
-            @if(auth()->user()->can('View-setting'))
-                <li class="nav-item">
-                    <a href="{{ route('admin.setting.view') }}"
-                       class="nav-link {{ request()->routeIs('admin.setting.view') ? 'active': '' }}">
-                        <i class="fas fa-cog"></i>
-                        <p>
-                            {{ __('menu.list_management.setting') }}
-                        </p>
-                    </a>
-                </li>
-            @endif
+{{--            @if(auth()->user()->can('View-setting'))--}}
+{{--                <li class="nav-item">--}}
+{{--                    <a href="{{ route('admin.setting.view') }}"--}}
+{{--                       class="nav-link {{ request()->routeIs('admin.setting.view') ? 'active': '' }}">--}}
+{{--                        <i class="fas fa-cog"></i>--}}
+{{--                        <p>--}}
+{{--                            {{ __('menu.list_management.setting') }}--}}
+{{--                        </p>--}}
+{{--                    </a>--}}
+{{--                </li>--}}
+{{--            @endif--}}
         </ul>
     </nav>
     <!-- /.sidebar-menu -->
