@@ -15,28 +15,21 @@ class HomePageController extends Controller
      */
     protected $medicalSessionService;
 
-    /**
-     * @var PrescriptionOfMedicalSessionService
-     */
-    protected $prescriptionOfMedicalSessionService;
 
     /**
-     * @param 
+     * @param
      */
     public function __construct(
         MedicalSessionService $medicalSessionService,
-        PrescriptionOfMedicalSessionService $prescriptionOfMedicalSessionService
     )
     {
         $this->medicalSessionService = $medicalSessionService;
-        $this->prescriptionOfMedicalSessionService = $prescriptionOfMedicalSessionService;
     }
 
     public function dashboard()
     {
         $medicalDashboad = $this->medicalSessionService->getDashboardData();
-        $medicineDashboard = $this->prescriptionOfMedicalSessionService->getDashboardData();
-        $result = array_merge($medicalDashboad, $medicineDashboard);
+        $result = array_merge($medicalDashboad);
         return $result;
     }
 }

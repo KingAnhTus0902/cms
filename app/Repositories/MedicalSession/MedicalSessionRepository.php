@@ -49,7 +49,6 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                 CadresConstants::TABLE_NAME . "." . CadresConstants::COLUMN_PHONE,
                 CadresConstants::TABLE_NAME . "." . CadresConstants::COLUMN_GENDER,
                 CadresConstants::TABLE_NAME . "." . CadresConstants::COLUMN_IDENTITY_CARD_NUMBER,
-                CadresConstants::TABLE_NAME . "." . CadresConstants::COLUMN_MEDICAL_INSURANCE_NUMBER,
                 CityConstants::TABLE_NAME . "." . CityConstants::COLUMN_NAME . ' as city_name',
                 CadresConstants::TABLE_NAME . "." . CadresConstants::COLUMN_CITY_ID,
                 DB::raw("DATE_FORMAT(" . CadresConstants::TABLE_NAME . ".birthday, '%Y') as birthday"),
@@ -119,13 +118,6 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                     CommonConstants::OPERATOR_LIKE,
                     "%{$keyword['multiple']}%"
                 );
-                if (!empty($searchPayment)) {
-                    $query->orWhere(
-                        CadresConstants::TABLE_NAME . "." . CadresConstants::COLUMN_MEDICAL_INSURANCE_NUMBER,
-                        CommonConstants::OPERATOR_LIKE,
-                        "%{$keyword['multiple']}%"
-                    );
-                }
             });
             unset($keyword['multiple']);
         }
@@ -171,14 +163,6 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
             }
         }
 
-        if (!empty($data['get_prescription'])) {
-            $query->completedSession();
-            $query->whereHas('prescription', function ($queryPrescription) use ($data) {
-                if (!empty($data['prescription_status'])) {
-                    $queryPrescription->where('prescription_of_medical_sessions_tbl.status', $data['prescription_status']);
-                }
-            });
-        }
 
         if (!empty($data[CommonConstants::KEY_SORT_COLUMN]) && !empty($data[CommonConstants::KEY_SORT_TYPE])) {
             $sort = [
