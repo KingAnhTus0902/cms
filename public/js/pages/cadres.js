@@ -50,7 +50,10 @@ $(document).ready(function () {
 
     $(document).on("click", ".add", function () {
         let api = API_CREATE;
+        let type = $("#type").val();
+        let medicalInsuranceAddress = $(`#medical_insurance_address-${type}`).val();
         let serializeArrayData = $("#add-cadres-form").serializeArray();
+        serializeArrayData.push({ name: "medical_insurance_address", value: medicalInsuranceAddress });
         let data = jQuery.param(serializeArrayData);
         hideMessageValidate('#add-cadres-form');
         createOrUpdate(api, data, nextAddCadres);
@@ -76,7 +79,6 @@ $(document).ready(function () {
 
     $(document).on("click", ".edit", function () {
         let id = $(this).data('id');
-        let med_number = $('#medical_insurance_number-edit').val();
         let data = {
             id: id,
             code: $('#code-edit').val(),
@@ -145,28 +147,32 @@ $(document).on("click", ".sorting", function () {
 });
 
 
-function getCadres(name = "", page = 1, sortColumn = "", sortType = "", identity_card_number = "") {
+function getCadres(code = "", name = "", page = 1, sortColumn = "", sortType = "", identity_card_number = "", medical_insurance_number = "") {
     let api = API_LIST;
     let dataSearch = {
+        phone: code,
         name: name,
         page: page,
         sort_column: sortColumn,
         sort_type: sortType,
-        identity_card_number: identity_card_number
+        identity_card_number: identity_card_number,
+        medical_insurance_number: medical_insurance_number
     };
     getData(api, dataSearch, nextGetCadres);
 }
 function searchCadres(search) {
     let sortType = '';
+    let code = $("#input-search-phone-cadres-hidden").val();
     let name = $("#input-search-name-cadres-hidden").val();
     let identity_card_number = $("#input-search-identity_card_number-hidden").val();
+    let medical_insurance_number = $("#input-search-medical_insurance_number-hidden").val();
     let page = $("li.page-item.active ").find("a.page-link").data('id');
     if (search) {page = 1;}
     if ($("#ordinal-number-cadres").hasClass("sorting_desc")) {
         sortType = 'desc';
     }
     let sortColumn = $("#ordinal-number-cadres").data('column-name');
-    getCadres(name, page, sortColumn, sortType, identity_card_number);
+    getCadres(code, name, page, sortColumn, sortType, identity_card_number, medical_insurance_number);
 }
 
 
@@ -261,20 +267,41 @@ function getSelectData(type, city_id, district_id, folk_id) {
     })
 }
 function appendKeyWordSearch () {
+    let keywordPhone = $('#input-search-phone-cadres').val();
     let keywordName = $('#input-search-name-cadres').val();
+    let keywordMedicalInsurance = $('#input-search-medical_insurance_number').val();
     let keywordIdentity = $('#input-search-identity_card_number').val();
 
+    $("#input-search-phone-cadres-hidden").val(keywordPhone);
     $("#input-search-name-cadres-hidden").val(keywordName);
+    $("#input-search-medical_insurance_number-hidden").val(keywordMedicalInsurance);
     $("#input-search-identity_card_number-hidden").val(keywordIdentity);
 }
 
 function resetFormAddCadres(element) {
     resetForm(element);
+    setDefaultInsurance('add');
     $(`${element} .input-group.date`).each(function() {
         resetDateTimePicker($(this));
     })
 }
 
+
+$("#hospital_code-add, #hospital_code-edit").keyup(function () {
+    let type = $("#type").val();
+    let hospital_code =  $(this).val();
+    if (hospital_code !== "") {
+        autoFillHospital(type, hospital_code);
+    }
+});
+
+$("#hospital_code-add, #hospital_code-edit").on('input', function () {
+    let type = $("#type").val();
+    let hospitalCode =  $(this).val();
+    if (hospitalCode == null || hospitalCode.trim() === '') {
+        $(`#medical_insurance_address-${type}`).val('');
+    }
+});
 
 $.clinicChangeStatus({
     selector: '.change-status-btn',
