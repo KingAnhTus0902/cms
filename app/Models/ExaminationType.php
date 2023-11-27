@@ -19,7 +19,6 @@ class ExaminationType extends Model
      */
     protected $fillable = [
         'name',
-        'insurance_unit_price',
         'service_unit_price'
     ];
 }
