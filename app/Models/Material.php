@@ -23,12 +23,7 @@ class Material extends Model
         'content',
         'dosage_form',
         'material_type_id',
-        'ingredients',
         'unit_id',
-        'service_unit_price',
-        'use_insurance',
-        'insurance_code',
-        'insurance_unit_price',
         'disease_type',
         'method',
         'usage',
@@ -56,7 +51,7 @@ class Material extends Model
 
     /**
      * Get the material batches for the material.
-     * 
+     *
      * @return Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function materialBatches(): HasMany

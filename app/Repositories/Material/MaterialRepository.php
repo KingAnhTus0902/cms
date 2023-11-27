@@ -27,15 +27,10 @@ class MaterialRepository extends BaseRepository implements MaterialRepositoryInt
             'id',
             'code',
             'name',
-            'insurance_unit_price',
             'material_type_id',
             'unit_id'
         ];
-        $query = $this->model->select($select)->with('unit:id,name')->with('materialType:id,name')
-            ->with(['materialBatches' => function (Builder $query) {
-                $query->select(['id', 'material_id', 'amount'])
-                    ->realSave();
-            }]);
+        $query = $this->model->select($select)->with('unit:id,name')->with('materialType:id,name');
         if (isset($conditions[CommonConstants::KEYWORD])) {
             $keyword = $conditions[CommonConstants::KEYWORD];
             $query->where(function ($query) use ($keyword) {
