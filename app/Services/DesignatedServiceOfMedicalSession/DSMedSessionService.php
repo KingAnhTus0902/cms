@@ -174,10 +174,8 @@ class DSMedSessionService implements DSMedSessionServiceInterface
                 [
                     'name',
                     'service_unit_price',
-                    'insurance_unit_price',
                     'room_id',
                     'type_surgery',
-                    'insurance_code',
                     'specialist'
                 ]
             );
@@ -203,9 +201,7 @@ class DSMedSessionService implements DSMedSessionServiceInterface
                     'designated_service_name' => $designatedService['name'] ?? '',
                     'room_id' => $designatedService['room_id'] ?? null,
                     'designated_service_unit_price' => $designatedService['service_unit_price'] ?? 0,
-                    'designated_insurance_unit_price' => $designatedService['insurance_unit_price'] ?? 0,
                     'designated_service_type_surgery' => $designatedService['type_surgery'] ?? null,
-                    'designated_service_insurance_code' => $designatedService['insurance_code'] ?? null,
                     'designated_service_specialist' => $designatedService['specialist'] ?? null,
                     'medical_session_id' => $id
                 ]);
@@ -266,18 +262,14 @@ class DSMedSessionService implements DSMedSessionServiceInterface
                         'id',
                         'name',
                         'service_unit_price',
-                        'insurance_unit_price',
                         'type_surgery',
-                        'insurance_code',
                         'specialist'
                     ]
                 );
                 $param += [
                     'designated_service_name' => $designatedService['name'] ?? '',
                     'designated_service_unit_price' => $designatedService['service_unit_price'] ?? 0,
-                    'designated_insurance_unit_price' => $designatedService['insurance_unit_price'] ?? 0,
                     'designated_service_type_surgery' => $designatedService['type_surgery'] ?? null,
-                    'designated_service_insurance_code' => $designatedService['insurance_code'] ?? null,
                     'designated_service_specialist' => $designatedService['specialist'] ?? null
                 ];
             }

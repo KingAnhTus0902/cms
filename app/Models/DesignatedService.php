@@ -18,13 +18,8 @@ class DesignatedService extends Model
         'name',
         'description',
         'room_id',
-        'decision_number',
-        'insurance_surcharge',
         'specialist',
-        'use_insurance',
-        'insurance_code',
         'service_unit_price',
-        'insurance_unit_price',
         'type_surgery',
     ];
 
