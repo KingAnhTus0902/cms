@@ -323,7 +323,6 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                     'designated_service_id',
                     'designated_service_name',
                     'designated_service_unit_price',
-                    'designated_insurance_unit_price',
                     'payment_status',
                     'designated_service_amount',
                     'designated_service_type_surgery',
