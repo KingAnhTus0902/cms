@@ -18,24 +18,10 @@ class MedicineOfMedicalSession extends Model
     protected $fillable = [
         'medical_session_id',
         'materials_name',
-        'materials_code',
         'materials_amount',
-        'materials_unit',
-        'materials_unit_price',
-        'materials_insurance_unit_price',
         'materials_usage',
-        'materials_type_id',
-        'materials_active_ingredient_name',
-        'materials_insurance_code',
-        'status',
-        'materials_dosage_form',
-        'materials_method',
-        'materials_content',
-        'materials_type_name',
         'advice',
         'user_id',
-        'payment_status',
-        'use_insurance'
     ];
 
     /**

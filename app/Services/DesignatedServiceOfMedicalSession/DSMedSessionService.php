@@ -394,9 +394,7 @@ class DSMedSessionService implements DSMedSessionServiceInterface
                     'room_id'
                 ],
                 [
-                    QueryHelper::setRelationshipQueryInput('medicalSession', [
-                        'cadre_gender', 'cadre_address', 'cadre_name', 'cadre_birthday', 'cadre_code'
-                    ]),
+                    QueryHelper::setRelationshipQueryInput('medicalSession', ['cadre_gender', 'cadre_address', 'cadre_name', 'cadre_birthday', 'cadre_code']),
                     QueryHelper::setRelationshipQueryInput('room', ['id', 'name'])
                 ]
             );

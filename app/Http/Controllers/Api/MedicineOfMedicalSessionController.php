@@ -63,15 +63,10 @@ class MedicineOfMedicalSessionController extends Controller
         $response['data'] = $this->medicineOfMedicalSessionService->saveMedicineOfMedicalSession(
             $request->only(
                 'materials_name',
-                'materials_code',
                 'materials_amount',
-                'materials_unit',
-                'materials_unit_price',
-                'materials_insurance_unit_price',
                 'materials_usage',
                 'advice',
                 'user_id',
-                'payment_status',
                 'material_id',
                 'medical_session_id',
             ),
@@ -109,15 +104,10 @@ class MedicineOfMedicalSessionController extends Controller
         $response['data'] = $this->medicineOfMedicalSessionService->saveMedicineOfMedicalSession(
             $request->only(
                 'materials_name',
-                'materials_code',
                 'materials_amount',
-                'materials_unit',
-                'materials_unit_price',
-                'materials_insurance_unit_price',
                 'materials_usage',
                 'advice',
                 'user_id',
-                'payment_status',
                 'material_id',
                 'medical_session_id',
             ),

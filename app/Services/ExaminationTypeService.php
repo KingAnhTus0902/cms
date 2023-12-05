@@ -37,7 +37,6 @@ class ExaminationTypeService extends BaseService
                 [
                     'id',
                     'name',
-                    'insurance_unit_price',
                     'service_unit_price'
                 ],
                 [
@@ -96,7 +95,6 @@ class ExaminationTypeService extends BaseService
                 [
                     'id',
                     'name',
-                    'insurance_unit_price',
                     'service_unit_price'
                 ]
             );

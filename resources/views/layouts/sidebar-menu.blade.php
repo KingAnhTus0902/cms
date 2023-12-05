@@ -64,8 +64,9 @@
                     @endif
                     @if(auth()->user()->can('List-hospital-tranfer'))
                             <li class="nav-item">
-                                <a href="{{route("admin.index.hospital_transfer")}}"
-                                   class="nav-link {{ request()->routeIs('admin.index.hospital_transfer') ? 'active': '' }}">
+{{--                                <a href="{{route("admin.index.hospital_transfer")}}"--}}
+                                <a href="#" class="nav-link" onclick="developing()">
+{{--                                   class="nav-link {{ request()->routeIs('admin.index.hospital_transfer') ? 'active': '' }}">--}}
                                     <i class='far fa-dot-circle'></i>
                                     <p>{{ __('menu.list_management.hospital_transfer') }}</p>
                                 </a>
@@ -74,14 +75,14 @@
                 </ul>
             </li>
             @endif
-            <li class="nav-item">
-                <a href="#" class="nav-link" onclick="developing()">
-                    <i class="fa fa-fw fa-calendar"></i>
-                    <p>
-                        {{ __('menu.list_management.booked') }}
-                    </p>
-                </a>
-            </li>
+{{--            <li class="nav-item">--}}
+{{--                <a href="#" class="nav-link" onclick="developing()">--}}
+{{--                    <i class="fa fa-fw fa-calendar"></i>--}}
+{{--                    <p>--}}
+{{--                        {{ __('menu.list_management.booked') }}--}}
+{{--                    </p>--}}
+{{--                </a>--}}
+{{--            </li>--}}
             @if(auth()->user()->canany(['C79a-HD','Medical-examination-handbook','20/BHYT']))
             <li class="nav-item
              {{CommonHelper::openReportSidebar() ? 'menu-is-opening menu-open' : ''}}
@@ -94,33 +95,34 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview menu-lv2">
-                    @if(auth()->user()->can('C79a-HD'))
-                        <li class="nav-item">
-                            <a href="{{route('admin.report.insurancePaidIndex')}}"
-                               class="nav-link {{request()->routeIs('admin.report.insurancePaidIndex') ? 'active': ''}}">
-                                <i class="far fa-dot-circle"></i>
-                                <p>{{ __('menu.list_management.insurance_paid') }}</p>
-                            </a>
-                        </li>
-                    @endif
+{{--                    @if(auth()->user()->can('C79a-HD'))--}}
+{{--                        <li class="nav-item">--}}
+{{--                            <a href="{{route('admin.report.insurancePaidIndex')}}"--}}
+{{--                               class="nav-link {{request()->routeIs('admin.report.insurancePaidIndex') ? 'active': ''}}">--}}
+{{--                                <i class="far fa-dot-circle"></i>--}}
+{{--                                <p>{{ __('menu.list_management.insurance_paid') }}</p>--}}
+{{--                            </a>--}}
+{{--                        </li>--}}
+{{--                    @endif--}}
                     @if(auth()->user()->can('Medical-examination-handbook'))
                         <li class="nav-item">
-                            <a href="{{route('admin.report.reportInsuranceIndex')}}"
-                               class="nav-link {{request()->routeIs('admin.report.reportInsuranceIndex') ? 'active': ''}}">
+{{--                            <a href="{{route('admin.report.reportInsuranceIndex')}}"--}}
+                            <a href="#" class="nav-link" onclick="developing()">
+{{--                               class="nav-link {{request()->routeIs('admin.report.reportInsuranceIndex') ? 'active': ''}}">--}}
                                 <i class="far fa-dot-circle"></i>
                                 <p>{{ __('menu.list_management.report_insurance') }}</p>
                             </a>
                         </li>
                         @endif
-                        @if(auth()->user()->can('20/BHYT'))
-                            <li class="nav-item">
-                                <a href="{{route('admin.report.distributed_materials')}}"
-                                   class="nav-link {{request()->routeIs('admin.report.distributed_materials') ? 'active': ''}}">
-                                    <i class="far fa-dot-circle"></i>
-                                    <p>{{ __('menu.list_management.distributed_materials') }}</p>
-                                </a>
-                            </li>
-                        @endif
+{{--                        @if(auth()->user()->can('20/BHYT'))--}}
+{{--                            <li class="nav-item">--}}
+{{--                                <a href="{{route('admin.report.distributed_materials')}}"--}}
+{{--                                   class="nav-link {{request()->routeIs('admin.report.distributed_materials') ? 'active': ''}}">--}}
+{{--                                    <i class="far fa-dot-circle"></i>--}}
+{{--                                    <p>{{ __('menu.list_management.distributed_materials') }}</p>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
+{{--                        @endif--}}
                 </ul>
             </li>
             @endif
@@ -165,15 +167,16 @@
                                 </a>
                             </li>
                             @endif
-{{--                            @if(RoleHelper::getByRole([ADMIN]))--}}
-{{--                                <li class="nav-item">--}}
+                            @if(RoleHelper::getByRole([ADMIN]))
+                                <li class="nav-item">
 {{--                                    <a href="{{route('admin.permission.index')}}"--}}
+                                    <a href="#" class="nav-link" onclick="developing()">
 {{--                                       class="nav-link {{request()->routeIs('admin.permission.index') ? 'active' : ''}}">--}}
-{{--                                        <i class='far fa-dot-circle nav-icon'></i>--}}
-{{--                                        <p>{{ __('menu.list_management.permission') }}</p>--}}
-{{--                                    </a>--}}
-{{--                                </li>--}}
-{{--                            @endif--}}
+                                        <i class='far fa-dot-circle nav-icon'></i>
+                                        <p>{{ __('menu.list_management.permission') }}</p>
+                                    </a>
+                                </li>
+                            @endif
                         </ul>
                     </li>
                     @endif
