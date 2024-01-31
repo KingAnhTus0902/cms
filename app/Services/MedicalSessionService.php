@@ -202,7 +202,7 @@ class MedicalSessionService extends BaseService
                 $data['examination_end_invoice'] = CommonHelper::formatDateInvoice(
                                                     $data['medical_examination_day_end'], 'Y-m-d H:i:s');
                 $data['examinations_service_cost'] = $examinationsServiceCost;
-                $data['services_service_cost'] = $servicesServiceCost;
+                $data['services_service_cost'] = $otherServices;
                 $data['sum_service'] = $sumService;
                 $data['other_services'] = $sumService;
                 $data['city_name'] = $data['cadre_city_id'] ?? null;

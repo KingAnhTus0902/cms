@@ -49,7 +49,6 @@ class DesignatedServiceOfMedicalSessionController extends BaseController
     public function view($id): View
     {
         $designatedServiceMedicalSession = $this->dsMedSessionService->view($id);
-
         return view('medical_test.view', compact('designatedServiceMedicalSession'));
     }
 }

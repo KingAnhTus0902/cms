@@ -48,7 +48,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/districts', [AddressController::class, 'listDistrict'])->name('list.district');
     Route::get('/cities', [AddressController::class, 'listCity'])->name('list.city');
     Route::get('/folks', [CadresController::class, 'listFolk'])->name('list.folk');
-    Route::get('/categories', [NewsController::class, 'listCategory'])->name('list.category');
     Route::post('/load-room-department', [RoomController::class, 'loadRoomByDepartment'])->name('department.room');
     Route::get('/department', [DepartmentController::class, 'listDepartment'])->name('list.department');
     Route::get('/room-by-department', [RoomController::class, 'roomOfExaminationDoctorByDepartment'])
@@ -552,12 +551,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 ->name('print.prescription')
                 ->middleware('permission:Print-medicines-medical-session');
         });
-    });
-
-
-    Route::prefix('dispense-medicine')->name('dispense_medicine.')->group(function () {
-        Route::post('/update-status', [DispenseMedicinesController::class, 'updateStatus'])
-            ->name('update_status');
     });
 
     Route::prefix('bao-cao')->name('report.')->group(function () {

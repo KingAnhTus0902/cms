@@ -96,7 +96,7 @@
                                     </label>
                                     <textarea class="form-control form-control-sm input-form"
                                             id="reason_for_examination-edit"
-                                            name="reason_for_examination" {{$isDisable}}
+                                            name="reason_for_examination"
                                             rows="2">{{ $medical_session->reason_for_examination ?? ''}}</textarea>
                                     <span id="reason_for_examination-edit-error" class="error validate-error"></span>
                                 </div>

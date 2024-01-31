@@ -2,7 +2,6 @@
     use App\Helpers\NumberFormatHelper;
     use App\Helpers\CommonHelper;
     use App\Constants\DesignatedServiceConstants;
-    use App\Constants\CadresConstants;
     use App\Constants\MedicalSessionConstants;
     use App\Constants\Constant;
 @endphp
@@ -131,6 +130,7 @@
             </td>
         </tr>
     </table>
+    @if($examination_end_invoice['hour']  != '...')
     <table class="infor">
         <tr>
             <td>(5) {{ __('label.invoice.cadre.medical_examination_day_end') }}:
@@ -141,28 +141,30 @@
             <td>{{ __('label.invoice.cadre.total_treatment_days') }}: 0</td>
         </tr>
     </table>
+    @endif
+    @if($diagnose)
     <table class="infor">
         <tr>
             <td width="70%">(6) {{ __('label.invoice.cadre.diagnose') }}: {{ $diagnose }}</td>
         </tr>
     </table>
+    @endif
+    @if (!empty($diseases[MedicalSessionConstants::MAIN_DISEASE]))
     <table class="infor">
         <tr>
             <td width="20%">(7) {{ __('label.invoice.cadre.diseases_code') }}:</td>
             <td width="10%" class="box-infor">
-                @if (!empty($diseases[MedicalSessionConstants::MAIN_DISEASE]))
                     {{ $diseases[MedicalSessionConstants::MAIN_DISEASE]['disease_code'] }}
-                @endif
             </td>
             <td width="70%"></td>
         </tr>
     </table>
+    @endif
+    @if (!empty($diseases[MedicalSessionConstants::SUB_DISEASE]))
     <table class="infor">
         <tr>
             <td>(8) {{ __('label.invoice.cadre.sub_disease_name') }}:
-                @if (!empty($diseases[MedicalSessionConstants::SUB_DISEASE]))
-                    {{ $diseases[MedicalSessionConstants::SUB_DISEASE]['disease_name'] }}
-                @endif
+                {{ $diseases[MedicalSessionConstants::SUB_DISEASE]['disease_name'] }}
             </td>
         </tr>
     </table>
@@ -170,17 +172,16 @@
         <tr>
             <td width="20%">(9) {{ __('label.invoice.cadre.sub_disease_code') }}:</td>
             <td width="10%" class="box-infor">
-                @if (!empty($diseases[MedicalSessionConstants::SUB_DISEASE]))
-                    {{ $diseases[MedicalSessionConstants::SUB_DISEASE]['disease_code'] }}
-                @endif
+                {{ $diseases[MedicalSessionConstants::SUB_DISEASE]['disease_code'] }}
             </td>
             <td width="70%"></td>
         </tr>
     </table>
+    @endif
     <p><b>II. {{ __('label.invoice.medical_examination/treatment_expenses') }}:
     </b></i><br /></p>
 </div>
-<div class="page-break">
+<div>
     <table width="100%" class="data">
         <tr style="text-align: center">
             <td rowspan="2" width="20%"><b>{{ __('label.invoice.invoice.content') }}</b></td>
@@ -206,6 +207,7 @@
             <td class="height-no">(6)</td>
             <td class="height-no">(7)</td>
         </tr>
+        @if ($examination_status == MedicalSessionConstants::STATUS_WAITING || $examination_status == MedicalSessionConstants::STATUS_DONE)
         <tr class="text-right">
             @if (!empty($examination_types))
                 <td colspan="6" class="height-no text-left"><b> 1. {{ __('label.invoice.invoice.examination') }}</b></td>
@@ -222,6 +224,7 @@
                 <td class="height-no">{{ NumberFormatHelper::priceFormat(0, '', 2, ',', '.') }}</td>
             </tr>
         @endforeach
+        @endif
         @endif
         @if (!empty($services))
             @foreach ($services as $key => $data)
@@ -247,35 +250,68 @@
                 @endif
             @endforeach
         @endif
-        <tr class="text-right">
-            <td colspan="5" class="height-no"><b>Cộng: </b></td>
-            <td class="height-no"><b>{{ NumberFormatHelper::priceFormat($sum_service, '', 2, ',', '.') }} </b></td>
-            <td colspan="6" class="height-no">{{ NumberFormatHelper::priceFormat(0, '', 2, ',', '.') }}</td>
-        </tr>
+        @if($examination_status == MedicalSessionConstants::STATUS_WAITING_RESULT)
+            <tr class="text-right">
+                <td colspan="5" class="height-no"><b>Cộng: </b></td>
+                <td class="height-no"><b>{{ NumberFormatHelper::priceFormat($services_service_cost, '', 2, ',', '.') }} </b></td>
+                <td colspan="6" class="height-no">{{ NumberFormatHelper::priceFormat(0, '', 2, ',', '.') }}</td>
+            </tr>
+
+        @elseif($examination_status == MedicalSessionConstants::STATUS_DONE)
+            <tr class="text-right">
+                <td colspan="5" class="height-no"><b>Cộng: </b></td>
+                <td class="height-no"><b>{{ NumberFormatHelper::priceFormat($sum_service, '', 2, ',', '.') }} </b></td>
+                <td colspan="6" class="height-no">{{ NumberFormatHelper::priceFormat(0, '', 2, ',', '.') }}</td>
+            </tr>
+        @elseif($examination_status == MedicalSessionConstants::STATUS_WAITING)
+            <tr class="text-right">
+                <td colspan="5" class="height-no"><b>Cộng: </b></td>
+                <td class="height-no"><b>{{ NumberFormatHelper::priceFormat($examinations_service_cost, '', 2, ',', '.') }} </b></td>
+                <td colspan="6" class="height-no">{{ NumberFormatHelper::priceFormat(0, '', 2, ',', '.') }}</td>
+            </tr>
+        @endif
     </table>
 </div>
 <div class="page-break">
-    <p>Tổng chi phí lần khám bệnh/cả đợt điều trị (làm tròn đến đơn vị đồng):
-        {{ NumberFormatHelper::priceFormat($sum_service, '', 0, ',', '.') }} Đồng</p>
-    <p>(Viết bằng chữ: {{ NumberFormatHelper::convertNumberToWords($sum_service, '', 0, ',', '.') }} đồng)</p>
-    <p>Trong đó, số tiền do:</p>
-    <p>- Người bệnh trả: {{ NumberFormatHelper::priceFormat($sum_service, '', 0, ',', '.') }} Đồng</p>
-    <p>- Nguồn khác: 0</p>
-    <br />
+
+    @if($examination_status == MedicalSessionConstants::STATUS_WAITING_RESULT)
+        <p>Tổng chi phí lần khám bệnh/cả đợt điều trị (làm tròn đến đơn vị đồng):
+            {{ NumberFormatHelper::priceFormat($services_service_cost, '', 0, ',', '.') }} Đồng</p>
+        <p>(Viết bằng chữ: {{ NumberFormatHelper::convertNumberToWords($services_service_cost, '', 0, ',', '.') }} đồng)</p>
+        <p>Trong đó, số tiền do:</p>
+        <p>- Người bệnh trả: {{ NumberFormatHelper::priceFormat($services_service_cost, '', 0, ',', '.') }} Đồng</p>
+        <p>- Nguồn khác: 0</p>
+        <br />
+    @elseif($examination_status == MedicalSessionConstants::STATUS_WAITING)
+        <p>Tổng chi phí lần khám bệnh/cả đợt điều trị (làm tròn đến đơn vị đồng):
+            {{ NumberFormatHelper::priceFormat($examinations_service_cost, '', 0, ',', '.') }} Đồng</p>
+        <p>(Viết bằng chữ: {{ NumberFormatHelper::convertNumberToWords($examinations_service_cost, '', 0, ',', '.') }} đồng)</p>
+        <p>Trong đó, số tiền do:</p>
+        <p>- Người bệnh trả: {{ NumberFormatHelper::priceFormat($examinations_service_cost, '', 0, ',', '.') }} Đồng</p>
+        <p>- Nguồn khác: 0</p>
+        <br />
+    @elseif($examination_status == MedicalSessionConstants::STATUS_DONE)
+        <p>Tổng chi phí lần khám bệnh/cả đợt điều trị (làm tròn đến đơn vị đồng):
+            {{ NumberFormatHelper::priceFormat($sum_service, '', 0, ',', '.') }} Đồng</p>
+        <p>(Viết bằng chữ: {{ NumberFormatHelper::convertNumberToWords($sum_service, '', 0, ',', '.') }} đồng)</p>
+        <p>Trong đó, số tiền do:</p>
+        <p>- Người bệnh trả: {{ NumberFormatHelper::priceFormat($sum_service, '', 0, ',', '.') }} Đồng</p>
+        <p>- Nguồn khác: 0</p>
+        <br />
+    @endif
     <table>
         <tr>
             <td width="30%" style="text-align: center">
-                <b>NGƯỜI LẬP BẢNG KÊ</b><br />
-                <i>(ký, ghi rõ họ tên)</i><br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
-                <br />
                 <b>XÁC NHẬN CỦA NGƯỜI BỆNH</b><br />
                 <i>(ký, ghi rõ họ tên)</i><br />
-                <b>(Tôi đã nhận ... phim ... Xquang/CT/MRl)</b>
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
+                <br />
             </td>
             <td width="40%"></td>
             <td width="30%" style="text-align: center">
