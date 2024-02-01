@@ -169,9 +169,8 @@
                             @endif
                             @if(RoleHelper::getByRole([ADMIN]))
                                 <li class="nav-item">
-{{--                                    <a href="{{route('admin.permission.index')}}"--}}
-                                    <a href="#" class="nav-link" onclick="developing()">
-{{--                                       class="nav-link {{request()->routeIs('admin.permission.index') ? 'active' : ''}}">--}}
+                                    <a href="{{route('admin.permission.index')}}"
+                                       class="nav-link {{request()->routeIs('admin.permission.index') ? 'active' : ''}}">
                                         <i class='far fa-dot-circle nav-icon'></i>
                                         <p>{{ __('menu.list_management.permission') }}</p>
                                     </a>

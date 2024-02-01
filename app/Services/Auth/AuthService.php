@@ -14,6 +14,7 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Auth\Passwords\PasswordBroker;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -167,12 +168,13 @@ class AuthService extends BaseService implements AuthServiceInterface
      */
     public function forgotPassword($email, $device): array
     {
+        DB::beginTransaction();
         try {
-            $model = ($device == MOBILE) ? $this->cadresRepository : $this->userRepository;
+            $model =  $this->userRepository;
 
             $user = $model->getDetail([
                 'email' => QueryHelper::setQueryInput($email)
-            ], ['id', 'email', 'name']);
+            ], ['id', 'email', 'name', 'password']);
 
             $otp = $this->setOtp($user);
 
@@ -181,7 +183,7 @@ class AuthService extends BaseService implements AuthServiceInterface
                 'subject' => __('label.email.forgot'),
                 'html_content' => 'emails.user-forgot-password',
                 'data' => [
-                    'name' => $user['name'],
+                    'name' => $user['password'],
                     'email' => $user['email'],
                     'otp' => $otp
                 ]
@@ -198,11 +200,11 @@ class AuthService extends BaseService implements AuthServiceInterface
                         'otp' => $otp
                     ]
                 ]
-                : [true, __('messages.SM-007')];
+                : [true, __('messages.SM-008')];
         } catch (Throwable) {
             return ($device == MOBILE)
                 ? ['code' => Response::HTTP_UNAUTHORIZED, 'message' => __('messages.EM-016')]
-                : [false, __('messages.forgot_password_failed')];
+                : [false, __('messages.SM-012')];
         }
     }
 

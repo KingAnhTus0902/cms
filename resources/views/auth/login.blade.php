@@ -19,7 +19,7 @@
                 <img class="img-logo mb-2" src="{{ !empty($setting->logo)
                         ? $setting->logo
                         : asset("images\logo\ministry_of_health_vietnam_Logo.png") }}" alt="logo">
-            
+
                 <h3 class="my-2"><strong>{{ $setting->default_name ?? 'Hệ thống CLINIC' }}</strong></h3>
                 <p class="mb-4 clinic-description">{{ __('menu.login') }}</p>
             </div>
@@ -61,7 +61,7 @@
                         </div>
                         <button type="submit" class="btn btn-block btn-primary">{{ __('button.login') }}</button>
                         <div class="mt-2">
-                            <a href="#" class="forgot-pass">{{ __('button.forgot_password') }}</a>
+                            <a href="{{route('password.forgot')}}" class="forgot-pass">{{ __('button.forgot_password') }}</a>
                         </div>
                     </form>
                 </div>

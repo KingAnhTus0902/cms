@@ -170,7 +170,6 @@ class MedicalSessionService extends BaseService
         try {
             $data = $this->mainRepository->getPaymentDetail($id);
             $setting = $this->settingRepository->first();
-                $servicesServiceCost = ZERO_PRICE;
                 $otherServices = ZERO_PRICE;
                 $hospitalName = null;
                 // calculate sum

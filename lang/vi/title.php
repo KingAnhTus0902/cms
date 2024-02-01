@@ -15,6 +15,7 @@ return [
     'examination_type_create_page' => 'Thêm mới loại khám',
     'setting_edit_page' => 'Chỉnh sửa thiết lập',
     'setting_create_page' => 'Tạo thiết lập',
+    'user_forgot_password_page' => 'Quên mật khẩu',
     'user_reset_password_page' => 'Thay đổi mật khẩu',
     'payment_page' => 'Thu phí viện phí',
     'payment_detail' => 'Chi tiết viện phí',

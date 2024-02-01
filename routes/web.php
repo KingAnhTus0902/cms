@@ -45,8 +45,11 @@ Route::get('dang-nhap', function(){
 })->name('login-page');
 
 Route::post('/dang-nhap', [AuthController::class, 'login'])->name('login');
+Route::get('quen-mat-khau', [AuthController::class, 'forgotPasswordForm'])->name('password.forgot');
 Route::get('doi-mat-khau/{token}', [AuthController::class, 'resetPasswordForm'])->name('password.reset');
 Route::post('doi-mat-khau', [AuthController::class, 'resetPassword'])->name('password.store');
+Route::post('quen-mat-khau', [AuthController::class, 'forgotPassword'])->name('password.save');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [HomePageController::class, 'index'])->name('home');
@@ -171,7 +174,7 @@ Route::middleware('auth')->group(function () {
 
             Route::get('/{id}', [MedicalSessionController::class, 'examination'])->name('examination');
         });
-        
+
 
         // Report
         Route::middleware('permission:C79a-HD')->group(function () {

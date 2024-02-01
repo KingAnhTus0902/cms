@@ -75,6 +75,10 @@ class AuthController extends Controller
 
         return view('auth.reset-password', ['data' => $data]);
     }
+    public function forgotPasswordForm(Request $request): View
+    {
+        return view('auth.forgot-password');
+    }
 
     /**
      * Handle an incoming new password request.
@@ -86,6 +90,19 @@ class AuthController extends Controller
     {
         list($result, $message) = $this->authService->resetPassword(
             $request->only('email', 'password', 'password_confirmation', 'token'),
+            WEB
+        );
+
+        if ($result) {
+            return redirect()->route('login-page')->with('success', $message);
+        }
+
+        return redirect()->back()->withInput($request->only('email'))->with('error', $message);
+    }
+    public function forgotPassword(Request $request): RedirectResponse
+    {
+        list($result, $message) = $this->authService->forgotPassword(
+            $request->only('email'),
             WEB
         );
 

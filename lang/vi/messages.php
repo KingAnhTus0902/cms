@@ -48,6 +48,7 @@ return [
     'SM-009' => 'Xác nhận mã OTP thành công',
     'SM-010' => 'Kích hoạt tài khoản thành công',
     'SM-011' => 'Hủy kích hoạt tài khoản thành công',
+    'SM-012' => 'Thông tin email không đúng, xin vui lòng kiểm tra lại!',
 
     'CF-001' => 'Bạn có chắc chắn muốn xóa bản ghi này?',
 

@@ -16,6 +16,7 @@ return [
     'login' => 'Đăng nhập',
     'forgot_password' => 'Quên mật khẩu',
     'register' => 'Thêm mới',
+    'forgot' => 'Tiếp tục',
     'update' => 'Thay đổi',
     'back_home' => 'Trở về trang chủ',
     'cancel' => 'Hủy khám',
