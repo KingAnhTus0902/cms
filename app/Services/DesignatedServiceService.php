@@ -3,11 +3,9 @@
 namespace App\Services;
 
 use App\Constants\CommonConstants;
-use App\Constants\DesignatedServiceConstants;
 use App\Repositories\DesignatedService\DesignatedServiceRepositoryInterface;
 use App\Services\FileService\FileServiceInterface;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 
 class DesignatedServiceService extends BaseService
 {

@@ -5,8 +5,6 @@ namespace App\Repositories\MaterialType;
 use App\Constants\CommonConstants;
 use App\Models\MaterialType;
 use App\Repositories\BaseRepository;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 
 class MaterialTypeRepository extends BaseRepository implements MaterialTypeRepositoryInterface
 {

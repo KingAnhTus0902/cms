@@ -22,7 +22,6 @@
                                     <th class="text-center" rowspan="2">{{__("label.common.field.order")}}</th>
                                     <th class="text-center" rowspan="2">{{__("label.report.insunrance_field.cadre_name")}}</th>
                                     <th class="text-center" colspan="2">{{__("label.report.insunrance_field.year_old")}}</th>
-                                    <th class="text-center u-width200" rowspan="2">{{__("label.report.insunrance_field.medical_insurance_number")}}</th>
                                     <th class="text-center" rowspan="2">{{__("label.report.insunrance_field.address")}}</th>
                                     <th class="text-center" rowspan="2">{{__("label.report.insunrance_field.folks_name")}}</th>
                                     <th class="text-center" rowspan="2">{{__("label.report.insunrance_field.department_name")}}</th>
@@ -65,9 +64,6 @@
                                     </td>
                                     <td class="text-right">{{ $medicalSession-> cadre_gender == 'Nữ' ? $yearOld : ''}}
                                     </td>
-
-                                    <td class="text-left">{{ $medicalSession-> cadre_medical_insurance_number }}</td>
-
                                     <td class="text-left cut-text">{{$medicalSession-> cadre_address }}</td>
                                     <td class="text-left cut-text">{{ $medicalSession-> folk_name }}</td>
 
@@ -81,7 +77,7 @@
                                     <td class="text-left cut-text">{{$medicalSession-> diagnose}}</td>
 
                                     {{-- Phương pháp điều trị --}}
-                                    <td class="text-left cut-text">{{$medicalSession-> combined_data}}</td>
+                                    <td class="text-left cut-text">{{$medicalSession-> conclude}}</td>
 
                                     {{-- Y, BS Khám bệnh --}}
                                     <td class="text-left cut-text">{{$medicalSession-> user_name}}</td>

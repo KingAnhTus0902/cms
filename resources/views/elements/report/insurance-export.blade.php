@@ -47,7 +47,6 @@
                                     <th class="text-center" rowspan="2">{{__("label.common.field.order")}}</th>
                                     <th class="text-center" rowspan="2">{{__("label.report.insunrance_field.cadre_name")}}</th>
                                     <th style="width: 100px;" class="text-center" colspan="2">{{__("label.report.insunrance_field.year_old")}}</th>
-                                    <th class="text-center" rowspan="2">{{__("label.report.insunrance_field.medical_insurance_number")}}</th>
                                     <th class="text-center" rowspan="2">{{__("label.report.insunrance_field.address")}}</th>
                                     <th class="text-center" rowspan="2">{{__("label.report.insunrance_field.folks_name")}}</th>
                                     <th class="text-center" rowspan="2">{{__("label.report.insunrance_field.department_name")}}</th>
@@ -92,7 +91,6 @@
                                     </td>
                                     <td>{{ $medicalSession-> cadre_gender == 'Nữ' ? $yearOld : ''}}
                                     </td>
-                                    <td>{{ $medicalSession-> cadre_medical_insurance_number }}</td>
                                     <td class="cut-text">{{$medicalSession-> cadre_address }}</td>
                                     <td>{{$medicalSession-> folk_name }}</td>
                                     {{-- Khám C/Khoa --}}
@@ -105,7 +103,7 @@
                                     <td>{{$medicalSession-> diagnose}}</td>
 
                                     {{-- Phương pháp điều trị --}}
-                                    <td class="cut-text">{{$medicalSession-> combined_data}}</td>
+                                    <td class="cut-text">{{$medicalSession-> conclude}}</td>
 
                                     {{-- Y, BS Khám bệnh --}}
                                     <td>{{$medicalSession-> user_name}}</td>

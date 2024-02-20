@@ -139,17 +139,6 @@ Breadcrumbs::for('admin.medical_tests.view', function ($trail) {
 
 
 //Export
-Breadcrumbs::for('admin.report.insurancePaidIndex', function ($trail) {
-    $trail->parent('home');
-    $trail->push(__('menu.list_management.insurance_paid'), route('admin.report.insurancePaidIndex'));
-});
-
-//Báo cáo danh sách thuốc đã phát
-Breadcrumbs::for('admin.report.distributed_materials', function ($trail) {
-    $trail->parent('home');
-    $trail->push(__('menu.list_management.distributed_materials'), route('admin.report.distributed_materials'));
-});
-
 Breadcrumbs::for('admin.report.reportInsuranceIndex', function ($trail) {
     $trail->parent('home');
     $trail->push(__('menu.list_management.report_insurance'), route('admin.report.reportInsuranceIndex'));

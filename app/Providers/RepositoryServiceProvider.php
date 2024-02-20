@@ -6,14 +6,10 @@ use App\Repositories\Auth\AuthRepository;
 use App\Repositories\Auth\AuthRepositoryInterface;
 use App\Repositories\DesignatedServiceOfMedicalSession\DSMedSessionRepository;
 use App\Repositories\DesignatedServiceOfMedicalSession\DSMedSessionRepositoryInterface;
-use App\Repositories\DesignatedServiceType\DesignatedServiceTypeRepository;
-use App\Repositories\DesignatedServiceType\DesignatedServiceTypeRepositoryInterface;
 use App\Repositories\Disease\DiseaseRepository;
 use App\Repositories\Disease\DiseaseRepositoryInterface;
 use App\Repositories\GroupPermission\GroupPermissionRepository;
 use App\Repositories\GroupPermission\GroupPermissionRepositoryInterface;
-use App\Repositories\MaterialBatch\MaterialBatchRepository;
-use App\Repositories\MaterialBatch\MaterialBatchRepositoryInterface;
 use App\Repositories\MedicalSessionRooms\MedicalSessionRoomRepository;
 use App\Repositories\MedicalSessionRooms\MedicalSessionRoomRepositoryInterface;
 use App\Repositories\Permission\PermissionRepository;
@@ -39,7 +35,6 @@ class RepositoryServiceProvider extends ServiceProvider
         RoleRepositoryInterface::class => RoleRepository::class,
         DiseaseRepositoryInterface::class => DiseaseRepository::class,
         DSMedSessionRepositoryInterface::class => DSMedSessionRepository::class,
-        MaterialBatchRepositoryInterface::class => MaterialBatchRepository::class,
         MedicalSessionRoomRepositoryInterface::class => MedicalSessionRoomRepository::class,
         PermissionRepositoryInterface::class => PermissionRepository::class,
         GroupPermissionRepositoryInterface::class => GroupPermissionRepository::class,
@@ -54,7 +49,6 @@ class RepositoryServiceProvider extends ServiceProvider
     public function register()
     {
         $repositories = [
-            'News\NewsRepositoryInterface' => 'News\NewsRepository',
             'Department\DepartmentRepositoryInterface' => 'Department\DepartmentRepository',
             'Unit\UnitRepositoryInterface' => 'Unit\UnitRepository',
             'Room\RoomRepositoryInterface' => 'Room\RoomRepository',
@@ -66,15 +60,12 @@ class RepositoryServiceProvider extends ServiceProvider
             'District\DistrictRepositoryInterface' => 'District\DistrictRepository',
             'MaterialType\MaterialTypeRepositoryInterface' => 'MaterialType\MaterialTypeRepository',
             'Material\MaterialRepositoryInterface' => 'Material\MaterialRepository',
-            'NewsCategory\NewsCategoryRepositoryInterface' => 'NewsCategory\NewsCategoryRepository',
             'Organization\OrganizationRepositoryInterface' => 'Organization\OrganizationRepository',
             'DesignatedServiceType\DesignatedServiceTypeRepositoryInterface' =>
                 'DesignatedServiceType\DesignatedServiceTypeRepository',
             'VitalSign\VitalSignRepositoryInterface' => 'VitalSign\VitalSignRepository',
             'ExaminationType\ExaminationTypeRepositoryInterface' =>
                 'ExaminationType\ExaminationTypeRepository',
-            'HealthInsuranceCardHead\HealthInsuranceCardHeadRepositoryInterface' =>
-            'HealthInsuranceCardHead\HealthInsuranceCardHeadRepository',
             'Setting\SettingRepositoryInterface' => 'Setting\SettingRepository',
             'MedicalSession\MedicalSessionRepositoryInterface' => 'MedicalSession\MedicalSessionRepository',
             'DiseaseOfMedicalSession\DiseaseOfMedicalSessionRepositoryInterface'
@@ -82,14 +73,6 @@ class RepositoryServiceProvider extends ServiceProvider
             'MedicineOfMedicalSession\MedicineOfMedicalSessionRepositoryInterface' =>
                 'MedicineOfMedicalSession\MedicineOfMedicalSessionRepository',
             'HospitalTransfer\HospitalTransferRepositoryInterface' => 'HospitalTransfer\HospitalTransferRepository',
-            'ImportMaterialsSlip\ImportMaterialsSlipRepositoryInterface' =>
-                'ImportMaterialsSlip\ImportMaterialsSlipRepository',
-            'PrescriptionOfMedicalSession\PrescriptionOfMedicalSessionRepositoryInterface' =>
-                'PrescriptionOfMedicalSession\PrescriptionOfMedicalSessionRepository',
-            'MedicineMedicalSessionBatch\MedicineMedicalSessionBatchRepositoryInterface' =>
-                'MedicineMedicalSessionBatch\MedicineMedicalSessionBatchRepository',
-            'MaterialBatch\MaterialBatchRepositoryInterface' =>
-                'MaterialBatch\MaterialBatchRepository',
             'MedicalSessionRooms\MedicalSessionRoomRepositoryInterface' =>
                 'MedicalSessionRooms\MedicalSessionRoomRepository',
         ];

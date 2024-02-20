@@ -2,7 +2,6 @@
 
 namespace App\Repositories\City;
 
-use App\Constants\CommonConstants;
 use App\Models\City;
 use App\Repositories\BaseRepository;
 

@@ -75,15 +75,7 @@
                 </ul>
             </li>
             @endif
-{{--            <li class="nav-item">--}}
-{{--                <a href="#" class="nav-link" onclick="developing()">--}}
-{{--                    <i class="fa fa-fw fa-calendar"></i>--}}
-{{--                    <p>--}}
-{{--                        {{ __('menu.list_management.booked') }}--}}
-{{--                    </p>--}}
-{{--                </a>--}}
-{{--            </li>--}}
-            @if(auth()->user()->canany(['C79a-HD','Medical-examination-handbook','20/BHYT']))
+            @if(auth()->user()->can('Medical-examination-handbook'))
             <li class="nav-item
              {{CommonHelper::openReportSidebar() ? 'menu-is-opening menu-open' : ''}}
              ">
@@ -95,34 +87,16 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview menu-lv2">
-{{--                    @if(auth()->user()->can('C79a-HD'))--}}
-{{--                        <li class="nav-item">--}}
-{{--                            <a href="{{route('admin.report.insurancePaidIndex')}}"--}}
-{{--                               class="nav-link {{request()->routeIs('admin.report.insurancePaidIndex') ? 'active': ''}}">--}}
-{{--                                <i class="far fa-dot-circle"></i>--}}
-{{--                                <p>{{ __('menu.list_management.insurance_paid') }}</p>--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                    @endif--}}
                     @if(auth()->user()->can('Medical-examination-handbook'))
                         <li class="nav-item">
-{{--                            <a href="{{route('admin.report.reportInsuranceIndex')}}"--}}
-                            <a href="#" class="nav-link" onclick="developing()">
-{{--                               class="nav-link {{request()->routeIs('admin.report.reportInsuranceIndex') ? 'active': ''}}">--}}
+                            <a href="{{route('admin.report.reportInsuranceIndex')}}"
+{{--                            <a href="#" class="nav-link" onclick="developing()">--}}
+                               class="nav-link {{request()->routeIs('admin.report.reportInsuranceIndex') ? 'active': ''}}">
                                 <i class="far fa-dot-circle"></i>
                                 <p>{{ __('menu.list_management.report_insurance') }}</p>
                             </a>
                         </li>
                         @endif
-{{--                        @if(auth()->user()->can('20/BHYT'))--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a href="{{route('admin.report.distributed_materials')}}"--}}
-{{--                                   class="nav-link {{request()->routeIs('admin.report.distributed_materials') ? 'active': ''}}">--}}
-{{--                                    <i class="far fa-dot-circle"></i>--}}
-{{--                                    <p>{{ __('menu.list_management.distributed_materials') }}</p>--}}
-{{--                                </a>--}}
-{{--                            </li>--}}
-{{--                        @endif--}}
                 </ul>
             </li>
             @endif
@@ -140,6 +114,7 @@
                     @if(auth()->user()->canany(['List-users', 'List-cadres']))
                     <li class="nav-item
                      {{(request()->routeIs('admin.users.index') ||
+                        request()->routeIs('admin.permission.index') ||
                         request()->routeIs('admin.cadres.index')) ? 'menu-is-opening menu-open' : ''}}">
                         <a href="#" class="nav-link">
                             <i class="fas fa-user"></i>
@@ -159,13 +134,13 @@
                             </li>
                             @endif
                             @if(auth()->user()->can('List-cadres'))
-                            <li class="nav-item">
-                                <a href="{{route("admin.cadres.index")}}"
-                                   class="nav-link {{request()->routeIs('admin.cadres.index') ? 'active' : ''}}">
-                                    <i class='far fa-dot-circle nav-icon'></i>
-                                    <p>{{ __('menu.list_management.cadres') }}</p>
-                                </a>
-                            </li>
+                                <li class="nav-item">
+                                    <a href="{{route("admin.cadres.index")}}"
+                                       class="nav-link {{request()->routeIs('admin.cadres.index') ? 'active' : ''}}">
+                                        <i class='far fa-dot-circle nav-icon'></i>
+                                        <p>{{ __('menu.list_management.cadres') }}</p>
+                                    </a>
+                                </li>
                             @endif
                             @if(RoleHelper::getByRole([ADMIN]))
                                 <li class="nav-item">

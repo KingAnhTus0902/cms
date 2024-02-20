@@ -2,11 +2,8 @@
 
 namespace App\Helpers;
 
-use App\Constants\CadresConstants;
-use App\Constants\MedicalSessionConstants;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Route;
 
 class CommonHelper
 {
@@ -16,9 +13,9 @@ class CommonHelper
     public static function openListManagementSidebar()
     {
         $open = false;
-        if (request()->routeIs('admin.news.*')
-            || request()->routeIs('admin.users.*')
+        if (request()->routeIs('admin.users.*')
             || request()->routeIs('admin.cadres.*')
+            || request()->routeIs('admin.permission.*')
             || request()->routeIs('admin.department.*')
             || request()->routeIs('admin.*.room')
             || request()->routeIs('admin.unit.*')
@@ -27,9 +24,7 @@ class CommonHelper
             || request()->routeIs('admin.*.designated_service')
             || request()->routeIs('admin.hospital.*')
             || request()->routeIs('admin.diseases.*')
-            || request()->routeIs('admin.*.health_insurance_card')
-            || request()->routeIs('admin.examination_type.*')
-            || request()->routeIs('admin.import_materials_slip.*')) {
+            || request()->routeIs('admin.examination_type.*')) {
             $open = true;
         }
         return $open;
@@ -40,9 +35,7 @@ class CommonHelper
     public static function openReportSidebar()
     {
         $open = false;
-        if (request()->routeIs('admin.report.insurancePaidIndex')
-            || request()->routeIs('admin.report.reportInsuranceIndex')
-            || request()->routeIs('admin.report.distributed_materials')) {
+        if (request()->routeIs('admin.report.reportInsuranceIndex')) {
             $open = true;
         }
         return $open;
@@ -56,8 +49,7 @@ class CommonHelper
         $open = false;
         if (request()->routeIs('admin.unit.*')
             || request()->routeIs('admin.material_type.*')
-            || request()->routeIs('admin.*.material')
-            || request()->routeIs('admin.import_materials_slip.*')) {
+            || request()->routeIs('admin.*.material')) {
             $open = true;
         }
         return $open;
@@ -164,15 +156,6 @@ class CommonHelper
                 $data['birthday'], DAY_MONTH_YEAR, YEAR_MONTH_DAY);
         }
         return $data;
-    }
-
-    public static function convertHospitalLine($listHospitalLines): string
-    {
-        $hospitalLineText = [];
-        foreach ($listHospitalLines as $listHospitalLine) {
-            $hospitalLineText[] = MedicalSessionConstants::HOSPITAL_LINE_TEXT[$listHospitalLine] ?? '';
-        }
-        return implode(' + ', $hospitalLineText);
     }
 
 

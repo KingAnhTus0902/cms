@@ -732,7 +732,7 @@ return [
             'department_name' => 'Khám C/Khoa',
             'reason_for_examination' => 'Triệu chứng',
             'diagnose' => 'Chẩn đoán',
-            'combined_data' => 'Phương pháp điều trị',
+            'combined_data' => 'Kết luận',
             'user_name' => 'Y, Bác sĩ khám bệnh',
             'male' => 'Nam',
             'female' => 'Nữ',

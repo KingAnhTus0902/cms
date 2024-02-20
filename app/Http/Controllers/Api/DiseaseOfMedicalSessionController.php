@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DiseaseOfMedicalSessionRequest;
 use App\Services\DiseaseOfMedicalSessionService;
 use App\Services\MedicalSessionService;
 use App\Repositories\Disease\DiseaseRepositoryInterface;
@@ -76,9 +75,8 @@ class DiseaseOfMedicalSessionController extends Controller
     public function createOrUpdate(Request $request) : JsonResponse
     {
         $medicalSessionId = $request->id;
-        
+
         try {
-            $medicalSession = $this->medicalSessionService->findOneOrFail($medicalSessionId);
             $mainDisease = $this->diseaseRepository
                     ->findBy(['code' => $request->main_disease], '*')
                     ->first();

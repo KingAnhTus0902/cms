@@ -2,17 +2,9 @@
 
 namespace App\Services;
 
-use App\Constants\MedicineConstants;
-use App\Constants\PrescriptionConstants;
-use App\Helpers\RoleHelper;
-use App\Repositories\ImportMaterialsSlip\ImportMaterialsSlipRepositoryInterface;
 use App\Repositories\Material\MaterialRepositoryInterface;
-use App\Repositories\MaterialBatch\MaterialBatchRepository;
-use App\Repositories\MedicineMedicalSessionBatch\MedicineMedicalSessionBatchRepository;
 use App\Repositories\MedicineOfMedicalSession\MedicineOfMedicalSessionRepositoryInterface;
-use App\Repositories\PrescriptionOfMedicalSession\PrescriptionOfMedicalSessionRepository;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -20,10 +12,6 @@ class MedicineOfMedicalSessionService extends BaseService
 {
     protected $medicineOfMedicalSessionRepository;
     protected $materialRepositoryInterface;
-    protected $prescriptionOfMedicalSessionRepository;
-    protected $importMaterialsSlipRepository;
-    protected $materialBatchRepository;
-    protected $medicineMedicalSessionBatchRepository;
 
     /**
      * Constructor
@@ -33,17 +21,9 @@ class MedicineOfMedicalSessionService extends BaseService
     public function __construct(
         MedicineOfMedicalSessionRepositoryInterface $medicineOfMedicalSessionInterface,
         MaterialRepositoryInterface $materialRepositoryInterface,
-        ImportMaterialsSlipRepositoryInterface $importMaterialsSlipRepositoryInterface,
-        MaterialBatchRepository $materialBatchRepository,
-        PrescriptionOfMedicalSessionRepository $prescriptionOfMedicalSessionRepository,
-        MedicineMedicalSessionBatchRepository $medicineMedicalSessionBatchRepository,
     ) {
         $this->medicineOfMedicalSessionRepository = $medicineOfMedicalSessionInterface;
         $this->materialRepositoryInterface = $materialRepositoryInterface;
-        $this->importMaterialsSlipRepository = $importMaterialsSlipRepositoryInterface;
-        $this->materialBatchRepository = $materialBatchRepository;
-        $this->prescriptionOfMedicalSessionRepository = $prescriptionOfMedicalSessionRepository;
-        $this->medicineMedicalSessionBatchRepository = $medicineMedicalSessionBatchRepository;
     }
 
     /**

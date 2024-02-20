@@ -82,15 +82,4 @@ class QueryHelper
             KEY_TYPE_JOIN => $type
         ];
     }
-
-    /**
-     * Set array of query filter.
-     *
-     * @param array $filter
-     * @return array
-     */
-    public static function setQueryFilter($filter): array
-    {
-        return $filter;
-    }
 }

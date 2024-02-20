@@ -2,20 +2,16 @@
 
 namespace App\Services;
 
-use App\Constants\CadresConstants;
 use App\Constants\CommonConstants;
 use App\Constants\MedicalSessionConstants;
 use App\Constants\MedicalSessionRoomConstants;
-use App\Constants\PrescriptionConstants;
 use App\Constants\DesignatedServiceConstants;
 use App\Helpers\CommonHelper;
 use App\Helpers\QueryHelper;
-use App\Helpers\TextFormatHelper;
 use App\Models\DesignatedServiceOfMedicalSession;
 use App\Models\MedicalSessionRoom;
 use App\Repositories\Cadres\CadresRepositoryInterface;
 use App\Repositories\MedicalSession\MedicalSessionRepositoryInterface;
-use App\Repositories\HealthInsuranceCardHead\HealthInsuranceCardHeadRepositoryInterface;
 use App\Repositories\Room\RoomRepositoryInterface;
 use App\Repositories\Setting\SettingRepositoryInterface;
 use App\Repositories\Hospital\HospitalRepositoryInterface;

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Constants\CommonConstants;
 use App\Repositories\City\CityRepositoryInterface;
 
 class CityService extends BaseService

@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Constants\CommonConstants;
 use App\Models\Folk;
 use App\Models\HospitalTransfer;
-use App\Repositories\Cadres\CadresRepositoryInterface;
 use App\Repositories\Hospital\HospitalRepositoryInterface;
 use App\Repositories\HospitalTransfer\HospitalTransferRepositoryInterface;
 use App\Repositories\MedicalSession\MedicalSessionRepositoryInterface;
@@ -16,7 +15,6 @@ class HospitalTransferService extends BaseService
 {
     protected $mainRepository;
 
-    protected $cadreRepository;
     protected $hospitalRepository;
 
     protected SettingServiceInterface $settingService;

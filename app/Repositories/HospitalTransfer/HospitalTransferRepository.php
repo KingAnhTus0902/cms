@@ -3,7 +3,6 @@
 namespace App\Repositories\HospitalTransfer;
 
 use App\Constants\CommonConstants;
-use App\Constants\MedicalSessionConstants;
 use App\Helpers\RoleHelper;
 use App\Models\HospitalTransfer;
 use App\Repositories\BaseRepository;

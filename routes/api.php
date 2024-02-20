@@ -554,18 +554,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
     Route::prefix('bao-cao')->name('report.')->group(function () {
-        Route::get('/benh-nhan-bao-hiem-da-thanh-toan', [ReportController::class, 'insurancePaidList'])
-            ->name('insurancePaidList')
-            ->middleware('permission:C79a-HD');
-
         Route::get('/bao-cao-benh-nhan-bh', [ReportController::class, 'insuranceList'])
             ->name('insuranceList')
             ->middleware('permission:Medical-examination-handbook');
-    });
-
-    Route::prefix('bao-cao')->name('report.')->group(function () {
-        Route::get('/search-list-distributed-materials', [ReportController::class, 'distributedMaterialsList'])
-            ->name('distributedMaterials')
-            ->middleware('permission:20/BHYT');
     });
 });

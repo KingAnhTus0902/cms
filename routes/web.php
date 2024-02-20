@@ -175,33 +175,6 @@ Route::middleware('auth')->group(function () {
             Route::get('/{id}', [MedicalSessionController::class, 'examination'])->name('examination');
         });
 
-
-        // Report
-        Route::middleware('permission:C79a-HD')->group(function () {
-            Route::prefix('bao-cao-benh-nhan-bao-hiem-da-thanh-toan')->group(function () {
-                Route::get('/', [ReportController::class, 'insurancePaidIndex'])
-                    ->name('report.insurancePaidIndex');
-
-                Route::get('/xuat-file-bao-cao-benh-nhan-bao-hiem-da-thanh-toan', [
-                    ReportController::class,
-                    'exportInsurancePaid'
-                ])->name('export-insurance-paid');
-            });
-        });
-
-        // Báo cáo danh sách thuốc đã phát
-        Route::middleware('permission:20/BHYT')->group(function () {
-            Route::prefix('danh-sach-thuoc-da-phat')->group(function () {
-                Route::get('/', [ReportController::class, 'distributedMaterialsIndex'])
-                    ->name('report.distributed_materials');
-
-                Route::get('/xuat-file-danh-sach-thuoc-da-phat', [
-                    ReportController::class,
-                    'exportDistributedMaterial'
-                ])->name('export-distributed-materials');
-            });
-        });
-
         // Report insurance
         Route::middleware('permission:Medical-examination-handbook')->group(function () {
             Route::prefix('bao-cao-benh-nhan-bh')->group(function () {

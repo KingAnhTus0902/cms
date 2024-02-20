@@ -5,7 +5,6 @@ namespace App\Repositories\Room;
 use App\Constants\CommonConstants;
 use App\Models\Room;
 use App\Repositories\BaseRepository;
-use Illuminate\Database\Eloquent\Builder;
 
 class RoomRepository extends BaseRepository implements RoomRepositoryInterface
 {

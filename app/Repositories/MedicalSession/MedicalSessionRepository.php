@@ -17,11 +17,9 @@ use App\Helpers\CommonHelper;
 use App\Helpers\RoleHelper;
 use App\Models\MedicalSession;
 use App\Models\MedicalSessionRoom;
-use App\Models\PrescriptionOfMedicalSession;
 use App\Models\DesignatedServiceOfMedicalSession;
 use App\Repositories\BaseRepository;
 use App\Constants\DepartmentsConstants;
-use App\Repositories\Hospital\HospitalRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -172,113 +170,6 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
         return $query;
     }
 
-    public function getInsurancePaidList(array $data, $paginate = false, $select = CommonConstants::SELECT_ALL, $type = null)
-    {
-        $mstHospital = app(HospitalRepositoryInterface::class)->getMstHospital();
-
-        $query = $this->model
-            ->select(
-                DB::raw('ROW_NUMBER() OVER (PARTITION BY (CASE
-                        WHEN hospitals_mst.id = ' . $mstHospital->id . '
-                            THEN ' . MedicalSessionConstants::ORIGINAL_PROVINCE_HOSPITAL_LINE . '
-                        WHEN hospitals_mst.city_id = ' . $mstHospital->city_id . '
-                            THEN ' . MedicalSessionConstants::INNER_PROVINCE_TO_HOSPITAL_LINE . '
-                        ELSE ' . MedicalSessionConstants::OUT_OF_PROVINCE_TO_HOSPITAL_LINE . ' END
-                    )) number'),
-                "medical_sessions_tbl.id",
-                "medical_sessions_tbl.payment_price",
-                "medical_sessions_tbl.health_insurance_fund",
-                "medical_sessions_tbl.patient_pay",
-                "medical_sessions_tbl.benefit_rate",
-                "medical_sessions_tbl.medical_examination_day",
-                "medical_sessions_tbl.cadre_name as cadres_name",
-                DB::raw("(case when medical_sessions_tbl.cadre_gender=0 then medical_sessions_tbl.cadre_birthday else null end) as male_birthday"),
-                DB::raw("(case when medical_sessions_tbl.cadre_gender=1 then medical_sessions_tbl.cadre_birthday else null end) as female_birthday"),
-                "medical_sessions_tbl.cadre_medical_insurance_number as medical_insurance_number",
-                "medical_sessions_tbl.cadre_hospital_code as hospital_code",
-                DB::raw(
-                    '(CASE
-                        WHEN hospitals_mst.id = ' . $mstHospital->id . '
-                            THEN ' . MedicalSessionConstants::ORIGINAL_PROVINCE_HOSPITAL_LINE . '
-                        WHEN hospitals_mst.city_id = ' . $mstHospital->city_id . '
-                            THEN ' . MedicalSessionConstants::INNER_PROVINCE_TO_HOSPITAL_LINE . '
-                        ELSE ' . MedicalSessionConstants::OUT_OF_PROVINCE_TO_HOSPITAL_LINE . ' END
-                    ) AS hospital_line'
-                ),
-                DB::raw("
-                    (select sum(`medicine_of_medical_sessions_tbl`.`materials_insurance_unit_price` * `medicine_of_medical_sessions_tbl`.`materials_amount`)
-                    from `medicine_of_medical_sessions_tbl`
-                    inner join `prescription_of_medical_sessions_tbl`
-                    on `prescription_of_medical_sessions_tbl`.`id` = `medicine_of_medical_sessions_tbl`.`prescription_id`
-                    where `medical_sessions_tbl`.`id` = `prescription_of_medical_sessions_tbl`.`medical_session_id`
-                    and `medicine_of_medical_sessions_tbl`.`deleted_at` is null
-                    and `prescription_of_medical_sessions_tbl`.`deleted_at` is null
-                    and `prescription_of_medical_sessions_tbl`.`status` = 2
-                    and `medicine_of_medical_sessions_tbl`.`use_insurance` = 1
-                    and `medicine_of_medical_sessions_tbl`.`status` = 2) as `medicine`
-                "), //Thuốc
-                DB::raw(
-                    "sum(case when designated_service_of_medical_sessions_tbl.designated_service_type_surgery = '1'
-                then designated_service_of_medical_sessions_tbl.designated_insurance_unit_price * designated_service_of_medical_sessions_tbl.designated_service_amount
-                else 0 end) as xet_nghiem"
-                ), //Tổng tiền xét nghiệm
-                DB::raw("sum(case when designated_service_of_medical_sessions_tbl.designated_service_type_surgery = '2'
-                then designated_service_of_medical_sessions_tbl.designated_insurance_unit_price * designated_service_of_medical_sessions_tbl.designated_service_amount
-                else 0 end) as cdha"), //Tổng tiền chần đoán hình ảnh
-                DB::raw("sum(case when designated_service_of_medical_sessions_tbl.designated_service_type_surgery = '3'
-                then designated_service_of_medical_sessions_tbl.designated_insurance_unit_price * designated_service_of_medical_sessions_tbl.designated_service_amount
-                else 0 end) as tdcn"), //tổng tiền thăm dò chức năng
-                DB::raw("sum(case when designated_service_of_medical_sessions_tbl.designated_service_type_surgery = '4'
-                then designated_service_of_medical_sessions_tbl.designated_insurance_unit_price * designated_service_of_medical_sessions_tbl.designated_service_amount
-                else 0 end) as ttpt") //Tổng tiền thủ thuật phẫu thuật
-
-            )
-            ->with('diseases')
-            ->with(['medicalSessionRoom' => function ($rooms) {
-                $rooms->select(
-                        'examination_id',
-                        'examination_name as name',
-                        'examination_insurance_price as insurance_unit_price',
-                        'examination_service_price as service_unit_price',
-                        'medical_session_id'
-                    )
-                    ->distinct('examination_id')
-                    ->where('status_room', MedicalSessionRoomConstants::STATUS_DONE);
-            }])
-            ->leftJoin("hospitals_mst", function ($join) {
-                $join->on("hospitals_mst.code", "=", "medical_sessions_tbl.cadre_hospital_code");
-            })
-            ->leftJoin("designated_service_of_medical_sessions_tbl", function ($join) {
-                $join->on(
-                    "medical_sessions_tbl.id", "=", "designated_service_of_medical_sessions_tbl.medical_session_id"
-                )->where("designated_service_of_medical_sessions_tbl.status", "=", DesignatedOfMedicalSessionsConstants::STATUS_DONE);
-            })
-            ->where("medical_sessions_tbl.use_medical_insurance", "=", MedicalSessionConstants::USE_INSURANCE)
-            ->where("medical_sessions_tbl.payment_status", "=", MedicalSessionConstants::PAID_STATUS);
-
-        $keyword = $data[CommonConstants::KEYWORD];
-        if (!empty($keyword['time'])) {
-            $query->whereBetween(
-                MedicalSessionConstants::COLUMN_MEDICAL_EXAMINATION_DAY,
-                [$keyword['time'][0], $keyword['time'][1]]
-            );
-            unset($keyword['time']);
-        }
-        $query->groupBy(
-            'medical_sessions_tbl.id'
-        );
-        $sort = [
-            'hospital_line' => 'asc',
-            'number' => 'asc'
-        ];
-        $query = $this->sort($query, $sort);
-
-        if ($paginate) {
-            $query = $this->paginate($query, $this->handlePaginate($data));
-        }
-        return $query;
-    }
-
 
     public function findMedicalSessionLastInDay($currentDate)
     {
@@ -381,10 +272,6 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
             ->first();
     }
 
-    public function updatePrescriptionByMedicalSessionId($medicalSessionId, $data)
-    {
-        return PrescriptionOfMedicalSession::where('medical_session_id', $medicalSessionId)->update($data);
-    }
 
     public function updateDesignatedByMedicalSessionId($medicalSessionId, $data)
     {
@@ -432,10 +319,7 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
      */
     public function insuranceList(array $data, $paginate = false, $select = CommonConstants::SELECT_ALL, $type = null)
     {
-        $queryGroupmedial = DB::table('medicine_of_medical_sessions_tbl as A')
-            ->select('B.medical_session_id', DB::raw('GROUP_CONCAT(A.materials_name SEPARATOR \'; \') as combined_data'))
-            ->join(DB::raw('(select pre.id, medical.id as medical_session_id from prescription_of_medical_sessions_tbl pre join medical_sessions_tbl medical on pre.medical_session_id = medical.id) as B'), 'B.id', '=', 'A.prescription_id')
-            ->groupBy('A.prescription_id');
+        $queryGroupmedial = DB::table('medicine_of_medical_sessions_tbl as A');
 
         $query = $this->model
             ->select(
@@ -443,17 +327,16 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                 MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_CODE,
                 MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_REASON_FOR_EXAMINATION,
                 MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_DIAGNOSE,
+                MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_CONCLUDE,
                 MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_MEDICAL_EXAMINATION_DAY,
                 DepartmentsConstants::TABLE_NAME.".".DepartmentsConstants::COLUMN_NAME." as department_name",
                 MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_CADRE_NAME,
                 MedicalSessionRoomConstants::TABLE_NAME. "." .MedicalSessionRoomConstants::COLUMN_ROOM_ID,
                 UserConstants::TABLE_NAME. "." .UserConstants::COLUMN_NAME." as user_name",
-                MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_CADRE_MEDICAL_INSURANCE_NUMBER,
                 MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_CADRE_GENDER,
                 MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_CADRE_ADDRESS,
                 MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_CADRE_BIRTHDAY
                 ,FolksConstants::TABLE_NAME.".".FolksConstants::COLUMN_NAME." as folk_name"
-                ,"subQ.combined_data"
             )
             ->leftJoin(FolksConstants::TABLE_NAME, function ($join) {
                 $join->on(
@@ -506,22 +389,14 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                     MedicineConstants::TABLE_NAME . '.' . MedicineConstants::COLUMN_MEDICAL_SESSION_ID
                 );
             })
-            -> leftJoinSub($queryGroupmedial,'subQ', function ($join) {
-                $join->on(
-                    MedicalSessionConstants::TABLE_NAME . '.' . MedicalSessionConstants::COLUMN_ID,
-                    OPERATOR_EQUAL,
-                    "subQ.medical_session_id"
-                );
-            })
             ->groupBy('departments_mst.name' ,
-                'medical_sessions_tbl.cadre_medical_insurance_number',
                 'medical_sessions_tbl.cadre_gender',
                 'medical_sessions_tbl.cadre_address',
                 'medical_sessions_tbl.cadre_birthday',
                 'medical_sessions_tbl.cadre_name',
-                'subQ.combined_data',
                 'medical_sessions_tbl.reason_for_examination',
                 'medical_sessions_tbl.diagnose',
+                'medical_sessions_tbl.conclude',
                 'medical_sessions_tbl.medical_examination_day'
             )
         ;

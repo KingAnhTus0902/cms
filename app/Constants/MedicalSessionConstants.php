@@ -17,6 +17,7 @@ class MedicalSessionConstants
     public const COLUMN_REASON_FOR_EXAMINATION = 'reason_for_examination';
 
     public const COLUMN_DIAGNOSE = 'diagnose';
+    public const COLUMN_CONCLUDE = 'conclude';
     public const COLUMN_CADRE_NAME = 'cadre_name';
     public const COLUMN_CADRE_ADDRESS = 'cadre_address';
     public const COLUMN_CADRE_GENDER = 'cadre_gender';

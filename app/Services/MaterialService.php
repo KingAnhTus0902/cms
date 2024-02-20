@@ -3,31 +3,22 @@
 namespace App\Services;
 
 use App\Constants\CommonConstants;
-use App\Constants\MaterialConstants;
-use App\Helpers\QueryHelper;
 use App\Repositories\Material\MaterialRepositoryInterface;
-use App\Repositories\MaterialBatch\MaterialBatchRepositoryInterface;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class MaterialService extends BaseService
 {
     protected $materialRepositoryInterface;
-    protected $materialBatchRepository;
 
     /**
      * Constructor
      * Before
      * @param MaterialRepositoryInterface $materialRepositoryInterface
-     * @param MaterialBatchRepositoryInterface $materialBatchRepository
      */
     public function __construct(
         MaterialRepositoryInterface $materialRepositoryInterface,
-        MaterialBatchRepositoryInterface $materialBatchRepository
     ) {
         $this->materialRepositoryInterface = $materialRepositoryInterface;
-        $this->materialBatchRepository = $materialBatchRepository;
     }
 
     /**
@@ -123,58 +114,6 @@ class MaterialService extends BaseService
             $forPrescription
         );
         return $result;
-    }
-
-
-    /**
-     * List data export.
-     *
-     * @return Collection
-     */
-    public function listDataExport()
-    {
-        DB::statement(DB::raw('set @no=0'));
-
-        $selectMethodSql = 'CASE';
-        foreach (MaterialConstants::METHOD as $value => $name) {
-            $selectMethodSql .= ' WHEN method = "' . $value . '" THEN "' . $name . '"';
-        }
-        $selectMethodSql .= ' ELSE "" END';
-
-        return $this->materialRepositoryInterface->getList(
-            [
-                DB::raw('@no  := @no  + 1 AS no'),
-                'materials_tbl.code',
-                'materials_tbl.name',
-                'mapping_name',
-                DB::raw(
-                    '(
-                        CASE
-                            WHEN type = "' . MaterialConstants::TYPE_MATERIAL . '"
-                                THEN "' . MaterialConstants::TYPE[MaterialConstants::TYPE_MATERIAL] . '"
-                            WHEN type = "' . MaterialConstants::TYPE_MEDICINE . '"
-                                THEN "' . MaterialConstants::TYPE[MaterialConstants::TYPE_MEDICINE] . '"
-                            ELSE ""
-                        END
-                    ) AS type'
-                ),
-                'active_ingredient_name',
-                'content',
-                'dosage_form',
-                'materials_types.code AS material_type_id',
-                'units_mst.code AS unit_id',
-                'ingredients',
-                'insurance_code',
-                'insurance_unit_price',
-                'service_unit_price',
-                'disease_type',
-                DB::raw('(' . $selectMethodSql . ') AS method'),
-                'usage',
-            ]
-        )
-            ->leftJoin('materials_types', 'material_type_id', '=', 'materials_types.id')
-            ->leftJoin('units_mst', 'unit_id', '=', 'units_mst.id')
-            ->get();
     }
 
     /**

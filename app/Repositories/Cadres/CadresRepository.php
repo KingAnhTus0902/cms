@@ -5,9 +5,6 @@ namespace App\Repositories\Cadres;
 use App\Constants\CommonConstants;
 use App\Models\Cadres;
 use App\Repositories\BaseRepository;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
-use App\Repositories\Cadres\CadresRepositoryInterface;
 use App\Constants\CadresConstants;
 
 class CadresRepository extends BaseRepository implements CadresRepositoryInterface

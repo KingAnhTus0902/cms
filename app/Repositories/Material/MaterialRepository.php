@@ -5,7 +5,6 @@ use App\Constants\CommonConstants;
 use App\Constants\MaterialConstants;
 use App\Models\Material;
 use App\Repositories\BaseRepository;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class MaterialRepository extends BaseRepository implements MaterialRepositoryInterface
 {

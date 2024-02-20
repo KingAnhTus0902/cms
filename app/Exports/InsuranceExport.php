@@ -58,7 +58,7 @@ class InsuranceExport implements FromView,ShouldAutoSize,WithStyles,WithEvents,W
     public function columnWidths(): array
     {
         return [
-            'G' => 60,
+            'G' => 20,
         ];
     }
 
@@ -78,7 +78,7 @@ class InsuranceExport implements FromView,ShouldAutoSize,WithStyles,WithEvents,W
         $fontItalic=['font' => ['italic' => true,],];
         $fontCenter=['alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER,],];
         $sheet->getStyle('A:C')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
-        $sheet->getStyle('F:M')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
+        $sheet->getStyle('F:L')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_LEFT);
         $sheet->getStyle('D:E')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_RIGHT);
         return [
             'B2' => $fontBold,

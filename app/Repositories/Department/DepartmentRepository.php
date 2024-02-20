@@ -5,8 +5,6 @@ namespace App\Repositories\Department;
 use App\Constants\CommonConstants;
 use App\Models\Department;
 use App\Repositories\BaseRepository;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Database\Eloquent\Builder;
 
 class DepartmentRepository extends BaseRepository implements DepartmentRepositoryInterface
 {
