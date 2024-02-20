@@ -193,7 +193,6 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                     'designated_service_id',
                     'designated_service_name',
                     'designated_service_unit_price',
-                    'payment_status',
                     'designated_service_amount',
                     'designated_service_type_surgery',
                     'status'
@@ -226,7 +225,6 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
             unset($data['medical_session_room']);
         }
         $data['medical_examination_day'] = $examinationDay;
-//        dd($data);
         return $data;
     }
 
@@ -235,24 +233,13 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
         return $this->findOneOrFail($id);
     }
 
-    public function getOrdinalInRoom($day, $roomId, $type, bool $getAll)
+    public function getOrdinalInRoom($day, $roomId)
     {
-        if ($getAll) {
-            $result = MedicalSessionRoom::where(MedicalSessionRoomConstants::COLUMN_MEDICAL_DAY, $day)
-                ->where(MedicalSessionRoomConstants::COLUMN_ROOM_ID, $roomId)
-                ->where(MedicalSessionRoomConstants::COLUMN_TYPE, $type)
-                ->orderBy(MedicalSessionRoomConstants::COLUMN_ORDINAL, ORDER_DESC)
-                ->pluck(MedicalSessionRoomConstants::COLUMN_ORDINAL)
-                ->toArray();
-        } else {
-            $result = MedicalSessionRoom::where(MedicalSessionRoomConstants::COLUMN_MEDICAL_DAY, $day)
-                ->where(MedicalSessionRoomConstants::COLUMN_ROOM_ID, $roomId)
-                ->where(MedicalSessionRoomConstants::COLUMN_TYPE, $type)
-                ->orderBy(MedicalSessionRoomConstants::COLUMN_ORDINAL, ORDER_DESC)
-                ->pluck(MedicalSessionRoomConstants::COLUMN_ORDINAL)
-                ->first();
-        }
-        return $result;
+        return MedicalSessionRoom::where(MedicalSessionRoomConstants::COLUMN_MEDICAL_DAY, $day)
+            ->where(MedicalSessionRoomConstants::COLUMN_ROOM_ID, $roomId)
+            ->orderBy(MedicalSessionRoomConstants::COLUMN_ORDINAL, ORDER_DESC)
+            ->pluck(MedicalSessionRoomConstants::COLUMN_ORDINAL)
+            ->first();
     }
 
     public function getCurrentRoom($medicalSessionId)
@@ -273,10 +260,6 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
     }
 
 
-    public function updateDesignatedByMedicalSessionId($medicalSessionId, $data)
-    {
-        return DesignatedServiceOfMedicalSession::where('medical_session_id', $medicalSessionId)->update($data);
-    }
     public function getlistByIdForeignKey($column, $id)
     {
         return $this->model->withTrashed()->where($column, $id)->get();
@@ -319,24 +302,21 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
      */
     public function insuranceList(array $data, $paginate = false, $select = CommonConstants::SELECT_ALL, $type = null)
     {
-        $queryGroupmedial = DB::table('medicine_of_medical_sessions_tbl as A');
-
         $query = $this->model
             ->select(
-//                MedicalSessionConstants::TABLE_NAME.".*"
-                MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_CODE,
-                MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_REASON_FOR_EXAMINATION,
-                MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_DIAGNOSE,
-                MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_CONCLUDE,
-                MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_MEDICAL_EXAMINATION_DAY,
-                DepartmentsConstants::TABLE_NAME.".".DepartmentsConstants::COLUMN_NAME." as department_name",
-                MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_CADRE_NAME,
-                MedicalSessionRoomConstants::TABLE_NAME. "." .MedicalSessionRoomConstants::COLUMN_ROOM_ID,
-                UserConstants::TABLE_NAME. "." .UserConstants::COLUMN_NAME." as user_name",
-                MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_CADRE_GENDER,
-                MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_CADRE_ADDRESS,
-                MedicalSessionConstants::TABLE_NAME.".".MedicalSessionConstants::COLUMN_CADRE_BIRTHDAY
-                ,FolksConstants::TABLE_NAME.".".FolksConstants::COLUMN_NAME." as folk_name"
+                MedicalSessionConstants::TABLE_NAME . "." . MedicalSessionConstants::COLUMN_CODE,
+                MedicalSessionConstants::TABLE_NAME . "." . MedicalSessionConstants::COLUMN_REASON_FOR_EXAMINATION,
+                MedicalSessionConstants::TABLE_NAME . "." . MedicalSessionConstants::COLUMN_DIAGNOSE,
+                MedicalSessionConstants::TABLE_NAME . "." . MedicalSessionConstants::COLUMN_CONCLUDE,
+                MedicalSessionConstants::TABLE_NAME . "." . MedicalSessionConstants::COLUMN_MEDICAL_EXAMINATION_DAY,
+                DepartmentsConstants::TABLE_NAME . "." . DepartmentsConstants::COLUMN_NAME . " as department_name",
+                MedicalSessionConstants::TABLE_NAME . "." . MedicalSessionConstants::COLUMN_CADRE_NAME,
+                MedicalSessionRoomConstants::TABLE_NAME . "." . MedicalSessionRoomConstants::COLUMN_ROOM_ID,
+                UserConstants::TABLE_NAME . "." . UserConstants::COLUMN_NAME . " as user_name",
+                MedicalSessionConstants::TABLE_NAME . "." . MedicalSessionConstants::COLUMN_CADRE_GENDER,
+                MedicalSessionConstants::TABLE_NAME . "." . MedicalSessionConstants::COLUMN_CADRE_ADDRESS,
+                MedicalSessionConstants::TABLE_NAME . "." . MedicalSessionConstants::COLUMN_CADRE_BIRTHDAY
+                , FolksConstants::TABLE_NAME . "." . FolksConstants::COLUMN_NAME . " as folk_name"
             )
             ->leftJoin(FolksConstants::TABLE_NAME, function ($join) {
                 $join->on(
@@ -366,19 +346,12 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                         '(SELECT MIN(id) FROM medical_session_room_tbl' .
                         ' WHERE medical_session_room_tbl.medical_session_id = medical_sessions_tbl.id)');
             })
-            ->leftJoin(UserRoomConstants::TABLE_NAME, function ($join) {
-                $join->on(
-                    MedicalSessionRoomConstants::TABLE_NAME . '.' . MedicalSessionRoomConstants::COLUMN_ROOM_ID,
-                    CommonConstants::OPERATOR_EQUAL,
-                    UserRoomConstants::TABLE_NAME . '.' . UserRoomConstants::COLUMN_ROOM_ID
-                );
-            })
             //join users để lấy tên bác sĩ khám bệnh
             ->leftJoin(UserConstants::TABLE_NAME, function ($join) {
                 $join->on(
                     UserConstants::TABLE_NAME . '.' . UserConstants::COLUMN_ID,
                     CommonConstants::OPERATOR_EQUAL,
-                    UserRoomConstants::TABLE_NAME . '.' . UserRoomConstants::COLUMN_USER_ID
+                    MedicalSessionRoomConstants::TABLE_NAME . '.' . MedicalSessionRoomConstants::COLUMN_USER_ID
                 );
             })
             // Join width medicine
@@ -389,7 +362,7 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                     MedicineConstants::TABLE_NAME . '.' . MedicineConstants::COLUMN_MEDICAL_SESSION_ID
                 );
             })
-            ->groupBy('departments_mst.name' ,
+            ->groupBy('departments_mst.name',
                 'medical_sessions_tbl.cadre_gender',
                 'medical_sessions_tbl.cadre_address',
                 'medical_sessions_tbl.cadre_birthday',
@@ -398,8 +371,7 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                 'medical_sessions_tbl.diagnose',
                 'medical_sessions_tbl.conclude',
                 'medical_sessions_tbl.medical_examination_day'
-            )
-        ;
+            );
 
         $keyword = $data[CommonConstants::KEYWORD];
         if (!empty($keyword['time'])) {
@@ -413,7 +385,7 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
         if (!empty($keyword['room_id'])) {
             $query->where(
                 MedicalSessionRoomConstants::TABLE_NAME . '.' . MedicalSessionRoomConstants::COLUMN_ROOM_ID,
-               "=", $keyword['room_id']
+                "=", $keyword['room_id']
             );
             unset($keyword['room_id']);
         }

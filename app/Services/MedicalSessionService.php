@@ -148,8 +148,6 @@ class MedicalSessionService extends BaseService
                 = $room->examinationType->id ?? null;
             $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_EXAMINATION_NAME}
                 = $room->examinationType->name ?? null;
-            $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_EXAMINATION_INSURANCE_PRICE}
-                = $room->examinationType->insurance_unit_price ?? null;
             $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_EXAMINATION_SERVICE_PRICE}
                 = $room->examinationType->service_unit_price ?? null;
             $medicalSessionRoom->save();
@@ -341,26 +339,9 @@ class MedicalSessionService extends BaseService
     {
         $lastOrdinalInRoom = $this->mainRepository->getOrdinalInRoom(
             $medicalDay,
-            $roomId,
-            MedicalSessionRoomConstants::TYPE_RECEPTION_CREATED,
-            false
+            $roomId
         );
-        $arrayOrdinalByTypeInRoom = $this->mainRepository->getOrdinalInRoom(
-            $medicalDay,
-            $roomId,
-            MedicalSessionRoomConstants::TYPE_USER_BOOKED,
-            true
-        );
-
-        $ordinal = ($lastOrdinalInRoom ?? 0) + 1;
-        if (!$arrayOrdinalByTypeInRoom) {
-            return $ordinal;
-        }
-
-        while (in_array($ordinal, $arrayOrdinalByTypeInRoom)) {
-            $ordinal++;
-        }
-        return $ordinal;
+        return ($lastOrdinalInRoom ?? 0) + 1;
     }
     public function checkStatusWaitingAndProcessingDSOfMedicalSession ($medical)
     {
@@ -442,7 +423,6 @@ class MedicalSessionService extends BaseService
                 $medicalData['payment_price'] = $medicalData['medical_price'];
                 unset($medicalData['medical_price']);
                 $this->mainRepository->updates($payment, $medicalData);
-                $this->mainRepository->updateDesignatedByMedicalSessionId($id, ['payment_status' => $action]);
                 DB::commit();
             }
             return $this->paymentDetail($id);

@@ -87,7 +87,6 @@ class DSMedSessionService implements DSMedSessionServiceInterface
                     'designated_service_name',
                     'designated_service_unit_price',
                     'status',
-                    'payment_status',
                     'description',
                     'designated_service_amount'
                 ],
@@ -130,7 +129,7 @@ class DSMedSessionService implements DSMedSessionServiceInterface
 
             $medicalSession = $this->medicalSessionRepository->getDetail(
                 ['id' => QueryHelper::setQueryInput($id)],
-                ['id', 'cadre_id', 'user_id', 'diagnose'],
+                ['id', 'cadre_id', 'diagnose'],
                 [
                     QueryHelper::setRelationshipQueryInput('cadre', [
                         'id',
@@ -140,7 +139,6 @@ class DSMedSessionService implements DSMedSessionServiceInterface
                         'birthday',
                         'address'
                     ]),
-                    QueryHelper::setRelationshipQueryInput('user', ['id', 'name'])
                 ]
             );
         } catch (Throwable $e) {
@@ -319,7 +317,6 @@ class DSMedSessionService implements DSMedSessionServiceInterface
                     'designated_service_id',
                     'designated_service_name',
                     'designated_service_unit_price',
-                    'payment_status',
                     'designated_service_amount',
                     'designated_service_specialist',
                     'designated_service_of_medical_sessions_tbl.description'
@@ -334,7 +331,6 @@ class DSMedSessionService implements DSMedSessionServiceInterface
                     ),
                     KEY_RELATE => [
                         QueryHelper::setRelationshipQueryInput('medicalSession', ['id', 'code', 'status']),
-                        QueryHelper::setRelationshipQueryInput('user', ['id', 'name']),
                         QueryHelper::setRelationshipQueryInput('room', ['id', 'name'])
                     ]
                 ]
@@ -345,7 +341,6 @@ class DSMedSessionService implements DSMedSessionServiceInterface
                 [
                     'id',
                     'cadre_id',
-                    'user_id',
                     'diagnose',
                     'cadre_name',
                     'cadre_gender',
@@ -353,9 +348,6 @@ class DSMedSessionService implements DSMedSessionServiceInterface
                     'cadre_birthday',
                     'cadre_address'
                 ],
-                [
-                    QueryHelper::setRelationshipQueryInput('user', ['id', 'name'])
-                ]
             );
 
             return [$designatedServiceMedicalSession, $medicalSession];

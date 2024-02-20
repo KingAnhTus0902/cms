@@ -13,12 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('news_categories_mst', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-            $table->softDeletes();
-        });
+        Schema::dropIfExists('health_insurance_card_head_mst');
     }
 
     /**
@@ -28,6 +23,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('news_categories_mst');
+        //
     }
 };

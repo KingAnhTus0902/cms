@@ -22,9 +22,8 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
 //            NewsCategorySeeder::class,
             HospitalSeeder::class,
-            DesignatedServiceSeeder::class,
+//            DesignatedServiceSeeder::class,
             SettingSeeder::class,
-            HealthInsuranceCardSeeder::class,
         ]);
     }
 }

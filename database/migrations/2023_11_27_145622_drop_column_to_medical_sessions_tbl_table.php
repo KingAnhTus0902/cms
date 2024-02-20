@@ -62,6 +62,12 @@ return new class extends Migration
             if (Schema::hasColumn('medical_sessions_tbl', 'department_name')) {
                 $table->dropColumn('department_name');
             }
+            if (Schema::hasColumn('medical_sessions_tbl', 'user_id')) {
+                $table->dropColumn('user_id');
+            }
+            if (Schema::hasColumn('medical_sessions_tbl', 'patient_pay')) {
+                $table->dropColumn('patient_pay');
+            }
         });
     }
 
