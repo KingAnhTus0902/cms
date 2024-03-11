@@ -121,7 +121,7 @@ class MedicalSessionController extends Controller
 
     public function create(MedicalSessionRequest $request)
     {
-        $cadreId = $request->cadre_id;
+        $cadreId = $request->cadre_id ?? '';
         $medicalSessionOld = $this->medicalSessionService->checkCanCreateMedicalSessionForCadre($cadreId);
         if ($medicalSessionOld > 0) {
             return $this->errorForbiddenResponse(__('label.medical_session.message.not_create'));

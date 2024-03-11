@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api;
 
 use App\Constants\MedicalSessionRoomConstants;
 use App\Http\Controllers\Controller;
-use App\Models\MedicalSessionRoom;
 use App\Repositories\MedicalSessionRooms\MedicalSessionRoomRepositoryInterface;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\ExaminationRequest;

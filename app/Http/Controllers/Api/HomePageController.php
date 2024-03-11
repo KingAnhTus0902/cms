@@ -2,12 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Constants\MedicalSessionConstants;
 use App\Http\Controllers\Controller;
 use App\Services\MedicalSessionService;
-use App\Services\PrescriptionOfMedicalSessionService;
-use Carbon\Carbon;
-
 class HomePageController extends Controller
 {
     /**
@@ -28,8 +24,7 @@ class HomePageController extends Controller
 
     public function dashboard()
     {
-        $medicalDashboad = $this->medicalSessionService->getDashboardData();
-        $result = array_merge($medicalDashboad);
-        return $result;
+        $medicalDashboard = $this->medicalSessionService->getDashboardData();
+        return array_merge($medicalDashboard);
     }
 }

@@ -25,11 +25,11 @@ class MaterialTypeController extends Controller
         $this->materialTypeService = $materialTypeService;
     }
 
-    
+
     /**
      * List material types Ajax Data
      * @param Request $request
-     * @return void
+     * @return string
      */
     public function listAjax(Request $request)
     {
@@ -48,7 +48,7 @@ class MaterialTypeController extends Controller
         $data = $request->all();
         try {
             $response['data'] = $this->materialTypeService->create($data);
-            
+
             return $this->createSuccessResponse($response);
         } catch (\Exception $e) {
             return $this->badRequestErrorResponse($e);
@@ -79,7 +79,7 @@ class MaterialTypeController extends Controller
             $id = $data['id'];
             $materialType = $this->materialTypeService->findOneOrFail($id);
             $response['data'] = $materialType->update($data);
-            
+
             return $this->updateSuccessResponse($response);
         } catch (\Exception $e) {
             return $this->badRequestErrorResponse($e);

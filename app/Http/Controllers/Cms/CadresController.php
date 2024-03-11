@@ -4,9 +4,7 @@ namespace App\Http\Controllers\Cms;
 
 use App\Http\Controllers\Controller;
 use Illuminate\View\View;
-use Illuminate\Http\Request;
 use App\Services\CadresService;
-use App\Constants\CommonConstants;
 
 class CadresController extends Controller
 {

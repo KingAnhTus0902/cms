@@ -262,7 +262,7 @@
             options: (responses) => {
                 $(CHANGE_PASSWORD_FORM).find('.validate-error').text('');
                 if (responses.code === HTTP_UNPROCESSABLE_ENTITY) {
-                    showMessageValidate('edit', responses.message);
+                    showMessageValidate('edit', responses.errors);
                 } else {
                     $('#change-password')[0].reset();
                     swal(responses.success, "", "success");

@@ -9,6 +9,9 @@ use App\Services\HospitalService;
 use App\Services\HospitalTransferService;
 use App\Services\MedicalSessionService;
 use App\Services\Setting\SettingServiceInterface;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
 
 class HospitalTransferController extends Controller
@@ -37,7 +40,7 @@ class HospitalTransferController extends Controller
 
     /**
      * List hospitals, list cities
-     * @param Request $request
+     * @return Application|Factory|View
      */
     public function index()
     {
@@ -50,7 +53,8 @@ class HospitalTransferController extends Controller
         $folks = Folk::all();
         $hospitals = $this->hospitalsService->all();
         $medical['cadre_age'] = date_diff(date_create($medical['cadre_birthday']), date_create(date('Y-m-d')))->y;
-        return view('hospital_transfer.add', compact('hospitals', 'folks', 'medical'));
+        return view('hospital_transfer.add',
+            compact('hospitals', 'folks', 'medical'));
     }
     public function print($id)
     {
@@ -59,7 +63,8 @@ class HospitalTransferController extends Controller
         $folks = Folk::all();
         $hospitalTransfer = $this->hospitalTransferService->findOneOrFail($id);
         $medical = $this->medicalSessionService->findOneOrFail($hospitalTransfer['medical_session_id']);;
-        return view('hospital_transfer.print', compact('hospitalTransfer', 'medical', 'folks', 'hospital'));
+        return view('hospital_transfer.print',
+            compact('hospitalTransfer', 'medical', 'folks', 'hospital'));
     }
 
     public function detail($id)
@@ -68,7 +73,8 @@ class HospitalTransferController extends Controller
         $folks = Folk::all();
         $hospitalTransfer = $this->hospitalTransferService->findOneOrFail($id);
         $medical = $this->medicalSessionService->findOneOrFail($hospitalTransfer['medical_session_id']);
-        return view('hospital_transfer.edit', compact('hospitalTransfer', 'medical', 'folks', 'hospitals'));
+        return view('hospital_transfer.edit',
+            compact('hospitalTransfer', 'medical', 'folks', 'hospitals'));
     }
 
 }

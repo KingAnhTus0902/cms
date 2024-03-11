@@ -74,7 +74,7 @@ class RoomController extends Controller
                 $departmentOfUser = $this->departmentService->findBy(
                     [
                         'id' => $room->department_id,
-                        'user_head_id' => Auth::user()->id
+                        'user_head_id' => Auth::user()->getAuthIdentifier()
                     ]
                 );
                 if (!$departmentOfUser->count()) {
@@ -103,7 +103,7 @@ class RoomController extends Controller
                 $departmentOfUser = $this->departmentService->findBy(
                     [
                         'id' => $room->department_id,
-                        'user_head_id' => Auth::user()->id
+                        'user_head_id' => Auth::user()->getAuthIdentifier()
                     ]
                 );
                 if (!$departmentOfUser->count()) {

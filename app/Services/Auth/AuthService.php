@@ -60,31 +60,12 @@ class AuthService extends BaseService implements AuthServiceInterface
         try {
             // The user is active, not suspended, and exists.
             $credentials = $credentials + ['status' => ACTIVE];
+            // Is user exist
+            $user = $this->userRepository->exist('email', $credentials['email']);
 
-            if ($device == MOBILE) {
-                $cadres = $this->cadresRepository->exist('email', $credentials['email']);
-
-                return ($cadres && $token = auth('mobile')->attempt($credentials))
-                    ? [
-                        'code' => Response::HTTP_OK, 'message' => __('messages.SM-004'),
-                        'data' => [
-                            'token' => 'Bearer ' . $token,
-                            'expires_in' => time() + env('EXPIRED_TOKEN', 604800)
-                        ]
-                    ]
-                    : [
-                        'code' => Response::HTTP_UNAUTHORIZED,
-                        'message' => __('messages.EM-015'),
-                        'data' => null
-                    ];
-            } else {
-                // Is user exist
-                $user = $this->userRepository->exist('email', $credentials['email']);
-
-                return ($user && auth()->attempt($credentials))
-                    ? ['code' => true, 'route' => route('home')]
-                    : ['code' => false, 'route' => route('login')];
-            }
+            return ($user && auth()->attempt($credentials))
+                ? ['code' => true, 'route' => route('home')]
+                : ['code' => false, 'route' => route('login')];
         } catch (Throwable) {
             return ($device == MOBILE)
                 ? [
@@ -118,7 +99,7 @@ class AuthService extends BaseService implements AuthServiceInterface
     public function resetPassword(array $params, $device): array
     {
         try {
-            $model = ($device == MOBILE) ? $this->cadresRepository : $this->userRepository;
+            $model = $this->userRepository;
             // User
             $user = $model->getDetail(
                 [
@@ -143,20 +124,12 @@ class AuthService extends BaseService implements AuthServiceInterface
                 }
             );
         } catch (Throwable) {
-            return ($device == MOBILE)
-                ? ['code' => Response::HTTP_UNAUTHORIZED, 'message' => __('messages.EM-000')]
-                : [false, __('messages.EM-000')];
+            return [false, __('messages.EM-000')];
         }
 
-        if ($device == MOBILE) {
-            return $status == Password::PASSWORD_RESET
-                ? ['code' => Response::HTTP_OK, 'message' => __('messages.SM-006')]
-                : ['code' => Response::HTTP_UNAUTHORIZED, 'message' => __('messages.EM-011')];
-        } else {
-            return $status == Password::PASSWORD_RESET
-                ? [true, __($status)]
-                : [false, __($status)];
-        }
+        return $status == Password::PASSWORD_RESET
+            ? [true, __($status)]
+            : [false, __($status)];
     }
 
     /**
@@ -224,35 +197,5 @@ class AuthService extends BaseService implements AuthServiceInterface
         ]);
 
         return $otp;
-    }
-
-    /**
-     * Compare otp.
-     *
-     * @param $params
-     * @return array
-     */
-    public function getOtp($params): array
-    {
-        try {
-            $cadres = $this->cadresRepository->getDetail(['email' => QueryHelper::setQueryInput($params['email'])]);
-
-            if ($params['otp'] !== $cadres['otp'] || now()->isAfter($cadres['expired_at'])) {
-                return [
-                    'code' => Response::HTTP_UNAUTHORIZED,
-                    'message' => __('messages.EM-017')
-                ];
-            }
-        } catch (Throwable) {
-            return [
-                'code' => Response::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => __('messages.EM-000')
-            ];
-        }
-
-        return [
-            'code' => Response::HTTP_OK,
-            'message' => __('messages.SM-009')
-        ];
     }
 }

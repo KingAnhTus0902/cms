@@ -49,7 +49,7 @@ class CadresController extends Controller
     /**
      * List cadres ajax
      * @param Request $request
-     * @return void
+     * @return string
      */
     public function list(Request $request)
     {
@@ -60,7 +60,7 @@ class CadresController extends Controller
 
     /**
      * @param Request $request
-     * @return void
+     * @return string
      */
     public function listFolk(Request $request)
     {

@@ -75,9 +75,9 @@ class UnitController extends Controller
         try {
             $response['data'] = $this->unitService->saveUnit(
                 $request->only(['code', 'name', 'note']),
-                $request->id
+                $request->id ?? ''
             );
-            if ($response['data'] === Response::HTTP_NOT_FOUND) {
+            if ($response['data'] == Response::HTTP_NOT_FOUND) {
                 return $this->notFoundErrorResponse();
             }
             $response['message'] = __('messages.SM-002');
@@ -95,7 +95,7 @@ class UnitController extends Controller
     public function delete(Request $request)
     {
         try {
-            $result = $this->unitService->deleteUnit($request->id);
+            $result = $this->unitService->deleteUnit($request->id ?? '');
             if ($result === Response::HTTP_NOT_FOUND) {
                 return $this->notFoundErrorResponse();
             }

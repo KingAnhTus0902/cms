@@ -6,7 +6,6 @@ use App\Http\Requests\PermissionRequest;
 use App\Models\Role;
 use App\Services\Permission\PermissionServiceInterface;
 use App\Services\Role\RoleServiceInterface;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Helpers\RoleHelper;
-use App\Http\Requests\Mobile\ChangePasswordRequest;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ProfileRequest;
 use App\Http\Requests\UserRequest;
 use App\Services\Auth\AuthServiceInterface;

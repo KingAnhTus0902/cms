@@ -31,6 +31,7 @@ class UnitController extends Controller
     /**
      * List Unit Ajax Data
      * @param BaseSearchRequest $request
+     * @return string
      */
     public function list(BaseSearchRequest $request)
     {

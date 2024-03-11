@@ -36,7 +36,7 @@ class AddressController extends Controller
     /**
      * Get list districts by city_id. Parameters is ?city_id=<city_id>
      * @param Request $request
-     * @return void
+     * @return string
      */
     public function listDistrict(Request $request)
     {
@@ -64,7 +64,7 @@ class AddressController extends Controller
 
     /**
      * @param Request $request
-     * @return void
+     * @return string
      */
     public function listCity(Request $request)
     {
