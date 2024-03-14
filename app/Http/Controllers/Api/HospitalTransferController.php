@@ -120,7 +120,11 @@ class HospitalTransferController extends Controller
             $data['treatment_end_date'] = CommonHelper::formatDate(
                 $data['treatment_end_date'], DAY_MONTH_YEAR, YEAR_MONTH_DAY);
             $data['transit_times'] = CommonHelper::formatDate(
-                $data['transit_times'], DAY_MONTH_YEAR, YEAR_MONTH_DAY);;
+                $data['transit_times'], DAY_MONTH_YEAR, YEAR_MONTH_DAY);
+            $data['medical_insurance_start_date'] = CommonHelper::formatDate(
+                $data['medical_insurance_start_date'], DAY_MONTH_YEAR, YEAR_MONTH_DAY);
+            $data['medical_insurance_end_date'] = CommonHelper::formatDate(
+                $data['medical_insurance_end_date'], DAY_MONTH_YEAR, YEAR_MONTH_DAY);
             return $data;
         } catch (\Exception $e) {
             Log::error($e->getMessage());

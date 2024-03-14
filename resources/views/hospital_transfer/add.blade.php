@@ -1,6 +1,3 @@
-@php
-    use App\Helpers\CommonHelper;
-@endphp
 @section('title', __('label.hospital_transfer.title_add'))
 @extends('layouts.admin')
 @php
@@ -166,43 +163,6 @@
                                            class="form-control form-control-sm input-form"
                                            id="cadre_work_place-add" name="cadre_work_place">
                                     <span id="cadre_work_place-add-error" class="error validate-error"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group form-group-sm">
-                                    <label for="code-add" class="col-form-label ">
-                                        {{ __('label.hospital_transfer.field.medical_insurance_number') }}
-                                    </label>
-                                    <input type="text"
-                                           value="{{$medical->cadre_medical_insurance_number}}" disabled
-                                           class="form-control form-control-sm input-form"
-                                           id="medical_insurance_number-add" name="medical_insurance_number">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="medical_insurance_start_date-add"
-                                           class="col-form-label ">
-                                        {{ __('label.hospital_transfer.field.medical_insurance_start_date') }}
-                                    </label>
-                                    <input type="text"
-                                           value="{{CommonHelper::formatDate($medical->cadre_medical_insurance_start_date, YEAR_MONTH_DAY, DAY_MONTH_YEAR)}}" disabled
-                                           class="form-control form-control-sm input-form"
-                                           id="medical_insurance_start_date-add" name="medical_insurance_start_date">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group form-group-sm">
-                                    <label for="medical_insurance_end_date-add"
-                                           class="col-form-label ">
-                                        {{ __('label.hospital_transfer.field.medical_insurance_end_date') }}
-                                    </label>
-                                    <input type="text"
-                                           value="{{CommonHelper::formatDate($medical->cadre_medical_insurance_end_date, YEAR_MONTH_DAY, DAY_MONTH_YEAR)}}" disabled
-                                           class="form-control form-control-sm input-form"
-                                           id="medical_insurance_end_date-add" name="medical_insurance_end_date">
                                 </div>
                             </div>
                         </div>

@@ -41,11 +41,6 @@
                                             colspan="1" aria-label="Platform(s): activate to sort column ascending">
                                             {{__("label.hospital_transfer.field.identity_card_number")}}
                                         </th>
-                                        <th class="u-width150 no-wrap" tabindex="0"
-                                            aria-controls="example2" rowspan="1"
-                                            colspan="1" aria-label="Platform(s): activate to sort column ascending">
-                                            {{__("label.hospital_transfer.field.medical_insurance_number")}}
-                                        </th>
                                         <th class="u-dt-center w-10" tabindex="0"
                                             aria-controls="example2" rowspan="1" colspan="1"
                                             aria-label="CSS grade: activate to sort column ascending">
@@ -64,9 +59,6 @@
                                             <td class="word-break">{{ $hospitalTransfer->hospital->name ?? ''}}</td>
                                             <td class="text-right word-break">
                                                 {{ $hospitalTransfer->medicalSession->cadre_identity_card_number ?? ''}}
-                                            </td>
-                                            <td class="text-left">
-                                                {{$hospitalTransfer->medicalSession->cadre_medical_insurance_number ?? ''}}
                                             </td>
                                             <td class="dt-center no-wrap">
                                                 @if ($hospitalTransfer->medicalSession->getRawOriginal('payment_status') !== MedicalSessionConstants::PAID_STATUS

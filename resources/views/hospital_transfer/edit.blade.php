@@ -181,43 +181,6 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group form-group-sm">
-                                    <label for="medical_insurance_number-edit" class="col-form-label ">
-                                        {{ __('label.hospital_transfer.field.medical_insurance_number') }}
-                                    </label>
-                                    <input type="text"
-                                           value="{{$medical->cadre_medical_insurance_number}}" disabled
-                                           class="form-control form-control-sm input-form"
-                                           id="medical_insurance_number-edit" name="medical_insurance_number">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="medical_insurance_start_date-edit"
-                                           class="col-form-label ">
-                                        {{ __('label.hospital_transfer.field.medical_insurance_start_date') }}
-                                    </label>
-                                    <input type="text"
-                                           value="{{ CommonHelper::formatDate($medical->cadre_medical_insurance_start_date, YEAR_MONTH_DAY, DAY_MONTH_YEAR) }}" disabled
-                                           class="form-control form-control-sm input-form"
-                                           id="medical_insurance_start_date-edit" name="medical_insurance_start_date">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group form-group-sm">
-                                    <label for="medical_insurance_end_date-edit"
-                                           class="col-form-label ">
-                                        {{ __('label.hospital_transfer.field.medical_insurance_end_date') }}
-                                    </label>
-                                    <input type="text"
-                                           value="{{ CommonHelper::formatDate($medical->cadre_medical_insurance_end_date, YEAR_MONTH_DAY, DAY_MONTH_YEAR) }}" disabled
-                                           class="form-control form-control-sm input-form"
-                                           id="medical_insurance_end_date-edit" name="medical_insurance_end_date">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label for="note-edit" class="col-form-label ">

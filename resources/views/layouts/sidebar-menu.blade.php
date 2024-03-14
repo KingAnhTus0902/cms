@@ -64,9 +64,8 @@
                     @endif
                     @if(auth()->user()->can('List-hospital-tranfer'))
                             <li class="nav-item">
-{{--                                <a href="{{route("admin.index.hospital_transfer")}}"--}}
-                                <a href="#" class="nav-link" onclick="developing()">
-{{--                                   class="nav-link {{ request()->routeIs('admin.index.hospital_transfer') ? 'active': '' }}">--}}
+                                <a href="{{route("admin.index.hospital_transfer")}}"
+                                   class="nav-link {{ request()->routeIs('admin.index.hospital_transfer') ? 'active': '' }}">
                                     <i class='far fa-dot-circle'></i>
                                     <p>{{ __('menu.list_management.hospital_transfer') }}</p>
                                 </a>
