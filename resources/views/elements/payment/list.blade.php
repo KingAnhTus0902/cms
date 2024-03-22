@@ -17,20 +17,17 @@
                                             data-column-name="id" id="ordinal-number">
                                             {{__("label.common.field.ordinal_number")}}
                                         </th>
-                                        <th class="text-center w-10">
+                                        <th class="text-center w-15">
                                             {{__("label.medical_session.field.code")}}
                                         </th>
-                                        <th class="text-center w-15">
+                                        <th class="text-center w-20">
                                             {{__("label.medical_session.field.cadres_name")}}
                                         </th>
-                                        <th class="text-center w-10">
+                                        <th class="text-center w-15">
                                             {{__("label.medical_session.field.cadres_address")}}
                                         </th>
-                                        <th class="text-center w-8 no-wrap">
+                                        <th class="text-center w-10 no-wrap">
                                             {{__("label.medical_session.field.medical_examination_day")}}
-                                        </th>
-                                        <th class="text-center w-20 no-wrap">
-                                            {{__("label.medical_session.field.payment_status")}}
                                         </th>
                                         <th class="text-center w-10 no-wrap">
                                             {{__("label.medical_session.field.examination_status")}}
@@ -44,15 +41,18 @@
                                     @foreach ($medicalSessions as $key => $medicalSession)
                                         <tr class="odd">
                                             <td class="text-center">{{ $itemStart + $key }}</td>
-                                            <td class="word-break text-right">
-                                                <a href="{{ route('admin.medical_session.examination', [
+                                            @if($medicalSession->getRawOriginal('status') != \App\Constants\MedicalSessionConstants::STATUS_WAITING_PAY)
+                                                <td class="dt-center">
+                                                    <a href="{{ route('admin.medical_session.examination', [
                                                     'id' => $medicalSession->id
                                                 ]) }}">{{$medicalSession->code}}</a>
-                                            </td>
+                                                </td>
+                                            @else
+                                                <td class="dt-center">{{$medicalSession->code}}</td>
+                                            @endif
                                             <td class="word-break">{{$medicalSession->cadre_name}}</td>
                                             <td class="word-break">{{$medicalSession->cadre_city_id}}</td>
                                             <td class="text-right">{{$medicalSession->medical_examination_day}}</td>
-                                            <td class="no-wrap">{!! $medicalSession->payment_status !!}</td>
                                             <td class="no-wrap">{!! $medicalSession->status !!}</td>
                                             <td class="text-center">
                                                 <a href="{{ route('admin.payment.detail', $medicalSession->id) }}">

@@ -49,7 +49,12 @@ class PaymentController extends BaseController
      */
     public function paymentDetail($id): JsonResponse
     {
-        $paymentDetail = $this->medicalSessionService->paymentDetail($id);
+        $checkStatus = $this->medicalSessionService->find($id);
+        if($checkStatus->getRawOriginal('status') == MedicalSessionConstants::STATUS_DONE) {
+            $paymentDetail = $this->medicalSessionService->paymentDetailDone($id);
+        } else {
+            $paymentDetail = $this->medicalSessionService->paymentDetail($id);
+        }
         return response()->json([
             'success' => true,
             'html' => view('elements.payment.detail', $paymentDetail)->render()
@@ -67,20 +72,14 @@ class PaymentController extends BaseController
         ]);
     }
 
-    public function cancel($id, Request $request): JsonResponse
-    {
-        $data = $request->all();
-        $paymentDetail = $this->medicalSessionService->changePaymentStatus(
-            $id, $data, MedicalSessionConstants::CANCEL_STATUS);
-        return response()->json([
-            'success' => true,
-            'html' => view('elements.payment.detail', $paymentDetail)->render()
-        ]);
-    }
-
     public function print($id): View
     {
-        $paymentDetail = $this->medicalSessionService->paymentDetail($id);
+        $checkStatus = $this->medicalSessionService->find($id);
+        if($checkStatus->getRawOriginal('status') == MedicalSessionConstants::STATUS_DONE) {
+            $paymentDetail = $this->medicalSessionService->paymentDetailDone($id);
+        } else {
+            $paymentDetail = $this->medicalSessionService->paymentDetailPrint($id);
+        }
         return view('prints.payment', $paymentDetail);
     }
 }

@@ -28,6 +28,7 @@ class MedicalSessionConstants
 
     public const COLUMN_CADRE_PHONE = 'cadre_phone';
 
+    public const STATUS_WAITING_PAY = 0;
     public const STATUS_WAITING = 1;
     public const STATUS_DOING   = 2;
     public const STATUS_WAITING_RESULT    = 3;
@@ -35,6 +36,7 @@ class MedicalSessionConstants
     public const STATUS_CANCEL  = 5;
 
     public const STATUS_TEXT = [
+        self::STATUS_WAITING_PAY => "Chờ thanh toán",
         self::STATUS_WAITING => "Đang chờ khám",
         self::STATUS_DOING => "Đang khám",
         self::STATUS_WAITING_RESULT => "Chờ kết quả",
@@ -51,29 +53,11 @@ class MedicalSessionConstants
         self::PAID_STATUS => "Đã thanh toán",
         self::CANCEL_STATUS => "Hủy thanh toán",
     ];
-
-    public const RIGHT_TREATMENT_LINE = 1;
-    public const OPPOSITE_TREATMENT_LINE = 2;
-    public const ON_TREATMENT_LINE = 3;
-    public const TREATMENT_LINE = [
-        self::RIGHT_TREATMENT_LINE => 'Đúng tuyến',
-        self::OPPOSITE_TREATMENT_LINE => 'Trái tuyến',
-        self::ON_TREATMENT_LINE => 'Thông tuyến',
-    ];
-
-    public const USE_INSURANCE = 1;
-    public const NOT_INSURANCE = 0;
     public const EMERGENCY = 1;
     public const NORMAL = 0;
 
     public const MAIN_DISEASE = 0;
     public const SUB_DISEASE = 1;
-
-    public const NO_USE_MEDICAL_INSURANCE  = '0';
-    public const USE_MEDICAL_INSURANCE  = '1';
-    public const COLUMN_TREATMENT_LINE = 'treatment_line';
-    public const COLUMN_HOSPITAL_ID = 'hospital_id';
-    public const COLUMN_USER_ID = 'user_id';
 
     public const ORIGINAL_PROVINCE_HOSPITAL_LINE = 1;
     public const INNER_PROVINCE_TO_HOSPITAL_LINE = 2;

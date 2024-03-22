@@ -80,12 +80,14 @@
                                                 <td class="no-wrap">{!! $value->format_status !!}</td>
                                                 <td class="text-center text-nowrap">
                                                     @if(auth()->user()->can('View-medical-test'))
+                                                        @if($value->status != \App\Constants\DesignatedOfMedicalSessionsConstants::WAITING_PAYMENT)
                                                         <a class="btn btn-info btn-sm mr-2"
                                                             data-id="{{ $value->id }}"
                                                             href="{{ route('admin.medical_tests.view', $value->id) }}"
                                                         >
                                                             <i class="fa fa-edit"></i>
                                                         </a>
+                                                        @endif
                                                     @endif
 
                                                 </td>

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Constants\CommonConstants;
+use App\Constants\DesignatedOfMedicalSessionsConstants;
 use App\Constants\MedicalSessionConstants;
 use App\Constants\MedicalSessionRoomConstants;
 use App\Constants\DesignatedServiceConstants;
@@ -11,10 +12,13 @@ use App\Helpers\QueryHelper;
 use App\Models\DesignatedServiceOfMedicalSession;
 use App\Models\MedicalSessionRoom;
 use App\Repositories\Cadres\CadresRepositoryInterface;
+use App\Repositories\DesignatedServiceOfMedicalSession\DSMedSessionRepository;
+use App\Repositories\DesignatedServiceOfMedicalSession\DSMedSessionRepositoryInterface;
 use App\Repositories\MedicalSession\MedicalSessionRepositoryInterface;
 use App\Repositories\Room\RoomRepositoryInterface;
 use App\Repositories\Setting\SettingRepositoryInterface;
 use App\Repositories\Hospital\HospitalRepositoryInterface;
+use App\Services\DesignatedServiceOfMedicalSession\DSMedSessionServiceInterface;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -49,6 +53,9 @@ class MedicalSessionService extends BaseService
      */
     protected $hospitalRepository;
 
+    /** @var DSMedSessionRepositoryInterface */
+    protected DSMedSessionRepositoryInterface $designatedServiceOfMedicalSessionRepository;
+
     /**
      * Constructor
      * Before
@@ -62,13 +69,15 @@ class MedicalSessionService extends BaseService
         CadresRepositoryInterface $cadresRepository,
         RoomRepositoryInterface $roomRepository,
         SettingRepositoryInterface $settingRepository,
-        HospitalRepositoryInterface $hospitalRepository
+        HospitalRepositoryInterface $hospitalRepository,
+        DSMedSessionRepositoryInterface $designatedServiceOfMedicalSessionRepository,
     ) {
         $this->mainRepository = $medicalSessionRepositoryInterface;
         $this->cadresRepository = $cadresRepository;
         $this->roomRepository = $roomRepository;
         $this->settingRepository = $settingRepository;
         $this->hospitalRepository = $hospitalRepository;
+        $this->designatedServiceOfMedicalSessionRepository = $designatedServiceOfMedicalSessionRepository;
     }
 
     public function list($data, $paginate, $searchPayment = null)
@@ -140,7 +149,7 @@ class MedicalSessionService extends BaseService
             $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_MEDICAL_SESSION_ID} = $medicalSession->id;
             $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_ROOM_ID} = $data['room_id'];
             $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_STATUS_ROOM}
-                = MedicalSessionConstants::STATUS_WAITING;
+                = MedicalSessionConstants::STATUS_WAITING_PAY;
             $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_MEDICAL_DAY} = date('Y-m-d');
             $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_ORDINAL}
                 = $this->getOrdinalInRoom(date('Y-m-d'), $data['room_id']);
@@ -209,6 +218,109 @@ class MedicalSessionService extends BaseService
 
         return null;
     }
+
+    public function paymentDetailDone($id)
+    {
+        try {
+            $data = $this->mainRepository->getPaymentDetailDone($id);
+            $setting = $this->settingRepository->first();
+            $otherServices = ZERO_PRICE;
+            $hospitalName = null;
+            // calculate sum
+            $examinationsServiceCost = !empty($data['examination_types']) ? array_sum(
+                array_column($data['examination_types'], 'service_unit_price')
+            ) : 0;
+
+            $data['service'] = $data['services'];
+            $data['services'] = [];
+            if (!empty($data['service'])) {
+                foreach ($data['service'] as $key => $value) {
+                    $service = (int) $value['designated_service_unit_price']
+                        * $value['designated_service_amount'];
+                    $value['total_service'] = $service;
+                    $value['type_surgery'] = $value['designated_service_type_surgery']
+                        ?? DesignatedServiceConstants::TYPE_TEST;
+                    $otherServices = $otherServices + $service;
+                    unset($value['designated_service']);
+                    $data['services'][$value['type_surgery']][] = $value;
+                }
+                ksort($data['services']);
+                unset($data['service']);
+            }
+            $sumService = $examinationsServiceCost + $otherServices;
+
+
+            $data['examination_start_invoice'] = CommonHelper::formatDateInvoice(
+                $data['medical_examination_day'], 'Y-m-d H:i:s');
+            $data['examination_end_invoice'] = CommonHelper::formatDateInvoice(
+                $data['medical_examination_day_end'], 'Y-m-d H:i:s');
+            $data['examinations_service_cost'] = $examinationsServiceCost;
+            $data['services_service_cost'] = $otherServices;
+            $data['sum_service'] = $sumService;
+            $data['other_services'] = $sumService;
+            $data['city_name'] = $data['cadre_city_id'] ?? null;
+            $data['clinic_name'] = $setting->clinic_name ?? null;
+            $data['ministry_of_health'] = $setting->ministry_of_health ?? null;
+            $data['hospital_name'] = $hospitalName;
+            return $data;
+        } catch (Throwable $e) {
+            report($e);
+        }
+
+        return null;
+    }
+
+    public function paymentDetailPrint($id)
+    {
+        try {
+            $data = $this->mainRepository->getPaymentDetailPrint($id);
+            $setting = $this->settingRepository->first();
+            $otherServices = ZERO_PRICE;
+            $hospitalName = null;
+            // calculate sum
+            $examinationsServiceCost = !empty($data['examination_types']) ? array_sum(
+                array_column($data['examination_types'], 'service_unit_price')
+            ) : 0;
+
+            $data['service'] = $data['services'];
+            $data['services'] = [];
+            if (!empty($data['service'])) {
+                foreach ($data['service'] as $key => $value) {
+                    $service = (int) $value['designated_service_unit_price']
+                        * $value['designated_service_amount'];
+                    $value['total_service'] = $service;
+                    $value['type_surgery'] = $value['designated_service_type_surgery']
+                        ?? DesignatedServiceConstants::TYPE_TEST;
+                    $otherServices = $otherServices + $service;
+                    unset($value['designated_service']);
+                    $data['services'][$value['type_surgery']][] = $value;
+                }
+                ksort($data['services']);
+                unset($data['service']);
+            }
+            $sumService = $examinationsServiceCost + $otherServices;
+
+
+            $data['examination_start_invoice'] = CommonHelper::formatDateInvoice(
+                $data['medical_examination_day'], 'Y-m-d H:i:s');
+            $data['examination_end_invoice'] = CommonHelper::formatDateInvoice(
+                $data['medical_examination_day_end'], 'Y-m-d H:i:s');
+            $data['examinations_service_cost'] = $examinationsServiceCost;
+            $data['services_service_cost'] = $otherServices;
+            $data['sum_service'] = $sumService;
+            $data['other_services'] = $sumService;
+            $data['city_name'] = $data['cadre_city_id'] ?? null;
+            $data['clinic_name'] = $setting->clinic_name ?? null;
+            $data['ministry_of_health'] = $setting->ministry_of_health ?? null;
+            $data['hospital_name'] = $hospitalName;
+            return $data;
+        } catch (Throwable $e) {
+            report($e);
+        }
+
+        return null;
+    }
+
 
     public function detail($id)
     {
@@ -304,6 +416,7 @@ class MedicalSessionService extends BaseService
     {
         DB::beginTransaction();
         try {
+            $this->mainRepository->update($data['id_medical_session'], ['status'=> MedicalSessionConstants::STATUS_WAITING_PAY]);
             MedicalSessionRoom::
             where(MedicalSessionRoomConstants::COLUMN_MEDICAL_SESSION_ID, $data['id_medical_session'])
                 ->update([MedicalSessionRoomConstants::COLUMN_STATUS_ROOM => MedicalSessionRoomConstants::STATUS_DONE]);
@@ -314,12 +427,12 @@ class MedicalSessionService extends BaseService
             $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_MEDICAL_DAY} = date('Y-m-d');
             $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_ORDINAL}
                 = $this->getOrdinalInRoom(date('Y-m-d'), $data['id_room']);
+            $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_STATUS_ROOM}
+                = MedicalSessionConstants::STATUS_WAITING_PAY;
             $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_EXAMINATION_ID}
                 = $room->examinationType->id ?? null;
             $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_EXAMINATION_NAME}
                 = $room->examinationType->name ?? null;
-            $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_EXAMINATION_INSURANCE_PRICE}
-                = $room->examinationType->insurance_unit_price ?? null;
             $medicalSessionRoom->{MedicalSessionRoomConstants::COLUMN_EXAMINATION_SERVICE_PRICE}
                 = $room->examinationType->service_unit_price ?? null;
             $medicalSessionRoom->save();
@@ -404,24 +517,32 @@ class MedicalSessionService extends BaseService
         ];
     }
 
-    public function changePaymentStatus($id, $data, $action = MedicalSessionConstants::PAID_STATUS)
+    public function changePaymentStatus($id, $data)
     {
         DB::beginTransaction();
         try {
-            $data['payment_status'] = $action;
             $payment = $this->mainRepository->find($id);
             if (!empty($payment)) {
-                if ($payment->getRawOriginal('payment_status') != $action) {
-                    $data['payment_at'] = Carbon::now();
-                }
-                if (!empty($data['not_change_payment_status']))
-                {
-                    unset($data['payment_status']);
-                }
-                unset($data['not_change_payment_status']);
+                $data['payment_at'] = Carbon::now();
                 $medicalData = $data;
-                $medicalData['payment_price'] = $medicalData['medical_price'];
+                if($payment->getRawOriginal('status') == MedicalSessionConstants::STATUS_WAITING_PAY) {
+                    $medicalData['status'] = MedicalSessionConstants::STATUS_WAITING;
+                    if($payment->getRawOriginal('payment_price') != 0) {
+                        $medicalData['payment_price'] = (string)($payment->getRawOriginal('payment_price') + $medicalData['medical_price']);
+                    } else {
+                        $medicalData['payment_price'] = $medicalData['medical_price'];
+                    }
+                }
+                if(!empty($medicalData['services'])) {
+                    $medicalData['payment_price'] = (string)($payment->getRawOriginal('payment_price') + $medicalData['medical_price']);
+                    $dataUpdate['status'] = DesignatedOfMedicalSessionsConstants::STATUS_WAITING;
+                    foreach($medicalData['services'] as $key => $service) {
+                        $dService = $this->designatedServiceOfMedicalSessionRepository->find((int)$service);
+                        $this->designatedServiceOfMedicalSessionRepository->updates($dService, $dataUpdate);
+                    }
+                }
                 unset($medicalData['medical_price']);
+                unset($medicalData['services']);
                 $this->mainRepository->updates($payment, $medicalData);
                 DB::commit();
             }

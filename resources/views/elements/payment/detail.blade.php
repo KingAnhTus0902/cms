@@ -2,11 +2,6 @@
     use App\Constants\MedicalSessionConstants;
     use App\Helpers\NumberFormatHelper;
     use App\Helpers\CommonHelper;
-    $condition = $is_payment == MedicalSessionConstants::PAID_STATUS;
-    $change = $condition ? 'cancel' : 'confirm';
-    $current = $condition ? 'confirm' : 'cancel';
-    $text = $condition ? __('label.common.button.cancel') : __('label.common.button.confirm');
-    $classButton = $condition ? 'btn-danger' : 'btn-success';
 @endphp
 <form id="save-payment-status" onsubmit="return false">
     <div class="row">
@@ -22,17 +17,10 @@
                                 <span class="text-sm">{!! $code !!}</span>
                             </div>
                             <div class="col-sm-6 text-right">
-                                @if ($examination_status == MedicalSessionConstants::STATUS_DONE)
-                                    <label class="col-form-label col-form-label-sm">
-                                        Trạng thái thanh toán:
-                                    </label>
-                                    <span class="text-sm">{!! $payment_status !!}</span>
-                                @else
-                                    <label class="col-form-label col-form-label-sm">
-                                        {{ __('label.medical_session.field.examination_status') }}:
-                                    </label>
-                                    <span class="text-sm">{!! $status !!}</span>
-                                @endif
+                                <label class="col-form-label col-form-label-sm">
+                                    {{ __('label.medical_session.field.examination_status') }}:
+                                </label>
+                                <span class="text-sm">{!! $status !!}</span>
                             </div>
                         </div>
                         <div class="row">
@@ -161,6 +149,7 @@
                                                 {{ NumberFormatHelper::priceFormat($data['designated_service_unit_price'], '', 2, ',', '.') }}
                                             </td>
                                         </tr>
+                                        <input type="hidden" name="services[]" value="{{$data['id']}}">
                                     @endforeach
                                 @endif
                             @endforeach
@@ -179,14 +168,14 @@
                 <div class="justify-content-between">
                     <div class="col d-flex justify-content-center">
                         <div class="row mb-3">
-                            @if ($examination_status == MedicalSessionConstants::STATUS_DONE)
+                            @if($stt != MedicalSessionConstants::STATUS_DONE)
                                 <div class="col-auto d-flex align-items-center">
-                                    <button class="btn {{ $classButton }} open-add-modal {{ $change }}"
-                                        data-toggle="modal" routes="{{ route('admin.payment.' . $change, $id) }}"
+                                    <button class="btn btn-success open-add-modal confirm"
+                                        data-toggle="modal" routes="{{ route('admin.payment.confirm', $id) }}"
                                         data-target="#add-designated-service-medical-session"
-                                        onclick="save('.{{ $change }}',
+                                        onclick="save('.confirm',
                                             false)">
-                                        {{ $text }}
+                                        {{ __('label.common.button.confirm') }}
                                     </button>
                                 </div>
                             @endif

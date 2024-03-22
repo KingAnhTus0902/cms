@@ -34,31 +34,6 @@
                     </div>
                 </div>
                 <div class="col-md-6 row justify-content-center">
-                    <label class="col-md-4 col-lg-4 col-xl-3 col-xxl-2 control-label" for="input-search-payment-status">
-                        {{ __('label.medical_session.search.title.payment_status') }}
-                    </label>
-                    <div class="col-md-7">
-                        <div class="input-group input-group-md">
-                        <select class="form-control form-control-sm select2" style="width: 100%;" id="input-search-payment-status">
-                                <option value="{{ MedicalSessionConstants::ALL_PAYMENT_STATUS }}">{{ __('label.medical_session.payment_status.all_payment_status') }}</option>
-                            @foreach(\App\Constants\MedicalSessionConstants::PAYMENT_STATUS_TEXT as $key => $value)
-                                <option value={{$key}}
-                                    @if(session('payment') && $key == session('payment')['payment_status'])
-                                        selected
-                                    @endif >
-                                    {{ $value }}
-                               </option>
-                            @endforeach
-                            </select>
-                            <input type="hidden" id="input-search-status-hidden" value="{{CommonHelper::getSession('payment', 'payment_status')}}">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12 mt-md-2">
-            <div class="row justify-content-center">
-                <div class="col-md-6 row justify-content-center">
                     <label class="col-md-4 col-lg-4 col-xl-3 col-xxl-2 control-label" for="input-search-multiple">
                         {{ __('label.medical_session.search.title.key_word') }}
                     </label>
@@ -73,7 +48,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6 row justify-content-center"></div>
             </div>
         </div>
     </form>

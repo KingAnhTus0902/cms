@@ -60,11 +60,15 @@
                                     @foreach ($medicalSessions as $key => $medicalSession)
                                         <tr class="odd">
                                             <td class="dt-center">{{ $itemStart + $key }}</td>
+                                            @if($medicalSession->getRawOriginal('status') != \App\Constants\MedicalSessionConstants::STATUS_WAITING_PAY)
                                             <td class="dt-center">
                                                 <a href="{{ route('admin.medical_session.examination', [
                                                     'id' => $medicalSession->id
                                                 ]) }}">{{$medicalSession->code}}</a>
                                             </td>
+                                            @else
+                                                <td class="dt-center">{{$medicalSession->code}}</td>
+                                            @endif
                                             <td class="word-break">{{$medicalSession->cadre_name}}</td>
                                             <td class="text-right word-break">
                                                 {{CommonHelper::formatDate($medicalSession->cadre_birthday, YEAR_MONTH_DAY, YEAR)}}
@@ -78,7 +82,7 @@
                                             <td class="no-wrap">{!! $medicalSession->status !!}</td>
                                             <td class="text-right">{{$medicalSession->medical_examination_day}}</td>
                                             <td class="dt-center">
-                                                @if($medicalSession->getRawOriginal('status') == 1)
+                                                @if($medicalSession->getRawOriginal('status') == 0)
                                                     <button class="btn btn-info btn-sm open-edit-modal mr-1"
                                                             data-form-id="form" data-toggle="modal"
                                                             data-target="#edit-medical-session" type="button"
@@ -87,13 +91,14 @@
                                                         <i class="fa fa-edit"></i>
                                                     </button>
                                                 @endif
+                                                @if($medicalSession->getRawOriginal('status') != 0)
                                                 <a class="btn btn-primary btn-sm"
                                                         href="{{ route('admin.medical_session.examination', [
                                                             'id' => $medicalSession->id
                                                         ]) }}"
                                                         title="{{ __('label.common.button.examination') }}">
                                                     <i class="fas fa-stethoscope"></i>
-                                                </a>
+                                                </a>@endif
                                             </td>
                                         </tr>
                                     @endforeach

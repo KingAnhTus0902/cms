@@ -114,23 +114,6 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
             });
             unset($keyword['multiple']);
         }
-
-        if (!empty($searchPayment)) {
-            $paymentStatus = $keyword['payment_status'] ?? MedicalSessionConstants::UNPAID_STATUS;
-            $query->where(
-                MedicalSessionConstants::TABLE_NAME . "." . MedicalSessionConstants::COLUMN_STATUS,
-                OPERATOR_NOT_EQUAL,
-                MedicalSessionConstants::STATUS_CANCEL
-            );
-            if ($paymentStatus != MedicalSessionConstants::ALL_PAYMENT_STATUS){
-                $query->where(
-                    MedicalSessionConstants::TABLE_NAME . "." . MedicalSessionConstants::COLUMN_PAYMENT_STATUS,
-                    $paymentStatus
-                );
-            }
-            unset($keyword['payment_status']);
-        }
-
         if (isset($data['room_of_examination_doctor'])) {
             $query->whereIn(
                 MedicalSessionRoomConstants::TABLE_NAME . '.' . MedicalSessionRoomConstants::COLUMN_ROOM_ID,
@@ -184,7 +167,7 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
     public function getPaymentDetail($id)
     {
         $data = $this->model->where('id', $id)
-            ->select("*", "payment_status as is_payment", "status as examination_status", "department_id as department")
+            ->select("*", "status as examination_status", "department_id as department")
             ->with(['department:id,name,code', 'diseases', 'city:id,name'])
             ->with(['services' => function ($services) {
                 $services->select(
@@ -197,7 +180,8 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                     'designated_service_type_surgery',
                     'status'
                 )->withWhereHas('designatedService')
-                ->where('status', OPERATOR_NOT_EQUAL, DesignatedOfMedicalSessionsConstants::STATUS_CANCEL);
+                    ->where('status', OPERATOR_EQUAL, DesignatedOfMedicalSessionsConstants::WAITING_PAYMENT);
+                ;
             }])
             ->with(['medicalSessionRoom' => function ($rooms) {
                 $rooms->select(
@@ -210,9 +194,106 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                     ->whereIn(
                         'status_room',
                         [
+                            MedicalSessionRoomConstants::STATUS_WAITING_PAY
+                        ]
+                    )
+                    ->limit(FIRST_TWO_RECORDS);
+            }])
+            ->first();
+        $examinationDay = $data->getRawOriginal('medical_examination_day');
+        $stt = $data->getRawOriginal('status');
+        $data = $data->toArray();
+        if (!empty($data['medical_session_room'])) {
+            $data['examination_types'] = $data['medical_session_room'];
+            unset($data['medical_session_room']);
+        }
+        $data['medical_examination_day'] = $examinationDay;
+        $data['stt'] = $stt;
+
+        return $data;
+    }
+    public function getPaymentDetailDone($id)
+    {
+        $data = $this->model->where('id', $id)
+            ->select("*", "status as examination_status", "department_id as department")
+            ->with(['department:id,name,code', 'diseases', 'city:id,name'])
+            ->with(['services' => function ($services) {
+                $services->select(
+                    'id',
+                    'medical_session_id',
+                    'designated_service_id',
+                    'designated_service_name',
+                    'designated_service_unit_price',
+                    'designated_service_amount',
+                    'designated_service_type_surgery',
+                    'status'
+                )->withWhereHas('designatedService')
+                    ->where('status', OPERATOR_EQUAL, DesignatedOfMedicalSessionsConstants::STATUS_DONE);
+                ;
+            }])
+            ->with(['medicalSessionRoom' => function ($rooms) {
+                $rooms->select(
+                    'examination_id',
+                    'examination_name as name',
+                    'examination_service_price as service_unit_price',
+                    'medical_session_id'
+                )
+                    ->distinct('examination_id')
+                    ->whereIn(
+                        'status_room',
+                        [
+                            MedicalSessionRoomConstants::STATUS_DONE
+                        ]
+                    )
+                    ->limit(FIRST_TWO_RECORDS);
+            }])
+            ->first();
+        $examinationDay = $data->getRawOriginal('medical_examination_day');
+        $stt = $data->getRawOriginal('status');
+        $data = $data->toArray();
+        if (!empty($data['medical_session_room'])) {
+            $data['examination_types'] = $data['medical_session_room'];
+            unset($data['medical_session_room']);
+        }
+        $data['medical_examination_day'] = $examinationDay;
+        $data['stt'] = $stt;
+
+        return $data;
+    }
+
+    public function getPaymentDetailPrint($id)
+    {
+        $data = $this->model->where('id', $id)
+            ->select("*", "status as examination_status", "department_id as department")
+            ->with(['department:id,name,code', 'diseases', 'city:id,name'])
+            ->with(['services' => function ($services) {
+                $services->select(
+                    'id',
+                    'medical_session_id',
+                    'designated_service_id',
+                    'designated_service_name',
+                    'designated_service_unit_price',
+                    'designated_service_amount',
+                    'designated_service_type_surgery',
+                    'status'
+                )->withWhereHas('designatedService')
+                    ->where('status', OPERATOR_EQUAL, DesignatedOfMedicalSessionsConstants::STATUS_WAITING)
+                    ->orWhere('status', OPERATOR_EQUAL, DesignatedOfMedicalSessionsConstants::WAITING_PAYMENT);
+                ;
+            }])
+            ->with(['medicalSessionRoom' => function ($rooms) {
+                $rooms->select(
+                    'examination_id',
+                    'examination_name as name',
+                    'examination_service_price as service_unit_price',
+                    'medical_session_id'
+                )
+                    ->distinct('examination_id')
+                    ->whereIn(
+                        'status_room',
+                        [
+                            MedicalSessionRoomConstants::STATUS_WAITING_PAY,
                             MedicalSessionRoomConstants::STATUS_WAITING,
-                            MedicalSessionRoomConstants::STATUS_DOING,
-                            MedicalSessionRoomConstants::STATUS_DONE,
                         ]
                     )
                     ->limit(FIRST_TWO_RECORDS);
@@ -225,6 +306,7 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
             unset($data['medical_session_room']);
         }
         $data['medical_examination_day'] = $examinationDay;
+
         return $data;
     }
 
@@ -265,11 +347,6 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
         return $this->model->withTrashed()->where($column, $id)->get();
     }
 
-    public function getMeidcalsessionRoom($column, $id)
-    {
-        return MedicalSessionRoom::where($column, $id)->first();
-    }
-
     public function getTotalPatient($type = true)
     {
         return $this->model->distinct('cadre_id')->timeInYear($type)->count('cadre_id');
@@ -286,7 +363,6 @@ class MedicalSessionRepository extends BaseRepository implements MedicalSessionR
                     DB::raw('Month(payment_at) as month, Sum(payment_price) as price')
                 )
                 ->where('status', MedicalSessionConstants::STATUS_DONE)
-                ->where('payment_status', 1)
                 ->whereYear('payment_at', Carbon::now()->year)
                 ->groupBy('month')
                 ->get()

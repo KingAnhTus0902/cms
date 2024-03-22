@@ -24,11 +24,13 @@ class DesignatedServiceOfMedicalSession extends Model
      *
      * @var array
      */
+    public const WAITING_PAY = 5;
     public const WAITING = 1;
     public const PROCESSING = 2;
     public const FINISH = 3;
     public const CANCEL = 4;
     public static array $status = array(
+        self::WAITING_PAY => 'Chờ thanh toán',
         self::WAITING => 'Chờ thực hiện',
         self::PROCESSING => 'Đang thực hiện',
         self::FINISH => 'Đã hoàn thành',
@@ -123,6 +125,10 @@ class DesignatedServiceOfMedicalSession extends Model
         $openBTag = '<b>';
         $closeTag = '</b></span>';
         return match ((int)$this->status) {
+            self::WAITING_PAY =>
+                "<span class='text-danger'>" . $openBTag
+                . self::$status[self::WAITING_PAY] .
+                $closeTag,
             self::WAITING =>
                 "<span class='text-warning-custom'>" . $openBTag
                 . self::$status[self::WAITING] .

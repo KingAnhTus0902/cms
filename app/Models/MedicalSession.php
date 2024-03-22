@@ -72,12 +72,15 @@ class MedicalSession extends Model
      *
      * @var array
      */
+
+    public const STATUS_WAITING_PAY = 0;
     public const STATUS_WAITING = 1;
     public const STATUS_DOING = 2;
     public const STATUS_WAITING_RESULT = 3;
     public const STATUS_DONE = 4;
     public const STATUS_CANCEL = 5;
     public static array $status = array(
+        self::STATUS_WAITING_PAY => 'Chờ thanh toán',
         self::STATUS_WAITING => 'Chờ khám',
         self::STATUS_DOING => 'Đang khám',
         self::STATUS_WAITING_RESULT => 'Chờ kết quả',
@@ -115,6 +118,10 @@ class MedicalSession extends Model
         $openBTag = '<b>';
         $closeTag = '</b></span>';
         return match ($value) {
+            MedicalSessionConstants::STATUS_WAITING_PAY =>
+                "<span class='text-danger'>" . $openBTag
+                . MedicalSessionConstants::STATUS_TEXT[MedicalSessionConstants::STATUS_WAITING_PAY] .
+                $closeTag,
             MedicalSessionConstants::STATUS_WAITING =>
                 "<span class='text-warning-custom'>" . $openBTag
                 . MedicalSessionConstants::STATUS_TEXT[MedicalSessionConstants::STATUS_WAITING] .

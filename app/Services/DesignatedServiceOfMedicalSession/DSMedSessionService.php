@@ -9,8 +9,6 @@ use App\Repositories\DesignatedServiceOfMedicalSession\DSMedSessionRepositoryInt
 use App\Repositories\MedicalSession\MedicalSessionRepositoryInterface;
 use App\Repositories\UserRoom\UserRoomRepository;
 use App\Services\FileService\FileServiceInterface;
-use DOMDocument;
-use DOMXPath;
 use Illuminate\Database\Eloquent\Model;
 use Throwable;
 
