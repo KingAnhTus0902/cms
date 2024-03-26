@@ -207,7 +207,7 @@
             <td class="height-no">(6)</td>
             <td class="height-no">(7)</td>
         </tr>
-        @if ($examination_status == MedicalSessionConstants::STATUS_WAITING || $examination_status == MedicalSessionConstants::STATUS_DONE)
+        @if ($examination_status == MedicalSessionConstants::STATUS_WAITING_PAY || $examination_status == MedicalSessionConstants::STATUS_WAITING || $examination_status == MedicalSessionConstants::STATUS_DONE)
         <tr class="text-right">
             @if (!empty($examination_types))
                 <td colspan="6" class="height-no text-left"><b> 1. {{ __('label.invoice.invoice.examination') }}</b></td>

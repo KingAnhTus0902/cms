@@ -19,11 +19,8 @@ class MedicalSessionRoomConstants
     public const COLUMN_EXAMINATION_INSURANCE_PRICE = 'examination_insurance_price';
     public const COLUMN_EXAMINATION_SERVICE_PRICE = 'examination_service_price';
 
-    public const TYPE_RECEPTION_CREATED = 0;
-    public const TYPE_USER_BOOKED       = 1;
     public const STATUS_WAITING_PAY = 0;
     public const STATUS_WAITING = 1;
     public const STATUS_DOING   = 2;
-    public const STATUS_WAITING_RESULT    = 3;
     public const STATUS_DONE    = 4;
 }
