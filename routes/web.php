@@ -177,7 +177,7 @@ Route::middleware('auth')->group(function () {
 
         // Report insurance
         Route::middleware('permission:Medical-examination-handbook')->group(function () {
-            Route::prefix('bao-cao-benh-nhan-bh')->group(function () {
+            Route::prefix('bao-cao-benh-nhan')->group(function () {
                 Route::get('/', [ReportController::class, 'reportInsuranceIndex'])
                     ->name('report.reportInsuranceIndex');
 

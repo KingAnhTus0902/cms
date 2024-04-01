@@ -554,7 +554,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 
     Route::prefix('bao-cao')->name('report.')->group(function () {
-        Route::get('/bao-cao-benh-nhan-bh', [ReportController::class, 'insuranceList'])
+        Route::get('/bao-cao-benh-nhan', [ReportController::class, 'insuranceList'])
             ->name('insuranceList')
             ->middleware('permission:Medical-examination-handbook');
     });
