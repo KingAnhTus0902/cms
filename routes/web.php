@@ -1,12 +1,10 @@
 <?php
 
 use App\Http\Controllers\Cms\DesignatedServiceOfMedicalSessionController;
-use App\Http\Controllers\Cms\ImportMaterialsSlipController;
 use App\Http\Controllers\Cms\MedicalSessionController;
 use App\Http\Controllers\Cms\ReportController;
 use App\Http\Controllers\Cms\PermissionController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Cms\NewsController;
 use App\Http\Controllers\Cms\DepartmentController;
 use App\Http\Controllers\Cms\HomePageController;
 use App\Http\Controllers\Cms\UserController;
@@ -21,10 +19,8 @@ use App\Http\Controllers\Cms\MaterialController;
 use App\Http\Controllers\Cms\DiseaseController;
 use App\Http\Controllers\Cms\PaymentController;
 use App\Http\Controllers\Cms\ExaminationTypeController;
-use App\Http\Controllers\Cms\HealthInsuranceCardHeadController;
 use App\Http\Controllers\Cms\SettingController;
 use App\Http\Controllers\Cms\HospitalTransferController;
-use App\Http\Controllers\Cms\DispenseMedicinesController;
 use Illuminate\Support\Facades\Auth;
 
 /*

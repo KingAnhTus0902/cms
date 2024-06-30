@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\DesignatedServiceOfMedicalSessionController;
-use App\Http\Controllers\Api\ImportMaterialsSlipController;
 use App\Http\Controllers\Api\MedicalSessionController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\ReportController;
@@ -11,7 +10,6 @@ use App\Http\Controllers\Api\DepartmentController;
 use App\Http\Controllers\Api\MaterialController;
 use App\Http\Controllers\Api\UnitController;
 use App\Http\Controllers\Api\HospitalController;
-use App\Http\Controllers\Api\NewsController;
 use App\Http\Controllers\Api\CadresController;
 use App\Http\Controllers\Api\AddressController;
 use App\Http\Controllers\Api\UserController;
@@ -27,7 +25,6 @@ use App\Http\Controllers\Api\DiseaseOfMedicalSessionController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\MedicineOfMedicalSessionController;
 use App\Http\Controllers\Api\HospitalTransferController;
-use App\Http\Controllers\Api\DispenseMedicinesController;
 use App\Http\Controllers\Api\HomePageController;
 
 /*

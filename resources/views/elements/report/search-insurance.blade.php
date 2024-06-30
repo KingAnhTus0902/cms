@@ -64,7 +64,7 @@
     function exportInsurance(){
         var startDate = $('#startDateSearch').val();
         var endDate = $('#endDateSearch').val();
-        var url = "/admin/bao-cao-benh-nhan-bh/xuat-file-bao-cao-benh-nhan-bh?start=" + startDate+ "&end="+ endDate;
+        var url = "/admin/bao-cao-benh-nhan/xuat-file-bao-cao-benh-nhan-bh?start=" + startDate+ "&end="+ endDate;
         window.location.href = url;
     }
 </script>

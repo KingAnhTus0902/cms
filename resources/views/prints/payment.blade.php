@@ -78,7 +78,7 @@
             <tr>
                 <td width="78%">
                     <p><b>Bộ Y tế/ Sở Y tế/ Y tế ngành: {{ $ministry_of_health }}</b></p>
-                    <p><b>Cơ sở khám, chữa bệnh: {{ $hospital_name ?? null }}</b></p>
+                    <p><b>Cơ sở khám, chữa bệnh: {{ $setting->hospital->name ?? null }}</b></p>
                     <p><b>Khoa: {{ $department['name'] ?? null }}</b></p>
                     <p><b>Mã khoa:  {{ $department['code'] ?? null }}</b></p>
                 </td>
@@ -121,26 +121,26 @@
             </td>
         </tr>
     </table>
-    <table>
-        <tr>
-            <td>(4) {{ __('label.invoice.cadre.examination_day') }}:
-                {{ $examination_start_invoice['hour'] }} {{ __('label.invoice.hour') }}
-                {{ $examination_start_invoice['minute'] }} {{ __('label.invoice.minute') }},
-                {{ $examination_start_invoice['day'] }}
-            </td>
-        </tr>
-    </table>
     @if($examination_end_invoice['hour']  != '...')
-    <table class="infor">
-        <tr>
-            <td>(5) {{ __('label.invoice.cadre.medical_examination_day_end') }}:
-                {{ $examination_end_invoice['hour'] }} {{ __('label.invoice.hour') }}
-                {{ $examination_end_invoice['minute'] }} {{ __('label.invoice.minute') }},
-                {{ $examination_end_invoice['day'] }}
-            </td>
-            <td>{{ __('label.invoice.cadre.total_treatment_days') }}: 0</td>
-        </tr>
-    </table>
+        <table class="infor">
+            <tr>
+                <td>(4) {{ __('label.invoice.cadre.medical_examination_day_end') }}:
+                    {{ $examination_end_invoice['hour'] }} {{ __('label.invoice.hour') }}
+                    {{ $examination_end_invoice['minute'] }} {{ __('label.invoice.minute') }},
+                    {{ $examination_end_invoice['day'] }}
+                </td>
+                <td>{{ __('label.invoice.cadre.total_treatment_days') }}: 0</td>
+            </tr>
+        </table>
+    @endif
+    @if($re_examination_date)
+        <table class="infor">
+            <tr>
+                <td>(5) {{ __('label.invoice.cadre.re_examination_date') }}:
+                    {{$re_examination_date}}
+                </td>
+            </tr>
+        </table>
     @endif
     @if($diagnose)
     <table class="infor">
@@ -150,27 +150,34 @@
     </table>
     @endif
     @if (!empty($diseases[MedicalSessionConstants::MAIN_DISEASE]))
-    <table class="infor">
-        <tr>
-            <td width="20%">(7) {{ __('label.invoice.cadre.diseases_code') }}:</td>
-            <td width="10%" class="box-infor">
+        <table class="infor">
+            <tr>
+                <td>(7) {{ __('label.invoice.cadre.diseases_name') }}:
+                    {{ $diseases[MedicalSessionConstants::MAIN_DISEASE]['disease_name'] }}
+                </td>
+            </tr>
+        </table>
+        <table class="infor">
+            <tr>
+                <td width="20%">(8) {{ __('label.invoice.cadre.diseases_code') }}:</td>
+                <td width="10%" class="box-infor">
                     {{ $diseases[MedicalSessionConstants::MAIN_DISEASE]['disease_code'] }}
-            </td>
-            <td width="70%"></td>
-        </tr>
-    </table>
+                </td>
+                <td width="70%"></td>
+            </tr>
+        </table>
     @endif
     @if (!empty($diseases[MedicalSessionConstants::SUB_DISEASE]))
     <table class="infor">
         <tr>
-            <td>(8) {{ __('label.invoice.cadre.sub_disease_name') }}:
+            <td>(9) {{ __('label.invoice.cadre.sub_disease_name') }}:
                 {{ $diseases[MedicalSessionConstants::SUB_DISEASE]['disease_name'] }}
             </td>
         </tr>
     </table>
     <table class="infor">
         <tr>
-            <td width="20%">(9) {{ __('label.invoice.cadre.sub_disease_code') }}:</td>
+            <td width="20%">(10) {{ __('label.invoice.cadre.sub_disease_code') }}:</td>
             <td width="10%" class="box-infor">
                 {{ $diseases[MedicalSessionConstants::SUB_DISEASE]['disease_code'] }}
             </td>

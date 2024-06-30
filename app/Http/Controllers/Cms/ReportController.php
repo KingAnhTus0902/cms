@@ -33,6 +33,10 @@ class ReportController extends Controller
         return view('report.insurance');
     }
 
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     */
     public function exportInsurance(Request $request)
     {
         $start = $request->query("start");

@@ -71,12 +71,12 @@
                                                         <i class="fa fa-edit"></i></a>
                                                 @endif
                                                 @if(auth()->user()->can('Print-hospital-tranfer'))
-                                                        <a style="border: 2px solid #FF6600;" class="btn btn-default btn-sm open-print-modal"
+                                                        `<a style="border: 2px solid #FF6600;" class="btn btn-default btn-sm open-print-modal"
                                                            data-url="{{
                                                             route('admin.print.hospital_transfer',
                                                             $hospitalTransfer->id)
                                                         }}">
-                                                            <i style="color: #FF6600; " class="fa fa-print"></i></a>
+                                                            <i style="color: #FF6600; " class="fa fa-print"></i></a>`
                                                 @endif
                                             </td>
                                         </tr>

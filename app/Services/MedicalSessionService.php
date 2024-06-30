@@ -225,7 +225,6 @@ class MedicalSessionService extends BaseService
             $data = $this->mainRepository->getPaymentDetailDone($id);
             $setting = $this->settingRepository->first();
             $otherServices = ZERO_PRICE;
-            $hospitalName = null;
             // calculate sum
             $examinationsServiceCost = !empty($data['examination_types']) ? array_sum(
                 array_column($data['examination_types'], 'service_unit_price')
@@ -261,7 +260,7 @@ class MedicalSessionService extends BaseService
             $data['city_name'] = $data['cadre_city_id'] ?? null;
             $data['clinic_name'] = $setting->clinic_name ?? null;
             $data['ministry_of_health'] = $setting->ministry_of_health ?? null;
-            $data['hospital_name'] = $hospitalName;
+            $data['setting'] = $setting;
             return $data;
         } catch (Throwable $e) {
             report($e);
@@ -276,7 +275,6 @@ class MedicalSessionService extends BaseService
             $data = $this->mainRepository->getPaymentDetailPrint($id);
             $setting = $this->settingRepository->first();
             $otherServices = ZERO_PRICE;
-            $hospitalName = null;
             // calculate sum
             $examinationsServiceCost = !empty($data['examination_types']) ? array_sum(
                 array_column($data['examination_types'], 'service_unit_price')
@@ -312,7 +310,7 @@ class MedicalSessionService extends BaseService
             $data['city_name'] = $data['cadre_city_id'] ?? null;
             $data['clinic_name'] = $setting->clinic_name ?? null;
             $data['ministry_of_health'] = $setting->ministry_of_health ?? null;
-            $data['hospital_name'] = $hospitalName;
+            $data['setting'] = $setting;
             return $data;
         } catch (Throwable $e) {
             report($e);

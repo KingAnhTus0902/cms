@@ -1,9 +1,7 @@
 @php
     use App\Helpers\CommonHelper;
     use App\Constants\MedicalSessionConstants;
-    $isDisable = ($medical_session->getRawOriginal('payment_status') == MedicalSessionConstants::PAID_STATUS) ? 'disabled' : "";
-    $isDisableHospitalTranferBtn = ($medical_session->cadre_medical_insurance_end_date < date('Y-m-d')
-    && $medical_session->cadre_medical_insurance_end_date !== null) ? 'disabled' : "";
+    $isDisable = ($medical_session->medical_examination_day_end && $medical_session->medical_examination_day_end < date('Y-m-d') ) ? 'disabled' : "";
 @endphp
 <input type="hidden" id="medical-session-id" value="{{$medical_session->id}}">
 <input type="hidden" id="user_id" value="{{ $current_room->user_id }}">
@@ -400,14 +398,6 @@
                         data-id="{{ $medical_session->id }}">
                         {{ __('label.hospital_transfer.button.title.complete') }}
                     </a>
-                    @if(!$isDisableHospitalTranferBtn)
-                    <a
-                        style="margin-left: 10px;"
-                        class="btn btn-secondary transfer-btn"
-                        data-id="{{ $medical_session->id }}">
-                        {{ __('label.hospital_transfer.button.title.hospital_transfer') }}
-                    </a>
-                    @endif
                     <a
                         style="margin-left: 10px;"
                         class="btn btn-danger cancel-btn"
